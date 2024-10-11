@@ -6,6 +6,7 @@ Take control of a civilization as it takes its first steps into the stars. Play 
 or the Davonian Empire, or any of many randomly generated/custom-built species as you explore the stars, settle alien worlds, and engage in epic 2D 
 fleet battles.
 
+------------------------------------------------------------------------------
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
