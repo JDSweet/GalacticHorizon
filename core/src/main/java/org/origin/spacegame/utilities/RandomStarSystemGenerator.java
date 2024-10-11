@@ -1,23 +1,28 @@
 package org.origin.spacegame.utilities;
 
-import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;
 
-import java.lang.Math;
 import java.util.Random;
 
-public class StarSystemGenerator
+public class RandomStarSystemGenerator
 {
     private static int totalGeneratedSystems = 0;
     private static Random random = new Random();
 
+    public static Random getRandom()
+    {
+        return random;
+    }
+
     private int minPlanets;
     private int maxPlanets;
 
-    public StarSystemGenerator(int minPlanets, int maxPlanets)
+    public RandomStarSystemGenerator(int minPlanets, int maxPlanets)
     {
         this.minPlanets = minPlanets;
         this.maxPlanets = maxPlanets;
@@ -31,6 +36,18 @@ public class StarSystemGenerator
         float galacticX = random.nextFloat(Constants.GALAXY_WIDTH);
         float galacticY = random.nextFloat(Constants.GALAXY_HEIGHT);
 
+        Vector2 galacticPos = new Vector2(galacticX, galacticY);
+        Array<StarSystem> starSystems = GameInstance.getInstance().getState().getStarSystems();
+        /*for(int i = 0; i < starSystems.size; i++)
+        {
+            //float distance = galacticPos.dst(starSystems.get(i).getGalacticPosition());
+            while(galacticPos.dst(starSystems.get(i).getGalacticPosition()) < Constants.MIN_DISTANCE_BETWEEN_STARS)
+            {
+                galacticPos.x++;
+                galacticPos.y++;
+            }
+        }*/
+
         //This chunk of code makes sure these coordinates are not too close to any other already existing star systems on the galactic map.
         /*for(int i = 0; i < GameInstance.getInstance().getState().getStarSystems().size; i++)
         {
@@ -41,6 +58,7 @@ public class StarSystemGenerator
                 galacticY = random.nextFloat(Constants.GALAXY_HEIGHT);
         }*/
 
+        Gdx.app.log("SystemGenerationDebug", starClassTags.get(starClassTagIndex));
         StarSystem newSystem = new StarSystem(totalGeneratedSystems++,
                                                 starClassTags.get(starClassTagIndex),
                                                 galacticX,

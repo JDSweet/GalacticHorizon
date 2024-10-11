@@ -18,19 +18,35 @@ import org.origin.spacegame.input.InputUtilities;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter
 {
-    private SpriteBatch batch;
+    //private SpriteBatch batch;
     private Texture image;
-    private OrthographicCamera camera;
+
+    private OrthographicCamera galacticCamera;
+    private OrthographicCamera systemCamera;
+    private OrthographicCamera currentCamera;
+
+    enum RenderView
+    {
+        SYSTEM_VIEW,
+        GALACTIC_VIEW
+    }
+
+    private RenderView renderView;
+    private SpriteBatch batch;
 
     ExtendViewport extendViewport;
 
     @Override
     public void create()
     {
+        renderView = RenderView.GALACTIC_VIEW;
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
+        //Create cameras...
+        galacticCamera = new OrthographicCamera(Constants.GALACTIC_MAP_CAMERA_VIEWPORT_WIDTH, Constants.GALACTIC_MAP_CAMERA_VIEWPORT_HEIGHT);
+        systemCamera = new OrthographicCamera();
+
         loadGameData();
-        initializeCamera();
     }
 
     private void loadGameData()
@@ -41,22 +57,29 @@ public class Main extends ApplicationAdapter
         GameInstance.getInstance().getState().initialize();
     }
 
-    private void initializeCamera()
-    {
-        camera = new OrthographicCamera(250, 250);
-        camera.zoom = 0.01f;
-    }
-
     @Override
     public void render()
     {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        batch.draw(image, 0, 0, 30, 30);
-        InputUtilities.detectCameraMovement(camera);
-        camera.update();
-        batch.end();
+        if(renderView == RenderView.GALACTIC_VIEW)
+        {
+            this.currentCamera = galacticCamera;
+        }
+        else
+        {
+            this.currentCamera = systemCamera;
+        }
+
+        InputUtilities.detectCameraMovement(currentCamera);
+        currentCamera.update();
+
+        batch.setProjectionMatrix(currentCamera.combined);
+        //batch.begin();
+        //GameInstance.getInstance().getStarClass("blue_star_01").getGfx().
+        //batch.draw(image, 0, 0, 100f, 100f);
+        //batch.draw(GameInstance.getInstance().getStarClass("blue_star_01").getGfx(), 0,0, 100f, 100f);
+        //batch.end();
+        GameInstance.getInstance().getState().renderGalacticMap(batch);
     }
 
     @Override
@@ -64,6 +87,6 @@ public class Main extends ApplicationAdapter
     {
         GameInstance.getInstance().dispose();
         batch.dispose();
-        image.dispose();
+        //image.dispose();
     }
 }

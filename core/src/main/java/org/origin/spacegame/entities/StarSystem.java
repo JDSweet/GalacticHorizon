@@ -12,12 +12,12 @@ public class StarSystem
 
     private Vector2 galacticPosition;
 
-    public StarSystem(int id, String startType, float galacticX, float galacticY)
+    public StarSystem(int id, String starType, float galacticX, float galacticY)
     {
         this.id = id;
         this.planets = new Array<Planet>();
         this.fleets = new Array<Fleet>();
-
+        this.starType = starType;
         this.galacticPosition = new Vector2(galacticX, galacticY);
     }
 

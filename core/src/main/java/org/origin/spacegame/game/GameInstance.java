@@ -2,7 +2,9 @@ package org.origin.spacegame.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
@@ -27,6 +29,8 @@ public class GameInstance implements Disposable
     private GameState state;
     private ArrayMap<String, StarClass> starClasses;
     private ArrayMap<String, PlanetClass> planetClasses;
+
+
 
     public GameInstance()
     {
@@ -90,7 +94,7 @@ public class GameInstance implements Disposable
 
     public Array<String> getStarClassTags()
     {
-        String[] starClassTags = starClasses.keys().toArray().toArray();
+        Array<String> starClassTags = starClasses.keys().toArray();
         return new Array<String>(starClassTags);
     }
 
