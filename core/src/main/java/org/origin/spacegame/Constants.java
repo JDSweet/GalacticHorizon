@@ -17,4 +17,9 @@ public class Constants
 
     public static int STAR_SYSTEM_MIN_PLANET_COUNT = 1;
     public static int STAR_SYSTEM_MAX_PLANET_COUNT = 2;
+
+    public static class InputConstants
+    {
+        public static int TILEMAP_NO_SYSTEM_VAL = -1;
+    }
 }

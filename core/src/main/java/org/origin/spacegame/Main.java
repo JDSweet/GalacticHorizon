@@ -55,6 +55,9 @@ public class Main extends ApplicationAdapter
         image = new Texture("gfx/libgdx.png");
         GameInstance.getInstance().loadData();
         GameInstance.getInstance().getState().initialize();
+        InputUtilities.initializeTileMapInput();
+
+        GameInstance.getInstance().getState().debugSystemIDs();
     }
 
     @Override
@@ -75,6 +78,7 @@ public class Main extends ApplicationAdapter
 
         batch.setProjectionMatrix(currentCamera.combined);
         GameInstance.getInstance().getState().renderGalacticMap(batch);
+
     }
 
     @Override

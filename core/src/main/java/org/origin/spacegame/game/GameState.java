@@ -98,6 +98,19 @@ public class GameState
         return false;
     }
 
+    public StarSystem getStarSystem(int id)
+    {
+        if(this.starSystems.containsKey(id))
+        {
+            return starSystems.get(id);
+        }
+        else
+        {
+            Gdx.app.log("GameState", "Star System " + id + " does not exist. Returning null.");
+        }
+        return null;
+    }
+
     public void renderGalacticMap(SpriteBatch batch)
     {
         batch.begin();
@@ -117,5 +130,13 @@ public class GameState
     public Array<StarSystem> getStarSystems()
     {
         return starSystems.values().toArray();
+    }
+
+    public void debugSystemIDs()
+    {
+        for(StarSystem system : getStarSystems())
+        {
+            system.debugID();
+        }
     }
 }
