@@ -7,7 +7,9 @@ import com.badlogic.gdx.utils.IntMap;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
+import org.origin.spacegame.utilities.SystemGeneratorType;
 import org.origin.spacegame.utilities.RandomStarSystemGenerator;
+import org.origin.spacegame.utilities.TileMapStarSystemGenerator;
 
 public class GameState
 {
@@ -28,19 +30,33 @@ public class GameState
     private void generateGalaxy()
     {
         Gdx.app.log("Galaxy being generated...", "The star system generator is running.");
-        generateStarSystems(Constants.STAR_SYSTEM_COUNT);
+        SystemGeneratorType genType = SystemGeneratorType.TILE_MAP;
+        generateStarSystems(Constants.STAR_SYSTEM_COUNT, genType);
     }
 
-    private void generateStarSystems(int systemCount)
+    private void generateStarSystems(int systemCount, SystemGeneratorType genType)
     {
-        RandomStarSystemGenerator generator = new RandomStarSystemGenerator(Constants.STAR_SYSTEM_MIN_PLANET_COUNT,
-                                                                Constants.STAR_SYSTEM_MAX_PLANET_COUNT);
-        //This array will be sent to post-processing.
-        Array<StarSystem> starSystemsArray = new Array<StarSystem>();
-        for(int i = 0; i < systemCount; i++)
+        if(genType == SystemGeneratorType.RANDOM)
         {
-            StarSystem generatedSystem = generator.generateSystem();
-            starSystems.put(generatedSystem.id, generatedSystem);
+            RandomStarSystemGenerator generator = new RandomStarSystemGenerator(Constants.STAR_SYSTEM_MIN_PLANET_COUNT,
+                Constants.STAR_SYSTEM_MAX_PLANET_COUNT);
+            //This array will be sent to post-processing.
+            Array<StarSystem> starSystemsArray = new Array<StarSystem>();
+            for(int i = 0; i < systemCount; i++)
+            {
+                StarSystem generatedSystem = generator.generateSystem();
+                starSystems.put(generatedSystem.id, generatedSystem);
+
+                for(StarSystem s1 : starSystemsArray)
+                {
+                    while(isTooCloseToAnotherSystem(s1, starSystemsArray))
+                    {
+                        s1.getGalacticPosition().x = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_WIDTH);
+                        s1.getGalacticPosition().y = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_HEIGHT);
+                    }
+                }
+                Gdx.app.log("Star System Generated", "Star System " + generatedSystem.id + " has been generated at (" + generatedSystem.getGalacticPosition().x + ", " + generatedSystem.getGalacticPosition().y + ") with a star type of " + generatedSystem.getStarTypeTag());
+            }
 
             for(StarSystem s1 : starSystemsArray)
             {
@@ -50,15 +66,14 @@ public class GameState
                     s1.getGalacticPosition().y = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_HEIGHT);
                 }
             }
-            Gdx.app.log("Star System Generated", "Star System " + generatedSystem.id + " has been generated at (" + generatedSystem.getGalacticPosition().x + ", " + generatedSystem.getGalacticPosition().y + ") with a star type of " + generatedSystem.getStarType());
         }
-
-        for(StarSystem s1 : starSystemsArray)
+        else if (genType == SystemGeneratorType.TILE_MAP)
         {
-            while(isTooCloseToAnotherSystem(s1, starSystemsArray))
+            TileMapStarSystemGenerator generator = new TileMapStarSystemGenerator();
+            Array<StarSystem> generatedSystems = generator.generateStarSystems(systemCount);
+            for(StarSystem system : generatedSystems)
             {
-                s1.getGalacticPosition().x = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_WIDTH);
-                s1.getGalacticPosition().y = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_HEIGHT);
+                this.starSystems.put(system.id, system);
             }
         }
     }
@@ -89,7 +104,7 @@ public class GameState
         //String starSystemRenderDebugTxt = "";
         for(StarSystem system : this.starSystems.values())
         {
-            batch.draw(GameInstance.getInstance().getStarClass(system.getStarType()).getGfx(),
+            batch.draw(GameInstance.getInstance().getStarClass(system.getStarTypeTag()).getGfx(),
                                                                 system.getGalacticPosition().x,
                                                                 system.getGalacticPosition().y, Constants.STAR_SYSTEM_GALACTIC_MAP_RENDER_WIDTH,
                                                                                                 Constants.STAR_SYSTEM_GALACTIC_MAP_RENDER_HEIGHT);

@@ -74,11 +74,6 @@ public class Main extends ApplicationAdapter
         currentCamera.update();
 
         batch.setProjectionMatrix(currentCamera.combined);
-        //batch.begin();
-        //GameInstance.getInstance().getStarClass("blue_star_01").getGfx().
-        //batch.draw(image, 0, 0, 100f, 100f);
-        //batch.draw(GameInstance.getInstance().getStarClass("blue_star_01").getGfx(), 0,0, 100f, 100f);
-        //batch.end();
         GameInstance.getInstance().getState().renderGalacticMap(batch);
     }
 
