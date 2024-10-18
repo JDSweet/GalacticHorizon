@@ -37,5 +37,6 @@ public class StarSystem
     public StarClass getStarClass()
     {
         return GameInstance.getInstance().getStarClass(this.getStarTypeTag());
+        //d
     }
 }
