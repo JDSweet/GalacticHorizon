@@ -88,8 +88,12 @@ public class InputUtilities
 
         if(!outOfBounds && tiles[x][y] != Constants.InputConstants.TILEMAP_NO_SYSTEM_VAL)
         {
-            selectedStarSystem = GameInstance.getInstance().getState().getStarSystem(tiles[x][y]);
-            Gdx.app.log("InputUtilities", " Star System " + selectedStarSystem.id + " selected.");
+            StarSystem thisSelectedStarSystem = GameInstance.getInstance().getState().getStarSystem(tiles[x][y]);
+            if(thisSelectedStarSystem != selectedStarSystem)
+            {
+                selectedStarSystem = thisSelectedStarSystem;
+                Gdx.app.log("InputUtilities", " Star System " + selectedStarSystem.id + " selected.");
+            }
         }
     }
 }
