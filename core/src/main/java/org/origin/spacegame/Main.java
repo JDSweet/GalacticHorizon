@@ -47,6 +47,12 @@ public class Main extends ApplicationAdapter
         systemCamera = new OrthographicCamera();
 
         loadGameData();
+        initInput();
+    }
+
+    private void initInput()
+    {
+        InputUtilities.initialize(currentCamera);
     }
 
     private void loadGameData()
@@ -55,7 +61,8 @@ public class Main extends ApplicationAdapter
         image = new Texture("gfx/libgdx.png");
         GameInstance.getInstance().loadData();
         GameInstance.getInstance().getState().initialize();
-        InputUtilities.initializeTileMapInput();
+
+        this.currentCamera = galacticCamera;
 
         GameInstance.getInstance().getState().debugSystemIDs();
     }

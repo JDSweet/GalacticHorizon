@@ -2,6 +2,8 @@ package org.origin.spacegame.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -12,6 +14,8 @@ import org.origin.spacegame.game.GameInstance;
 public class InputUtilities
 {
     private static StarSystem selectedStarSystem = null;
+    private static ZoomInputProcessor zoomProcessor = null;
+    private static int[][] tiles;
 
     public static void detectCameraMovement(OrthographicCamera camera)
     {
@@ -34,10 +38,33 @@ public class InputUtilities
             detectMouseClicks(camera);
     }
 
-    private static int[][] tiles;
+    public static void initialize(OrthographicCamera defaultCamera)
+    {
+        //Initialize the input-multiplexer, add the default processor to it, and add our zoom processor.
+        initializeInputMultiplexer(defaultCamera);
+
+        //Initialize the tile map's input detection.
+        initializeTileMapInput();
+    }
+
+    public static void setProjectionCamera(OrthographicCamera camera)
+    {
+        zoomProcessor.setCamera(camera);
+    }
+
+    private static void initializeInputMultiplexer(OrthographicCamera defaultCamera)
+    {
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        //InputProcessor defaultInputProcessor = Gdx.input.getInputProcessor();
+        ZoomInputProcessor zoomInputProcessor = new ZoomInputProcessor(defaultCamera);
+        zoomProcessor = zoomInputProcessor;
+        //inputMultiplexer.addProcessor(defaultInputProcessor);
+        inputMultiplexer.addProcessor(zoomInputProcessor);
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
 
     //Sets the default value for each tile.
-    public static void initializeTileMapInput()
+    private static void initializeTileMapInput()
     {
         tiles = new int[Math.round(Constants.GALAXY_WIDTH)][Math.round(Constants.GALAXY_HEIGHT)];
         Array<StarSystem> systems = GameInstance.getInstance().getState().getStarSystems();
