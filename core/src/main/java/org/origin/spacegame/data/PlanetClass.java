@@ -14,6 +14,11 @@ public class PlanetClass implements Disposable
         this.gfx = gfx;
     }
 
+    public Texture getGfx()
+    {
+        return gfx;
+    }
+
     @Override
     public void dispose()
     {

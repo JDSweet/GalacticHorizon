@@ -3,39 +3,39 @@ package org.origin.spacegame.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;
+import org.origin.spacegame.utilities.CameraManager;
 
 public class InputUtilities
 {
-    private static StarSystem selectedStarSystem = null;
+    //private static StarSystem selectedStarSystem = null;
     private static ZoomInputProcessor zoomProcessor = null;
-    private static int[][] tiles;
+    //private static int[][] tiles;
 
-    public static void detectCameraMovement(OrthographicCamera camera)
+    public static void detectCameraMovement(CameraManager manager)
     {
         if(Gdx.input.isKeyPressed(Input.Keys.DPAD_UP))
-            camera.position.y += (0.4f * camera.zoom);;
+            manager.getCurrentCamera().position.y += (0.4f * manager.getCurrentCamera().zoom);;
         if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN))
-            camera.position.y -= (0.4f * camera.zoom);
+            manager.getCurrentCamera().position.y -= (0.4f * manager.getCurrentCamera().zoom);
         if(Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT))
-            camera.position.x -= (0.4f * camera.zoom);
+            manager.getCurrentCamera().position.x -= (0.4f * manager.getCurrentCamera().zoom);
         if(Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT))
-            camera.position.x += (0.4f * camera.zoom);
+            manager.getCurrentCamera().position.x += (0.4f * manager.getCurrentCamera().zoom);
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER) || Gdx.input.isKeyPressed(Input.Keys.PLUS))
-            camera.zoom += (0.05f * camera.zoom);
+            manager.getCurrentCamera().zoom += (0.05f * manager.getCurrentCamera().zoom);
         if(Gdx.input.isKeyPressed(Input.Keys.BACKSPACE) || Gdx.input.isKeyPressed(Input.Keys.MINUS))
-            camera.zoom -= (0.05f * camera.zoom);
-        if(camera.zoom <= 0.01f)
-            camera.zoom = 0.01f;
+            manager.getCurrentCamera().zoom -= (0.05f * manager.getCurrentCamera().zoom);
+        if(manager.getCurrentCamera().zoom <= 0.01f)
+            manager.getCurrentCamera().zoom = 0.01f;
 
-        if(Gdx.input.isTouched())
-            detectMouseClicks(camera);
+        /*if(Gdx.input.isTouched())
+            detectStarSystemMouseClicks(manager);*/
     }
 
     public static void initialize(OrthographicCamera defaultCamera)
@@ -44,7 +44,7 @@ public class InputUtilities
         initializeInputMultiplexer(defaultCamera);
 
         //Initialize the tile map's input detection.
-        initializeTileMapInput();
+        //initializeTileMapInput();
     }
 
     public static void setProjectionCamera(OrthographicCamera camera)
@@ -55,16 +55,14 @@ public class InputUtilities
     private static void initializeInputMultiplexer(OrthographicCamera defaultCamera)
     {
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        //InputProcessor defaultInputProcessor = Gdx.input.getInputProcessor();
         ZoomInputProcessor zoomInputProcessor = new ZoomInputProcessor(defaultCamera);
         zoomProcessor = zoomInputProcessor;
-        //inputMultiplexer.addProcessor(defaultInputProcessor);
         inputMultiplexer.addProcessor(zoomInputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     //Sets the default value for each tile.
-    private static void initializeTileMapInput()
+    /*private static void initializeTileMapInput()
     {
         tiles = new int[Math.round(Constants.GALAXY_WIDTH)][Math.round(Constants.GALAXY_HEIGHT)];
         Array<StarSystem> systems = GameInstance.getInstance().getState().getStarSystems();
@@ -72,7 +70,7 @@ public class InputUtilities
         {
             for(int y = 0; y < tiles[x].length; y++)
             {
-                tiles[x][y] = Constants.InputConstants.TILEMAP_NO_SYSTEM_VAL;
+                tiles[x][y] = Constants.InputConstants.TILE_MAP_NO_SYSTEM_VAL;
             }
         }
         for(StarSystem system : systems)
@@ -81,13 +79,17 @@ public class InputUtilities
             int roundedY = Math.round(system.getGalacticPosition().y);
             tiles[roundedX][roundedY] = system.id;
         }
-    }
+    }*/
+    /*public static StarSystem getSelectedStarSystem()
+    {
+        return selectedStarSystem;
+    }*/
 
     //This detects mouse clicks and checks to see if the click is in bounds.
     //If it is, and the click matches a star system's tile coordinates, then
     //that system is selected.
-    static Vector3 projectedCoords = new Vector3();
-    public static void detectMouseClicks(OrthographicCamera camera)
+    /*static Vector3 projectedCoords = new Vector3();
+    public static void detectStarSystemMouseClicks(CameraManager manager)
     {
         String logText = "";
 
@@ -95,7 +97,7 @@ public class InputUtilities
         int py = Gdx.input.getY();
         projectedCoords.x = (float)px;
         projectedCoords.y = (float)py;
-        Vector3 unprojectedCoords = camera.unproject(projectedCoords);
+        Vector3 unprojectedCoords = manager.getCurrentCamera().unproject(projectedCoords);
 
         int x = Math.round(unprojectedCoords.x);
         int y = Math.round(unprojectedCoords.y);
@@ -113,14 +115,16 @@ public class InputUtilities
             logText += "/n y = " + y + " is out of bounds.";
         }
 
-        if(!outOfBounds && tiles[x][y] != Constants.InputConstants.TILEMAP_NO_SYSTEM_VAL)
+        if(!outOfBounds && tiles[x][y] != Constants.InputConstants.TILE_MAP_NO_SYSTEM_VAL)
         {
             StarSystem thisSelectedStarSystem = GameInstance.getInstance().getState().getStarSystem(tiles[x][y]);
             if(thisSelectedStarSystem != selectedStarSystem)
             {
                 selectedStarSystem = thisSelectedStarSystem;
+                GameInstance.getInstance().selectStarSystem(selectedStarSystem);
                 Gdx.app.log("InputUtilities", " Star System " + selectedStarSystem.id + " selected.");
+                manager.setRenderView(CameraManager.RenderView.SYSTEM_VIEW);
             }
         }
-    }
+    }*/
 }

@@ -9,7 +9,7 @@ public class ZoomInputProcessor implements InputProcessor
 
     public ZoomInputProcessor(OrthographicCamera camera)
     {
-        this.camera = camera;
+        setCamera(camera);
     }
 
     @Override

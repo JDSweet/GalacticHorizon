@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Disposable;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
+import org.origin.spacegame.entities.StarSystem;
 
 import java.util.HashMap;
 
@@ -86,9 +87,21 @@ public class GameInstance implements Disposable
         }
     }
 
+    private StarSystem selectedStarSystem;
+
+    public void selectStarSystem(StarSystem system)
+    {
+        this.selectedStarSystem = system;
+    }
+
+    public StarSystem getSelectedStarSystem()
+    {
+        return selectedStarSystem;
+    }
+
     public Array<String> getPlanetClassTags()
     {
-        String[] planetClassTags = planetClasses.keys().toArray().toArray();
+        Array<String> planetClassTags = planetClasses.keys().toArray();
         return new Array<String>(planetClassTags);
     }
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.IntMap;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
+import org.origin.spacegame.utilities.PlanetGenerator;
 import org.origin.spacegame.utilities.SystemGeneratorType;
 import org.origin.spacegame.utilities.RandomStarSystemGenerator;
 import org.origin.spacegame.utilities.TileMapStarSystemGenerator;
@@ -15,11 +16,13 @@ public class GameState
 {
     private IntMap<StarSystem> starSystems;
     private IntMap<Planet> planets;
+    private PlanetGenerator planetGenerator;
 
     public GameState()
     {
         this.starSystems = new IntMap<StarSystem>();
         this.planets = new IntMap<Planet>();
+        planetGenerator = new PlanetGenerator();
     }
 
     public void initialize()
@@ -38,8 +41,8 @@ public class GameState
     {
         if(genType == SystemGeneratorType.RANDOM)
         {
-            RandomStarSystemGenerator generator = new RandomStarSystemGenerator(Constants.STAR_SYSTEM_MIN_PLANET_COUNT,
-                Constants.STAR_SYSTEM_MAX_PLANET_COUNT);
+            RandomStarSystemGenerator generator = new RandomStarSystemGenerator(Constants.MIN_PLANET_COUNT,
+                Constants.MAX_PLANET_COUNT);
             //This array will be sent to post-processing.
             Array<StarSystem> starSystemsArray = new Array<StarSystem>();
             for(int i = 0; i < systemCount; i++)
@@ -71,8 +74,10 @@ public class GameState
         {
             TileMapStarSystemGenerator generator = new TileMapStarSystemGenerator();
             Array<StarSystem> generatedSystems = generator.generateStarSystems(systemCount);
+
             for(StarSystem system : generatedSystems)
             {
+                system.addAllPlanets(planetGenerator.generatePlanets(system));
                 this.starSystems.put(system.id, system);
             }
         }
@@ -109,6 +114,13 @@ public class GameState
             Gdx.app.log("GameState", "Star System " + id + " does not exist. Returning null.");
         }
         return null;
+    }
+
+    public void renderSystemView(SpriteBatch batch, StarSystem system)
+    {
+        batch.begin();
+        system.renderSystemToSystemView(batch);
+        batch.end();
     }
 
     public void renderGalacticMap(SpriteBatch batch)
