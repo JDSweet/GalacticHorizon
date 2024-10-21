@@ -44,5 +44,7 @@ public class Constants
         public static float MINIMUM_ORBITAL_RADIUS = ((STAR_SYSTEM_INTERNAL_WIDTH + STAR_SYSTEM_INTERNAL_HEIGHT)/2f) * 0.25f;
         public static float STAR_RENDER_SIZE = 30f;
         public static float PLANET_RENDER_SIZE = 10f;
+
+        public static int MAX_STARS_IN_SYSTEM = 3;
     }
 }

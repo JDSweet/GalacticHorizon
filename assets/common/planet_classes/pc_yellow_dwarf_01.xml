@@ -1,4 +1,4 @@
-<PlanetClass tag = "pc_yellow_dwarf_01"
+<PlanetClass tag = "pc_yellow_dwarf"
              min_habitability = "0"
              max_habitability = "0"
              min_size = "20"

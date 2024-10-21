@@ -8,11 +8,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.XmlReader;
-//import org.luaj.vm2.Lua;
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.Lua;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.jse.JsePlatform;
 import org.luaj.vm2.script.LuaScriptEngine;
 import org.luaj.vm2.script.LuaScriptEngineFactory;
 import org.origin.spacegame.data.PlanetClass;
@@ -21,6 +16,7 @@ import org.origin.spacegame.entities.StarSystem;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.util.Random;
 
 public class GameInstance implements Disposable
 {
@@ -37,7 +33,7 @@ public class GameInstance implements Disposable
     private ArrayMap<String, StarClass> starClasses;
     private ArrayMap<String, PlanetClass> planetClasses;
     private XmlReader xmlReader;
-
+    private Random random;
     private Skin guiSkin;
 
 
@@ -47,14 +43,9 @@ public class GameInstance implements Disposable
         starClasses = new ArrayMap<String, StarClass>();
         planetClasses = new ArrayMap<String, PlanetClass>();
         xmlReader = new XmlReader();
-        //Scriptable s;
+        this.random = new Random();
 
         String script = "val = 'hello from lua'";
-        //Globals globals = JsePlatform.standardGlobals();
-        //LuaValue chunk = globals.load(script);
-        //LuaValue val = chunk.get("val");
-        //LuaValue ret = chunk.call();
-
         LuaScriptEngine eng = (LuaScriptEngine) new LuaScriptEngineFactory().getScriptEngine();
         try {
             eng.eval(script);
@@ -63,6 +54,11 @@ public class GameInstance implements Disposable
         }
         String ret = (String)eng.get("val");
         Gdx.app.log("ScriptEngine", ret);
+    }
+
+    public Random getRandom()
+    {
+        return random;
     }
 
     public GameState getState()
@@ -141,10 +137,7 @@ public class GameInstance implements Disposable
 
     private boolean yesOrNoToTrueOrFalse(String str)
     {
-        if(str.toLowerCase().equals("yes"))
-            return true;
-        else
-            return false;
+        return str.equalsIgnoreCase("yes");
     }
 
     public void loadStarClasses()

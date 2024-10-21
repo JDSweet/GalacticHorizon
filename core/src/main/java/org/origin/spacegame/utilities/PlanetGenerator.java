@@ -5,7 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.PlanetClass;
+import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.Planet;
+import org.origin.spacegame.entities.Star;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;
 
@@ -66,12 +68,15 @@ public class PlanetGenerator
         float lastOrbitalRadius = 0f; //Constants.StarSystemConstants.MINIMUM_ORBITAL_RADIUS;
         //float curRadius = 0f;
 
+        int numStarsInSystem = 0;
         for(int i = 0; i < realPlanetCount; i++)
         {
             //float stepAmount = 0f;
             float distanceBetweenThisAndLastOrbit = random.nextFloat(Constants.StarSystemConstants.MIN_DISTANCE_BETWEEN_PLANET_ORBITS,
                                                                      Constants.StarSystemConstants.MAX_DISTANCE_BETWEEN_PLANET_ORBITS);
-            if(i == 1)
+            if(i == 0)
+                curOrbitalRadius = 0f;
+            else if(i == 1)
                 curOrbitalRadius = Constants.StarSystemConstants.MINIMUM_ORBITAL_RADIUS;
             else
                 curOrbitalRadius = lastOrbitalRadius + distanceBetweenThisAndLastOrbit;
@@ -82,8 +87,36 @@ public class PlanetGenerator
 
             Array<String> planetClassTags = GameInstance.getInstance().getPlanetClassTags();
             String planetClassTag = planetClassTags.get(random.nextInt(0, planetClassTags.size));
-            PlanetClass planetClass = GameInstance.getInstance().getPlanetClass(planetClassTag);
-            //Planet planet = generatePlanet(system, planetClass, curOrbitalRadius + stepAmount);
+            PlanetClass planetClass = null;
+            if(i == 0) //If this is the first "planet" in the system, then is the system's main star.
+            {
+                planetClass = system.getStarClass().getStarPlanetClass();
+                numStarsInSystem++;
+            }
+            else
+            {
+                planetClass = GameInstance.getInstance().getPlanetClass(planetClassTag);
+                if(planetClass.isStar())
+                {
+                    numStarsInSystem++;
+                }
+            }
+
+
+
+            if(numStarsInSystem >= Constants.StarSystemConstants.MAX_STARS_IN_SYSTEM)
+            {
+                //Now, we're going to remove all star planet classes from the list of possible planet classes to
+                //avoid going over the limit.
+                for(String pcTag : planetClassTags)
+                {
+                    if(GameInstance.getInstance().getPlanetClass(pcTag).isStar())
+                        planetClassTags.removeValue(pcTag, false);
+                }
+                //Regenerate the list of valid planet-classes to exclude stars, now that we are out of stars.
+                planetClassTag = planetClassTags.get(random.nextInt(0, planetClassTags.size));
+                planetClass = GameInstance.getInstance().getPlanetClass(planetClassTag);
+            }
 
             Planet planet = generatePlanet(system, planetClass, curOrbitalRadius);
             Gdx.app.log("PlanetGeneratorDebug", "Planet " + planet.id
@@ -104,6 +137,15 @@ public class PlanetGenerator
         float planetX = system.getCenter().x + (orbitalRadius * cos);
         float planetY = system.getCenter().y + (orbitalRadius * sin);
         Vector2 position = new Vector2(planetX, planetY);
-        return new Planet(planetCount++, position, orbitalRadius, planetClass);
+        Planet retval = null;
+        if(planetClass.isStar())
+        {
+            retval = new Star(planetCount++, position, orbitalRadius, planetClass);
+        }
+        else
+        {
+            retval = new Planet(planetCount++, position, orbitalRadius, planetClass);
+        }
+        return retval;
     }
 }

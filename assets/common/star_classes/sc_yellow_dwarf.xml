@@ -2,6 +2,6 @@
              hab_min_radius = "3"
              hab_max_radius = "6"
              textureFile = "assets/gfx/stars/yellow_star_01.png"
-             star_planet_class = "pc_yellow_dwarf_01"
+             star_planet_class = "pc_yellow_dwarf"
              energy_prod_bonus = "1.2">
 </StarClass>

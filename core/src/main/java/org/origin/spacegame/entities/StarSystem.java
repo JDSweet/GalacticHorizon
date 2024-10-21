@@ -16,6 +16,7 @@ public class StarSystem
     public Array<Planet> planets;
     public Array<Fleet> fleets;
     private Vector2 centroid;
+    private Array<Planet> stars;
 
     private Vector2 galacticPosition;
 
@@ -35,6 +36,7 @@ public class StarSystem
         this.planets = new Array<Planet>();
         this.fleets = new Array<Fleet>();
         this.starType = starType;
+        this.stars = new Array<Planet>();
         this.galacticPosition = new Vector2(galacticX, galacticY);
 
         float xCenter = (0f + Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_WIDTH)/2f;
@@ -46,15 +48,21 @@ public class StarSystem
     //System View must be enabled for this to work.
     public void renderSystemToSystemView(SpriteBatch batch)
     {
-        batch.draw(getStarClass().getGfx(),
+        /*batch.draw(getStarClass().getGfx(),
             Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_WIDTH/2f,
             Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_HEIGHT/2f,
                Constants.StarSystemConstants.STAR_RENDER_SIZE,
-               Constants.StarSystemConstants.STAR_RENDER_SIZE);
+               Constants.StarSystemConstants.STAR_RENDER_SIZE);*/
         for(Planet p : planets)
         {
             p.renderPlanet(batch);
         }
+    }
+
+    //Adds the specific planet to the star list.
+    public void addStar(Planet p)
+    {
+        stars.add(p);
     }
 
     public void addAllPlanets(Array<Planet> planets)
