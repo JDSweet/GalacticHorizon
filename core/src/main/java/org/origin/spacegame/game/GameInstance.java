@@ -19,6 +19,7 @@ import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.StarSystem;
 
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 public class GameInstance implements Disposable
