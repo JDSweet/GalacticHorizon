@@ -8,9 +8,18 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.XmlReader;
+//import org.luaj.vm2.Lua;
+import org.luaj.vm2.Globals;
+import org.luaj.vm2.Lua;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.JsePlatform;
+import org.luaj.vm2.script.LuaScriptEngine;
+import org.luaj.vm2.script.LuaScriptEngineFactory;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.StarSystem;
+
+import javax.script.ScriptException;
 
 public class GameInstance implements Disposable
 {
@@ -37,6 +46,22 @@ public class GameInstance implements Disposable
         starClasses = new ArrayMap<String, StarClass>();
         planetClasses = new ArrayMap<String, PlanetClass>();
         xmlReader = new XmlReader();
+        //Scriptable s;
+
+        String script = "val = 'hello from lua'";
+        //Globals globals = JsePlatform.standardGlobals();
+        //LuaValue chunk = globals.load(script);
+        //LuaValue val = chunk.get("val");
+        //LuaValue ret = chunk.call();
+
+        LuaScriptEngine eng = (LuaScriptEngine) new LuaScriptEngineFactory().getScriptEngine();
+        try {
+            eng.eval(script);
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
+        String ret = (String)eng.get("val");
+        Gdx.app.log("ScriptEngine", ret);
     }
 
     public GameState getState()
