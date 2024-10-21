@@ -63,21 +63,32 @@ public class PlanetGenerator
 
         //The current orbital radius we are working with.
         float curOrbitalRadius = Constants.StarSystemConstants.MINIMUM_ORBITAL_RADIUS;
+        float lastOrbitalRadius = 0f; //Constants.StarSystemConstants.MINIMUM_ORBITAL_RADIUS;
+        //float curRadius = 0f;
 
         for(int i = 0; i < realPlanetCount; i++)
         {
-            float stepAmount = 0f;
-            if(i > 0)
+            //float stepAmount = 0f;
+            float distanceBetweenThisAndLastOrbit = random.nextFloat(Constants.StarSystemConstants.MIN_DISTANCE_BETWEEN_PLANET_ORBITS,
+                                                                     Constants.StarSystemConstants.MAX_DISTANCE_BETWEEN_PLANET_ORBITS);
+            if(i == 0)
+                curOrbitalRadius = Constants.StarSystemConstants.MINIMUM_ORBITAL_RADIUS;
+            else
+                curOrbitalRadius = lastOrbitalRadius + distanceBetweenThisAndLastOrbit;
+            /*if(i > 0)
                 stepAmount = random.nextFloat(minOrbitalRadius, minOrbitalRadius + Constants.StarSystemConstants.MAX_DISTANCE_BETWEEN_PLANET_ORBITS);
             else
-                stepAmount = random.nextFloat(minOrbitalRadius, minOrbitalRadius * 1.5f);
+                stepAmount = random.nextFloat(minOrbitalRadius, minOrbitalRadius * 1.1f);*/
 
             Array<String> planetClassTags = GameInstance.getInstance().getPlanetClassTags();
             String planetClassTag = planetClassTags.get(random.nextInt(0, planetClassTags.size-1));
             PlanetClass planetClass = GameInstance.getInstance().getPlanetClass(planetClassTag);
-            Planet planet = generatePlanet(system, planetClass, curOrbitalRadius + stepAmount);
+            //Planet planet = generatePlanet(system, planetClass, curOrbitalRadius + stepAmount);
+
+            Planet planet = generatePlanet(system, planetClass, curOrbitalRadius);
             Gdx.app.log("PlanetGeneratorDebug", "Planet " + planet.id
                 + " generated at " + planet.getPosition().toString());
+            lastOrbitalRadius = curOrbitalRadius;
             retval.add(planet);
         }
         return retval;

@@ -30,8 +30,8 @@ public class Constants
 
     public static class StarSystemConstants
     {
-        public static float MIN_DISTANCE_BETWEEN_PLANET_ORBITS = 20f;
-        public static float MAX_DISTANCE_BETWEEN_PLANET_ORBITS = 50f;
+        public static float MIN_DISTANCE_BETWEEN_PLANET_ORBITS = 40f;
+        public static float MAX_DISTANCE_BETWEEN_PLANET_ORBITS = 80f;
         //The max height and width of the star system. Used to determine camera bounds.
         //Also used to calculate the logical center of the system.
 
@@ -41,7 +41,7 @@ public class Constants
         public static float STAR_SYSTEM_VIEWPORT_WIDTH = 100f;
         public static float STAR_SYSTEM_VIEWPORT_HEIGHT = 100f;
 
-        public static float MINIMUM_ORBITAL_RADIUS = (STAR_SYSTEM_INTERNAL_WIDTH + STAR_SYSTEM_INTERNAL_HEIGHT)/2f;
+        public static float MINIMUM_ORBITAL_RADIUS = ((STAR_SYSTEM_INTERNAL_WIDTH + STAR_SYSTEM_INTERNAL_HEIGHT)/2f) * 0.25f;
         public static float STAR_RENDER_SIZE = 30f;
         public static float PLANET_RENDER_SIZE = 10f;
     }
