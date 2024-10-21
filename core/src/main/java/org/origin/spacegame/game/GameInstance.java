@@ -12,6 +12,7 @@ import org.luaj.vm2.script.LuaScriptEngine;
 import org.luaj.vm2.script.LuaScriptEngineFactory;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
+import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
 
 import javax.script.ScriptEngineManager;
@@ -35,6 +36,8 @@ public class GameInstance implements Disposable
     private XmlReader xmlReader;
     private Random random;
     private Skin guiSkin;
+    private StarSystem selectedStarSystem;
+    private Planet selectedPlanet;
 
 
     public GameInstance()
@@ -71,6 +74,16 @@ public class GameInstance implements Disposable
         loadPlanetClasses();
         loadStarClasses();
         loadSkin();
+    }
+
+    public void selectPlanet(Planet planet)
+    {
+        this.selectedPlanet = planet;
+    }
+
+    public Planet getSelectedPlanet()
+    {
+        return selectedPlanet;
     }
 
     private void loadSkin()
@@ -173,8 +186,6 @@ public class GameInstance implements Disposable
         float energyProdBonus = Float.parseFloat(root.getAttribute("energy_prod_bonus"));
         return new StarClass(tag, starPlanetClassTag, gfx, habZoneMinRadius, habZoneMaxRadius, energyProdBonus);
     }
-
-    private StarSystem selectedStarSystem;
 
     public void selectStarSystem(StarSystem system)
     {
