@@ -6,5 +6,5 @@
              only_spawns_in_habitable_zone = "no"
              star = "yes"
              can_colonize = "no"
-             textureFile = "assets/gfx/stars/yellow_star_01.png">
+             textureFile = "assets/gfx/stars/blue_star_01.png">
 </PlanetClass>

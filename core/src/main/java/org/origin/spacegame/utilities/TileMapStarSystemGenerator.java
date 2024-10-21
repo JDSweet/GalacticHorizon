@@ -112,7 +112,8 @@ public class TileMapStarSystemGenerator
     private StarSystem generateSystem(int id, int x, int y)
     {
         Array<String> starClassTags = GameInstance.getInstance().getStarClassTags();
-        int starClassTagIndex = random.nextInt(0, starClassTags.size-1);
+        Gdx.app.log("System Generation Debug", "Star Classes..." + starClassTags.size);
+        int starClassTagIndex = random.nextInt(0, starClassTags.size);
 
         float galacticX = random.nextFloat(Constants.GALAXY_WIDTH);
         float galacticY = random.nextFloat(Constants.GALAXY_HEIGHT);

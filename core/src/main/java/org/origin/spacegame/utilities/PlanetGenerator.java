@@ -81,7 +81,7 @@ public class PlanetGenerator
                 stepAmount = random.nextFloat(minOrbitalRadius, minOrbitalRadius * 1.1f);*/
 
             Array<String> planetClassTags = GameInstance.getInstance().getPlanetClassTags();
-            String planetClassTag = planetClassTags.get(random.nextInt(0, planetClassTags.size-1));
+            String planetClassTag = planetClassTags.get(random.nextInt(0, planetClassTags.size));
             PlanetClass planetClass = GameInstance.getInstance().getPlanetClass(planetClassTag);
             //Planet planet = generatePlanet(system, planetClass, curOrbitalRadius + stepAmount);
 

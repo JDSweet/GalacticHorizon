@@ -124,14 +124,35 @@ public class GameInstance implements Disposable
     public void loadStarClasses()
     {
 
-        FileHandle[] starTexturePaths = Gdx.files.internal("assets/gfx/stars/").list();
+        /*FileHandle[] starTexturePaths = Gdx.files.internal("assets/gfx/stars/").list();
         Gdx.app.log("Loading Star Textures...", "Testing. " + starTexturePaths.length + " stars detected.");
         for(FileHandle starTexturePath : starTexturePaths)
         {
             String fileName = starTexturePath.nameWithoutExtension();
             Gdx.app.log("Texture Loaded: ", fileName);
             starClasses.put(fileName, new StarClass(fileName, new Texture(starTexturePath), 1.0f));
+        }*/
+        Gdx.app.log("GameInstance", "Loading Star Class XML Files...");
+        FileHandle[] starClassDefinesPaths = Gdx.files.internal("assets/common/star_classes/").list();
+        for(FileHandle starClassDefinePath : starClassDefinesPaths)
+        {
+            //starClasses.put(fileName, new StarClass(fileName, new Texture(starTexturePath), 1.0f));
+            StarClass starClass = loadStarClass(this.xmlReader, starClassDefinePath);
+            Gdx.app.log("GameInstance: ", "Star Class " + starClass.getTag() + " has been loaded.");
+            this.starClasses.put(starClass.getTag(), starClass);
         }
+    }
+
+    private StarClass loadStarClass(XmlReader reader, FileHandle handle)
+    {
+        XmlReader.Element root = reader.parse(handle);
+        String tag = root.getAttribute("tag");
+        String starPlanetClassTag = root.getAttribute("star_planet_class");
+        Texture gfx = new Texture(Gdx.files.internal(root.getAttribute("textureFile")));
+        float habZoneMinRadius = Float.parseFloat(root.getAttribute("hab_min_radius"));
+        float habZoneMaxRadius = Float.parseFloat(root.getAttribute("hab_max_radius"));
+        float energyProdBonus = Float.parseFloat(root.getAttribute("energy_prod_bonus"));
+        return new StarClass(tag, starPlanetClassTag, gfx, habZoneMinRadius, habZoneMaxRadius, energyProdBonus);
     }
 
     private StarSystem selectedStarSystem;
