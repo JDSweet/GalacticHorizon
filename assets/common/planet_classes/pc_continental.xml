@@ -1,0 +1,10 @@
+<PlanetClass tag = "pc_continental"
+             min_habitability = "0.8"
+             max_habitability = "0.99"
+             min_size = "8"
+             max_size = "16"
+             only_spawns_in_habitable_zone = "true"
+             star = "no"
+             can_colonize = "yes"
+             textureFile = "assets/gfx/planets/pc_continental.png">
+</PlanetClass>

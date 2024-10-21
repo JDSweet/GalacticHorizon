@@ -54,7 +54,7 @@ public class PlanetGenerator
 
         int minPlanetCount = Constants.MIN_PLANET_COUNT;
         int maxPlanetCount = Constants.MAX_PLANET_COUNT;
-        int realPlanetCount = random.nextInt(minPlanetCount, maxPlanetCount);
+        int realPlanetCount = random.nextInt(minPlanetCount, maxPlanetCount+1); //+1 because we are now treating stars like planets for the purpose of system generation.
 
         //We generate the minimum orbital radius, then we "step" out a random distance from the minimum for each planet
         //generated. The random distance is between Constants.StarSystemConstants.MIN_DISTANCE_BETWEEN_PLANET_ORBITS
@@ -71,7 +71,7 @@ public class PlanetGenerator
             //float stepAmount = 0f;
             float distanceBetweenThisAndLastOrbit = random.nextFloat(Constants.StarSystemConstants.MIN_DISTANCE_BETWEEN_PLANET_ORBITS,
                                                                      Constants.StarSystemConstants.MAX_DISTANCE_BETWEEN_PLANET_ORBITS);
-            if(i == 0)
+            if(i == 1)
                 curOrbitalRadius = Constants.StarSystemConstants.MINIMUM_ORBITAL_RADIUS;
             else
                 curOrbitalRadius = lastOrbitalRadius + distanceBetweenThisAndLastOrbit;
@@ -95,7 +95,7 @@ public class PlanetGenerator
     }
 
     //This function takes a star system, a planet class, and an orbital radius, and returns a new planet
-    //positioned at a random point on that orbital radius around the centerpoint of that system.
+    //positioned at a random point on that orbital radius around the center-point of that system.
     private Planet generatePlanet(StarSystem system, PlanetClass planetClass, float orbitalRadius)
     {
         float angle = random.nextFloat(0f, 2f*3.1415f);

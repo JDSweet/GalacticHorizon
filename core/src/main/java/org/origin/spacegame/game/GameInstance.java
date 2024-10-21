@@ -2,19 +2,15 @@ package org.origin.spacegame.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Disposable;
-import org.origin.spacegame.Constants;
+import com.badlogic.gdx.utils.XmlReader;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.StarSystem;
-
-import java.util.HashMap;
 
 public class GameInstance implements Disposable
 {
@@ -30,7 +26,9 @@ public class GameInstance implements Disposable
     private GameState state;
     private ArrayMap<String, StarClass> starClasses;
     private ArrayMap<String, PlanetClass> planetClasses;
+    private XmlReader xmlReader;
 
+    private Skin guiSkin;
 
 
     public GameInstance()
@@ -38,18 +36,29 @@ public class GameInstance implements Disposable
         state = new GameState();
         starClasses = new ArrayMap<String, StarClass>();
         planetClasses = new ArrayMap<String, PlanetClass>();
+        xmlReader = new XmlReader();
     }
 
     public GameState getState()
     {
         return state;
-
     }
 
     public void loadData()
     {
-        loadStarClasses();
         loadPlanetClasses();
+        loadStarClasses();
+        loadSkin();
+    }
+
+    private void loadSkin()
+    {
+        this.guiSkin = new Skin(Gdx.files.internal("assets/gfx/skins/uiskin.json"));
+    }
+
+    public Skin getGuiSkin()
+    {
+        return this.guiSkin;
     }
 
     public StarClass getStarClass(String tag)
@@ -62,6 +71,56 @@ public class GameInstance implements Disposable
         return planetClasses.get(tag);
     }
 
+    //Loads planet classes from XML files in the assets/common/planet_classes folder.
+    public void loadPlanetClasses()
+    {
+        /*FileHandle[] planetTexturePaths = Gdx.files.internal("assets/gfx/planets/").list();
+        Gdx.app.log("Loading Planet Textures...", "Testing. " + planetTexturePaths.length + " planets detected.");
+        for(FileHandle planetTexturePath : planetTexturePaths)
+        {
+            String fileName = planetTexturePath.nameWithoutExtension();
+            Gdx.app.log("Texture Loaded: ", fileName);
+            planetClasses.put(fileName, new PlanetClass(fileName, new Texture(planetTexturePath)));
+        }*/
+
+        FileHandle[] planetXMLDefinePaths = Gdx.files.internal("assets/common/planet_classes/").list();
+        Gdx.app.log("Loading Planet XML Files...", "Testing. " + planetXMLDefinePaths.length + " planet classes detected.");
+        for(FileHandle planetDefinePath : planetXMLDefinePaths)
+        {
+            if(planetDefinePath.extension().equals("xml"))
+            {
+                PlanetClass pc = loadPlanetClass(xmlReader, planetDefinePath);
+                planetClasses.put(pc.getTag(), pc);
+            }
+        }
+    }
+
+    private PlanetClass loadPlanetClass(XmlReader reader, FileHandle handle)
+    {
+        XmlReader.Element root = reader.parse(handle);
+        String tag = root.getAttribute("tag");
+        Texture gfx = new Texture(Gdx.files.internal(root.getAttribute("textureFile")));
+        float minHabitability = Float.parseFloat(root.getAttribute("min_habitability"));
+        float maxHabitability = Float.parseFloat(root.getAttribute("max_habitability"));
+        int minSize = Integer.parseInt(root.getAttribute("min_size"));
+        int maxSize = Integer.parseInt(root.getAttribute("max_size"));
+        boolean onlySpawnsInHabitableZone = yesOrNoToTrueOrFalse(root.getAttribute("only_spawns_in_habitable_zone"));
+        boolean isStar = yesOrNoToTrueOrFalse(root.getAttribute("star"));
+        boolean canColonize = yesOrNoToTrueOrFalse(root.getAttribute("can_colonize"));
+        PlanetClass pc = new PlanetClass(tag, gfx, minHabitability,
+            maxHabitability, minSize, maxSize, onlySpawnsInHabitableZone,
+            isStar, canColonize);
+        return pc;
+    }
+
+    private boolean yesOrNoToTrueOrFalse(String str)
+    {
+        if(str.toLowerCase().equals("yes"))
+            return true;
+        else
+            return false;
+    }
+
     public void loadStarClasses()
     {
 
@@ -72,18 +131,6 @@ public class GameInstance implements Disposable
             String fileName = starTexturePath.nameWithoutExtension();
             Gdx.app.log("Texture Loaded: ", fileName);
             starClasses.put(fileName, new StarClass(fileName, new Texture(starTexturePath), 1.0f));
-        }
-    }
-
-    public void loadPlanetClasses()
-    {
-        FileHandle[] planetTexturePaths = Gdx.files.internal("assets/gfx/planets/").list();
-        Gdx.app.log("Loading Planet Textures...", "Testing. " + planetTexturePaths.length + " planets detected.");
-        for(FileHandle planetTexturePath : planetTexturePaths)
-        {
-            String fileName = planetTexturePath.nameWithoutExtension();
-            Gdx.app.log("Texture Loaded: ", fileName);
-            planetClasses.put(fileName, new PlanetClass(fileName, new Texture(planetTexturePath)));
         }
     }
 

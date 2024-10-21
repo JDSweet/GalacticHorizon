@@ -1,0 +1,8 @@
+<StarClass tag = "sc_yellow_dwarf"
+             hab_zone_range = "3"
+             min_size = "30"
+             max_size = "60"
+             textureFile = "assets/gfx/stars/sc_yellow_star_01.png"
+             star_planet_class = "pc_yellow_dwarf_01"
+             energy_prod_bonus = "1.2">
+</StarClass>

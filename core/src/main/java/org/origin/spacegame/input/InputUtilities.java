@@ -13,9 +13,8 @@ import org.origin.spacegame.utilities.CameraManager;
 
 public class InputUtilities
 {
-    //private static StarSystem selectedStarSystem = null;
+    private static InputMultiplexer plexer = null;
     private static ZoomInputProcessor zoomProcessor = null;
-    //private static int[][] tiles;
 
     public static void detectCameraMovement(CameraManager manager)
     {
@@ -47,6 +46,11 @@ public class InputUtilities
         //initializeTileMapInput();
     }
 
+    public static InputMultiplexer getInputMultiplexer()
+    {
+        return plexer;
+    }
+
     public static void setProjectionCamera(OrthographicCamera camera)
     {
         zoomProcessor.setCamera(camera);
@@ -54,11 +58,11 @@ public class InputUtilities
 
     private static void initializeInputMultiplexer(OrthographicCamera defaultCamera)
     {
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        plexer = new InputMultiplexer();
         ZoomInputProcessor zoomInputProcessor = new ZoomInputProcessor(defaultCamera);
         zoomProcessor = zoomInputProcessor;
-        inputMultiplexer.addProcessor(zoomInputProcessor);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        plexer.addProcessor(zoomInputProcessor);
+        Gdx.input.setInputProcessor(plexer);
     }
 
     //Sets the default value for each tile.

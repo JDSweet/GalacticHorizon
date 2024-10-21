@@ -2,19 +2,48 @@ package org.origin.spacegame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.origin.spacegame.SpaceGame;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.input.InputUtilities;
+import org.origin.spacegame.utilities.CameraManager;
 
 public class SystemScreen implements Screen
 {
     private SpaceGame game;
     boolean enterPositionSet = false;
 
+    //This is used for the System GUI
+    //A button to take you back to the galaxy view
+    //is at the bottom center of the screen.
+    private Stage stage;
+    private TextButton goToGalaxyScreenButton;
+
     public SystemScreen(SpaceGame game)
     {
         this.game = game;
+        stage = new Stage();
+        InputUtilities.getInputMultiplexer().addProcessor(stage);
+        goToGalaxyScreenButton = new TextButton("Galaxy Screen", GameInstance.getInstance().getGuiSkin());
+        goToGalaxyScreenButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.getCameraManager().setRenderView(CameraManager.RenderView.GALACTIC_VIEW);
+                Gdx.app.log("SystemScreenDebug", "Galaxy Button Clicked!");
+            }
+        });
+
+
+
+        goToGalaxyScreenButton.setX(Gdx.graphics.getWidth()/2f);
+        //goToGalaxyScreenButton.setY(Gdx.graphics.getHeight()/2f);
+        stage.addActor(goToGalaxyScreenButton);
+        //goToGalaxyScreenButton.
     }
 
     /**
@@ -23,7 +52,7 @@ public class SystemScreen implements Screen
     @Override
     public void show()
     {
-        Gdx.app.log("SystemScreen Debug", "Showing System View...");
+        Gdx.app.log("SystemScreenDebug", "Showing System View...");
     }
 
     /**
@@ -44,6 +73,9 @@ public class SystemScreen implements Screen
 
         game.getBatch().setProjectionMatrix(game.getCameraManager().getCurrentCamera().combined);
         GameInstance.getInstance().getState().renderSystemView(game.getBatch(), GameInstance.getInstance().getSelectedStarSystem());
+
+        stage.draw();
+        stage.act();
     }
 
     /**

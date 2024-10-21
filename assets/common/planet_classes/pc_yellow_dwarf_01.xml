@@ -1,0 +1,10 @@
+<PlanetClass tag = "pc_yellow_dwarf_01"
+             min_habitability = "0"
+             max_habitability = "0.01"
+             min_size = "20"
+             max_size = "30"
+             only_spawns_in_habitable_zone = "no"
+             star = "yes"
+             can_colonize = "no"
+             textureFile = "assets/gfx/stars/yellow_star_01.png">
+</PlanetClass>

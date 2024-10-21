@@ -29,6 +29,7 @@ public class SpaceGame extends Game//ApplicationAdapter
         //These classes rely on all the initial generation to be finished.
         this.galaxyScreen = new GalaxyScreen(this);
         this.systemScreen = new SystemScreen(this);
+        //Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode(Gdx.graphics.getPrimaryMonitor()));
     }
 
     private void initInput()
