@@ -2,10 +2,14 @@ package org.origin.spacegame.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Plane;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.game.GameInstance;
+import org.origin.spacegame.utilities.RandomNumberUtility;
+
+import java.util.Random;
 
 public class Planet
 {
@@ -13,6 +17,7 @@ public class Planet
     private Vector2 position;
     private float orbitalRadius;
     private PlanetClass planetClass;
+    private Rectangle rect;
 
     private int size = 0;
     private float habitability = 0f;
@@ -31,14 +36,14 @@ public class Planet
         if(planetClass.getMaxHabitability() <= planetClass.getMinHabitability())
             this.habitability = planetClass.getMinHabitability();
         else
-            this.habitability = GameInstance.getInstance().getRandom().nextFloat(planetClass.getMinHabitability(),
+            this.habitability = RandomNumberUtility.nextFloat(planetClass.getMinHabitability(),
                 planetClass.getMaxHabitability());
         if(planetClass.getMinSize() <= planetClass.getMaxSize())
             this.size = planetClass.getMinSize();
         else
-            this.size = GameInstance.getInstance().getRandom().nextInt(planetClass.getMinSize(),
+            this.size = RandomNumberUtility.nextInt(planetClass.getMinSize(),
                 planetClass.getMaxSize());
-
+        this.rect = new Rectangle(position.x, position.y, size, size);
     }
 
     public void renderPlanet(SpriteBatch batch)
@@ -49,6 +54,19 @@ public class Planet
         batch.draw(planetClass.getGfx(), position.x, position.y,
             size,
             size);
+    }
+
+    public boolean isTouched(float x, float y)
+    {
+        if(rect.contains(x, y))
+            return true;
+        else
+            return false;
+    }
+
+    public int getSize()
+    {
+        return size;
     }
 
     public Vector2 getPosition()

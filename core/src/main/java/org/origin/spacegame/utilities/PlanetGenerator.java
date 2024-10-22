@@ -56,7 +56,7 @@ public class PlanetGenerator
 
         int minPlanetCount = Constants.MIN_PLANET_COUNT;
         int maxPlanetCount = Constants.MAX_PLANET_COUNT;
-        int realPlanetCount = random.nextInt(minPlanetCount, maxPlanetCount+1); //+1 because we are now treating stars like planets for the purpose of system generation.
+        int realPlanetCount = RandomNumberUtility.nextInt(minPlanetCount, maxPlanetCount+1); //+1 because we are now treating stars like planets for the purpose of system generation.
 
         //We generate the minimum orbital radius, then we "step" out a random distance from the minimum for each planet
         //generated. The random distance is between Constants.StarSystemConstants.MIN_DISTANCE_BETWEEN_PLANET_ORBITS
@@ -72,7 +72,7 @@ public class PlanetGenerator
         for(int i = 0; i < realPlanetCount; i++)
         {
             //float stepAmount = 0f;
-            float distanceBetweenThisAndLastOrbit = random.nextFloat(Constants.StarSystemConstants.MIN_DISTANCE_BETWEEN_PLANET_ORBITS,
+            float distanceBetweenThisAndLastOrbit = RandomNumberUtility.nextFloat(Constants.StarSystemConstants.MIN_DISTANCE_BETWEEN_PLANET_ORBITS,
                                                                      Constants.StarSystemConstants.MAX_DISTANCE_BETWEEN_PLANET_ORBITS);
             if(i == 0)
                 curOrbitalRadius = 0f;
@@ -86,7 +86,7 @@ public class PlanetGenerator
                 stepAmount = random.nextFloat(minOrbitalRadius, minOrbitalRadius * 1.1f);*/
 
             Array<String> planetClassTags = GameInstance.getInstance().getPlanetClassTags();
-            String planetClassTag = planetClassTags.get(random.nextInt(0, planetClassTags.size));
+            String planetClassTag = planetClassTags.get(RandomNumberUtility.nextInt(0, planetClassTags.size));
             PlanetClass planetClass = null;
             if(i == 0) //If this is the first "planet" in the system, then is the system's main star.
             {
@@ -114,7 +114,7 @@ public class PlanetGenerator
                         planetClassTags.removeValue(pcTag, false);
                 }
                 //Regenerate the list of valid planet-classes to exclude stars, now that we are out of stars.
-                planetClassTag = planetClassTags.get(random.nextInt(0, planetClassTags.size));
+                planetClassTag = planetClassTags.get(RandomNumberUtility.nextInt(0, planetClassTags.size));
                 planetClass = GameInstance.getInstance().getPlanetClass(planetClassTag);
             }
 
@@ -131,7 +131,7 @@ public class PlanetGenerator
     //positioned at a random point on that orbital radius around the center-point of that system.
     private Planet generatePlanet(StarSystem system, PlanetClass planetClass, float orbitalRadius)
     {
-        float angle = random.nextFloat(0f, 2f*3.1415f);
+        float angle = RandomNumberUtility.nextFloat(0f, 2f*3.1415f);
         float cos = (float)Math.cos(angle);
         float sin = (float)Math.sin(angle);
         float planetX = system.getCenter().x + (orbitalRadius * cos);

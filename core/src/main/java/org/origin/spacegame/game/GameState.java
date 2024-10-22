@@ -7,10 +7,7 @@ import com.badlogic.gdx.utils.IntMap;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
-import org.origin.spacegame.utilities.PlanetGenerator;
-import org.origin.spacegame.utilities.SystemGeneratorType;
-import org.origin.spacegame.utilities.RandomStarSystemGenerator;
-import org.origin.spacegame.utilities.TileMapStarSystemGenerator;
+import org.origin.spacegame.utilities.*;
 
 public class GameState
 {
@@ -39,38 +36,7 @@ public class GameState
 
     private void generateStarSystems(int systemCount, SystemGeneratorType genType)
     {
-        if(genType == SystemGeneratorType.RANDOM)
-        {
-            RandomStarSystemGenerator generator = new RandomStarSystemGenerator(Constants.MIN_PLANET_COUNT,
-                Constants.MAX_PLANET_COUNT);
-            //This array will be sent to post-processing.
-            Array<StarSystem> starSystemsArray = new Array<StarSystem>();
-            for(int i = 0; i < systemCount; i++)
-            {
-                StarSystem generatedSystem = generator.generateSystem();
-                starSystems.put(generatedSystem.id, generatedSystem);
-
-                for(StarSystem s1 : starSystemsArray)
-                {
-                    while(isTooCloseToAnotherSystem(s1, starSystemsArray))
-                    {
-                        s1.getGalacticPosition().x = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_WIDTH);
-                        s1.getGalacticPosition().y = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_HEIGHT);
-                    }
-                }
-                Gdx.app.log("Star System Generated", "Star System " + generatedSystem.id + " has been generated at (" + generatedSystem.getGalacticPosition().x + ", " + generatedSystem.getGalacticPosition().y + ") with a star type of " + generatedSystem.getStarTypeTag());
-            }
-
-            for(StarSystem s1 : starSystemsArray)
-            {
-                while(isTooCloseToAnotherSystem(s1, starSystemsArray))
-                {
-                    s1.getGalacticPosition().x = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_WIDTH);
-                    s1.getGalacticPosition().y = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_HEIGHT);
-                }
-            }
-        }
-        else if (genType == SystemGeneratorType.TILE_MAP)
+        if (genType == SystemGeneratorType.TILE_MAP)
         {
             TileMapStarSystemGenerator generator = new TileMapStarSystemGenerator();
             Array<StarSystem> generatedSystems = generator.generateStarSystems(systemCount);

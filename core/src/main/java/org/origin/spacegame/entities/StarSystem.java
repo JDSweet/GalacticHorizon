@@ -59,6 +59,11 @@ public class StarSystem
         }
     }
 
+    public Array<Planet> getPlanets()
+    {
+        return this.planets;
+    }
+
     //Adds the specific planet to the star list.
     public void addStar(Planet p)
     {

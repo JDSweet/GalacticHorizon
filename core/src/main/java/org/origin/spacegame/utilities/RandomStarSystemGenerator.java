@@ -31,10 +31,10 @@ public class RandomStarSystemGenerator
     public StarSystem generateSystem()
     {
         Array<String> starClassTags = GameInstance.getInstance().getStarClassTags();
-        int starClassTagIndex = random.nextInt(0, starClassTags.size-1);
+        int starClassTagIndex = RandomNumberUtility.nextInt(0, starClassTags.size-1);
 
-        float galacticX = random.nextFloat(Constants.GALAXY_WIDTH);
-        float galacticY = random.nextFloat(Constants.GALAXY_HEIGHT);
+        float galacticX = RandomNumberUtility.nextFloat(0f, Constants.GALAXY_WIDTH);
+        float galacticY = RandomNumberUtility.nextFloat(0f, Constants.GALAXY_HEIGHT);
 
         Vector2 galacticPos = new Vector2(galacticX, galacticY);
         Array<StarSystem> starSystems = GameInstance.getInstance().getState().getStarSystems();

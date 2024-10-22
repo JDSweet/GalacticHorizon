@@ -8,8 +8,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.XmlReader;
-import org.luaj.vm2.script.LuaScriptEngine;
-import org.luaj.vm2.script.LuaScriptEngineFactory;
+//import org.luaj.vm2.ast.Chunk;
+//import org.luaj.vm2.script.LuaScriptEngine;
+//import org.luaj.vm2.script.LuaScriptEngineFactory;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.Planet;
@@ -48,7 +49,9 @@ public class GameInstance implements Disposable
         xmlReader = new XmlReader();
         this.random = new Random();
 
-        String script = "val = 'hello from lua'";
+
+
+        /*String script = "val = 'hello from lua'";
         LuaScriptEngine eng = (LuaScriptEngine) new LuaScriptEngineFactory().getScriptEngine();
         try {
             eng.eval(script);
@@ -56,7 +59,7 @@ public class GameInstance implements Disposable
             throw new RuntimeException(e);
         }
         String ret = (String)eng.get("val");
-        Gdx.app.log("ScriptEngine", ret);
+        Gdx.app.log("ScriptEngine", ret);*/
     }
 
     public Random getRandom()

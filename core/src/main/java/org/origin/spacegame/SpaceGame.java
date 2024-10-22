@@ -1,11 +1,13 @@
 package org.origin.spacegame;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.input.InputUtilities;
 import org.origin.spacegame.screens.GalaxyScreen;
+import org.origin.spacegame.screens.PlanetScreen;
 import org.origin.spacegame.screens.SystemScreen;
 import org.origin.spacegame.utilities.CameraManager;
 
@@ -17,6 +19,7 @@ public class SpaceGame extends Game//ApplicationAdapter
 
     private GalaxyScreen galaxyScreen;
     private SystemScreen systemScreen;
+    private PlanetScreen planetScreen;
 
     @Override
     public void create()
@@ -48,7 +51,8 @@ public class SpaceGame extends Game//ApplicationAdapter
     @Override
     public void render()
     {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        ScreenUtils.clear(Color.BLACK);
+        Gdx.app.log("Debug", "Rendering....");
 
         //This bit of code handles the logic of screen transitions.
         if(cameraManager.hasRecentlyChangedCamera() && cameraManager.getRenderView() == CameraManager.RenderView.GALACTIC_VIEW)
@@ -59,6 +63,11 @@ public class SpaceGame extends Game//ApplicationAdapter
         else if(cameraManager.hasRecentlyChangedCamera() && cameraManager.getRenderView() == CameraManager.RenderView.SYSTEM_VIEW)
         {
             setScreen(systemScreen);
+            cameraManager.toggleChangeCameraFlag();
+        }
+        else if(cameraManager.hasRecentlyChangedCamera() && cameraManager.getRenderView() == CameraManager.RenderView.PLANET_VIEW)
+        {
+            setScreen(planetScreen);
             cameraManager.toggleChangeCameraFlag();
         }
         super.render();

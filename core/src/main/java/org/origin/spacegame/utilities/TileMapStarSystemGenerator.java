@@ -60,7 +60,7 @@ public class TileMapStarSystemGenerator
                     if(!isSystemInThisTile(retval, 0.1f, x, y))
                     {
                         //And if the random component says we should generate a star system in this tile...
-                        if(random.nextFloat(0f, 1f) < percentChanceOfStarSpawningInTile)
+                        if(RandomNumberUtility.nextFloat(0f, 1f) < percentChanceOfStarSpawningInTile)
                         {
                             //Then generate the star system.
                             retval.add(generateSystem(currentSystemBeingGenerated++, x, y));
@@ -113,10 +113,10 @@ public class TileMapStarSystemGenerator
     {
         Array<String> starClassTags = GameInstance.getInstance().getStarClassTags();
         Gdx.app.log("System Generation Debug", "Star Classes..." + starClassTags.size);
-        int starClassTagIndex = random.nextInt(0, starClassTags.size);
+        int starClassTagIndex = RandomNumberUtility.nextInt(0, starClassTags.size);
 
-        float galacticX = random.nextFloat(Constants.GALAXY_WIDTH);
-        float galacticY = random.nextFloat(Constants.GALAXY_HEIGHT);
+        float galacticX = RandomNumberUtility.nextFloat(0, Constants.GALAXY_WIDTH);
+        float galacticY = RandomNumberUtility.nextFloat(0, Constants.GALAXY_HEIGHT);
 
         //Vector2 galacticPos = new Vector2(galacticX, galacticY);
         Array<StarSystem> starSystems = GameInstance.getInstance().getState().getStarSystems();

@@ -9,7 +9,8 @@ public class CameraManager
     public enum RenderView
     {
         SYSTEM_VIEW,
-        GALACTIC_VIEW
+        GALACTIC_VIEW,
+        PLANET_VIEW
     }
 
     private OrthographicCamera currentCamera;

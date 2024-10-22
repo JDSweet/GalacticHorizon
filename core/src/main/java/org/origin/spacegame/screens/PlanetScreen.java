@@ -1,23 +1,18 @@
 package org.origin.spacegame.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.origin.spacegame.SpaceGame;
-import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.input.InputUtilities;
 import org.origin.spacegame.utilities.CameraManager;
 
-public class SystemScreen implements Screen, InputProcessor
+public class PlanetScreen implements Screen
 {
     private SpaceGame game;
     boolean enterPositionSet = false;
@@ -28,7 +23,7 @@ public class SystemScreen implements Screen, InputProcessor
     private Stage stage;
     private TextButton goToGalaxyScreenButton;
 
-    public SystemScreen(SpaceGame game)
+    public PlanetScreen(SpaceGame game)
     {
         this.game = game;
         stage = new Stage();
@@ -57,17 +52,14 @@ public class SystemScreen implements Screen, InputProcessor
     public void show()
     {
         Gdx.app.log("SystemScreenDebug", "Showing System View...");
-        //InputUtilities.getInputMultiplexer().addProcessor(this);
     }
 
     /**
      * @param delta The time in seconds since the last render.
      */
-    String debugTxt = "";
     @Override
     public void render(float delta)
     {
-        Gdx.app.log("SystemScreen", "Render");
         StarSystem selectedSystem = GameInstance.getInstance().getSelectedStarSystem();
         InputUtilities.detectCameraMovement(game.getCameraManager());
         if(!enterPositionSet)
@@ -76,18 +68,13 @@ public class SystemScreen implements Screen, InputProcessor
             game.getCameraManager().getCurrentCamera().position.y = selectedSystem.getCenter().y;
             this.enterPositionSet = true;
         }
-        onPlanetClicked(null);
         game.getCameraManager().update();
+
         game.getBatch().setProjectionMatrix(game.getCameraManager().getCurrentCamera().combined);
         GameInstance.getInstance().getState().renderSystemView(game.getBatch(), GameInstance.getInstance().getSelectedStarSystem());
-        debugTxt += ("SystemScreen Render");
+
         stage.draw();
         stage.act();
-    }
-
-    private void onPlanetClicked(Planet planet)
-    {
-        debugTxt += ("\nSystemScreen: Planet " + planet.id + " clicked.");
     }
 
     /**
@@ -124,7 +111,7 @@ public class SystemScreen implements Screen, InputProcessor
     @Override
     public void hide()
     {
-        Gdx.app.log("Debug ", debugTxt);
+
     }
 
     /**
@@ -134,64 +121,5 @@ public class SystemScreen implements Screen, InputProcessor
     public void dispose()
     {
 
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button)
-    {
-        Gdx.app.log("SystemScreen", "Click detected!");
-        for(Planet planet : GameInstance.getInstance().getSelectedStarSystem().getPlanets())
-        {
-            Vector3 touchPos = game.getCameraManager().getCurrentCamera().unproject(new Vector3((float)screenX,
-                (float)screenY, 0f));
-            float tx = touchPos.x;
-            float ty = touchPos.y;
-            float x = planet.getPosition().x;
-            float y = planet.getPosition().y;
-
-            if(planet.isTouched(tx, ty))
-                onPlanetClicked(planet);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return false;
     }
 }
