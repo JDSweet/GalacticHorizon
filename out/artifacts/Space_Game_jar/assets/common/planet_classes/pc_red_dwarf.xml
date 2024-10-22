@@ -1,0 +1,12 @@
+<PlanetClass tag = "pc_red_dwarf"
+             min_habitability = "0"
+             max_habitability = "0"
+             min_size = "25"
+             max_size = "30"
+             only_spawns_in_habitable_zone = "no"
+             star = "yes"
+             can_colonize = "no"
+             textureFile = "assets/gfx/stars/red_star_01.png"
+             can_be_moon = "no"
+             gas_giant = "no">
+</PlanetClass>

@@ -1,0 +1,13 @@
+<PlanetClass tag = "pc_toxic"
+             min_habitability = "0.3"
+             max_habitability = "0.6"
+             min_size = "8"
+             max_size = "18"
+             only_spawns_in_habitable_zone = "true"
+             star = "no"
+             can_colonize = "yes"
+             textureFile = "assets/gfx/planets/pc_toxic.png"
+             can_be_moon = "yes"
+             gas_giant = "no"
+>
+</PlanetClass>
