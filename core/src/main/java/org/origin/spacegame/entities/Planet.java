@@ -1,15 +1,11 @@
 package org.origin.spacegame.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.utilities.RandomNumberUtility;
-
-import java.util.Random;
 
 public class Planet
 {

@@ -41,7 +41,7 @@ public class Constants
         public static float STAR_SYSTEM_VIEWPORT_WIDTH = 100f;
         public static float STAR_SYSTEM_VIEWPORT_HEIGHT = 100f;
 
-        public static float MINIMUM_ORBITAL_RADIUS = ((STAR_SYSTEM_INTERNAL_WIDTH + STAR_SYSTEM_INTERNAL_HEIGHT)/2f) * 0.1f;
+        public static float MINIMUM_ORBITAL_RADIUS = ((STAR_SYSTEM_INTERNAL_WIDTH + STAR_SYSTEM_INTERNAL_HEIGHT)/2f) * 0.35f;
         public static float STAR_RENDER_SIZE = 30f;
         public static float PLANET_RENDER_SIZE = 10f;
 

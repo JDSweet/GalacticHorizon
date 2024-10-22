@@ -13,13 +13,13 @@ public class GameState
 {
     private IntMap<StarSystem> starSystems;
     private IntMap<Planet> planets;
-    private PlanetGenerator planetGenerator;
+    private PlanetOrbitGenerator planetOrbitGenerator;
 
     public GameState()
     {
         this.starSystems = new IntMap<StarSystem>();
         this.planets = new IntMap<Planet>();
-        planetGenerator = new PlanetGenerator();
+        planetOrbitGenerator = new PlanetOrbitGenerator();
     }
 
     public void initialize()
@@ -43,7 +43,7 @@ public class GameState
 
             for(StarSystem system : generatedSystems)
             {
-                system.addAllPlanets(planetGenerator.generatePlanets(system));
+                system.addAllPlanets(planetOrbitGenerator.generatePlanets(system));
                 this.starSystems.put(system.id, system);
             }
         }

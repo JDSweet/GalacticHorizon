@@ -8,7 +8,7 @@ import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.input.InputUtilities;
 import org.origin.spacegame.screens.GalaxyScreen;
 import org.origin.spacegame.screens.PlanetScreen;
-import org.origin.spacegame.screens.SystemScreen;
+import org.origin.spacegame.screens.StarSystemScreen;
 import org.origin.spacegame.utilities.CameraManager;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -18,7 +18,7 @@ public class SpaceGame extends Game//ApplicationAdapter
     private SpriteBatch batch;
 
     private GalaxyScreen galaxyScreen;
-    private SystemScreen systemScreen;
+    private StarSystemScreen starSystemScreen;
     private PlanetScreen planetScreen;
 
     @Override
@@ -31,7 +31,7 @@ public class SpaceGame extends Game//ApplicationAdapter
 
         //These classes rely on all the initial generation to be finished.
         this.galaxyScreen = new GalaxyScreen(this);
-        this.systemScreen = new SystemScreen(this);
+        this.starSystemScreen = new StarSystemScreen(this);
         //Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode(Gdx.graphics.getPrimaryMonitor()));
     }
 
@@ -52,23 +52,23 @@ public class SpaceGame extends Game//ApplicationAdapter
     public void render()
     {
         ScreenUtils.clear(Color.BLACK);
-        Gdx.app.log("Debug", "Rendering....");
-
-        //This bit of code handles the logic of screen transitions.
-        if(cameraManager.hasRecentlyChangedCamera() && cameraManager.getRenderView() == CameraManager.RenderView.GALACTIC_VIEW)
+        if(getCameraManager().hasRecentlyChangedCamera())
         {
-            setScreen(galaxyScreen);
-            cameraManager.toggleChangeCameraFlag();
-        }
-        else if(cameraManager.hasRecentlyChangedCamera() && cameraManager.getRenderView() == CameraManager.RenderView.SYSTEM_VIEW)
-        {
-            setScreen(systemScreen);
-            cameraManager.toggleChangeCameraFlag();
-        }
-        else if(cameraManager.hasRecentlyChangedCamera() && cameraManager.getRenderView() == CameraManager.RenderView.PLANET_VIEW)
-        {
-            setScreen(planetScreen);
-            cameraManager.toggleChangeCameraFlag();
+            if(getCameraManager().getRenderView() == CameraManager.RenderView.SYSTEM_VIEW)
+            {
+                getCameraManager().toggleChangeCameraFlag();
+                setScreen(starSystemScreen);
+            }
+            if(getCameraManager().getRenderView() == CameraManager.RenderView.GALACTIC_VIEW)
+            {
+                getCameraManager().toggleChangeCameraFlag();
+                setScreen(galaxyScreen);
+            }
+            if(getCameraManager().getRenderView() == CameraManager.RenderView.PLANET_VIEW)
+            {
+                getCameraManager().toggleChangeCameraFlag();
+                setScreen(planetScreen);
+            }
         }
         super.render();
     }
