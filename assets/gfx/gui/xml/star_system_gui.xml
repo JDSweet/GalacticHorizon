@@ -1,4 +1,4 @@
-<GUIScreen callback_file = "00_callbacks.lua">
+<GUIScreen callback_file = "02_star_system_screen_gui_callbacks.lua">
     <TextButton
         id = "galaxy_screen_btn"
         x = "0.5"

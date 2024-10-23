@@ -55,11 +55,11 @@ public class CameraManager
 
     public void setRenderView(String renderView)
     {
-        if(renderView.equals("GALACTIC"))
+        if(renderView.equalsIgnoreCase("galactic"))
             setRenderView(RenderView.GALACTIC_VIEW);
-        if(renderView.equals("SYSTEM"))
+        if(renderView.equalsIgnoreCase("SYSTEM"))
             setRenderView(RenderView.SYSTEM_VIEW);
-        if(renderView.equals("PLANET"))
+        if(renderView.equalsIgnoreCase("PLANET"))
             setRenderView(RenderView.PLANET_VIEW);
     }
 
