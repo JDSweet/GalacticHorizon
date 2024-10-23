@@ -53,6 +53,16 @@ public class CameraManager
         toggleChangeCameraFlag();
     }
 
+    public void setRenderView(String renderView)
+    {
+        if(renderView.equals("GALACTIC"))
+            setRenderView(RenderView.GALACTIC_VIEW);
+        if(renderView.equals("SYSTEM"))
+            setRenderView(RenderView.SYSTEM_VIEW);
+        if(renderView.equals("PLANET"))
+            setRenderView(RenderView.PLANET_VIEW);
+    }
+
     public RenderView getRenderView()
     {
         return renderView;

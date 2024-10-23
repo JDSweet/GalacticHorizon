@@ -25,6 +25,7 @@ public class SpaceGame extends Game//ApplicationAdapter
     public void create()
     {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
+        GameInstance.getInstance().setGame(this);
         cameraManager = new CameraManager();
         loadGameData();
         initInput();
@@ -32,7 +33,8 @@ public class SpaceGame extends Game//ApplicationAdapter
         //These classes rely on all the initial generation to be finished.
         this.galaxyScreen = new GalaxyScreen(this);
         this.starSystemScreen = new StarSystemScreen(this);
-        //Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode(Gdx.graphics.getPrimaryMonitor()));
+
+
     }
 
     private void initInput()

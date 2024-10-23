@@ -11,13 +11,14 @@ import com.badlogic.gdx.utils.XmlReader;
 //import org.luaj.vm2.ast.Chunk;
 //import org.luaj.vm2.script.LuaScriptEngine;
 //import org.luaj.vm2.script.LuaScriptEngineFactory;
+import org.origin.spacegame.SpaceGame;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
+import org.origin.spacegame.utilities.CameraManager;
 
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import java.io.File;
 import java.util.Random;
 
 public class GameInstance implements Disposable
@@ -39,6 +40,7 @@ public class GameInstance implements Disposable
     private Skin guiSkin;
     private StarSystem selectedStarSystem;
     private Planet selectedPlanet;
+    private ArrayMap<String, Skin> skins;
 
 
     public GameInstance()
@@ -48,8 +50,7 @@ public class GameInstance implements Disposable
         planetClasses = new ArrayMap<String, PlanetClass>();
         xmlReader = new XmlReader();
         this.random = new Random();
-
-
+        this.skins = new ArrayMap<String, Skin>();
 
         /*String script = "val = 'hello from lua'";
         LuaScriptEngine eng = (LuaScriptEngine) new LuaScriptEngineFactory().getScriptEngine();
@@ -72,11 +73,16 @@ public class GameInstance implements Disposable
         return state;
     }
 
+    public Skin getSkin(String skinName)
+    {
+        return this.guiSkin;
+    }
+
     public void loadData()
     {
         loadPlanetClasses();
         loadStarClasses();
-        loadSkin();
+        loadDefaultSkin();
     }
 
     public void selectPlanet(Planet planet)
@@ -89,9 +95,28 @@ public class GameInstance implements Disposable
         return selectedPlanet;
     }
 
-    private void loadSkin()
+    private void loadSkins()
     {
-        this.guiSkin = new Skin(Gdx.files.internal("assets/gfx/skins/uiskin.json"));
+        Array<FileHandle> skinFileHandles = new Array<FileHandle>();
+        FileHandle[] skinFolderFileHandles = Gdx.files.internal("assets/gfx/gui/skins/").list();
+
+        //Get the skin JSON files.
+        for(FileHandle skinFolderFileHandle : skinFolderFileHandles)
+        {
+            if(skinFolderFileHandle.extension().equals(".json"))
+                skinFileHandles.add(skinFolderFileHandle);
+        }
+
+        for(FileHandle skinFileHandle : skinFileHandles)
+        {
+            this.skins.put(skinFileHandle.nameWithoutExtension(), new Skin(skinFileHandle));
+        }
+    }
+
+    @Deprecated
+    private void loadDefaultSkin()
+    {
+        this.guiSkin = new Skin(Gdx.files.internal("assets/gfx/gui/skins/uiskin.json"));
     }
 
     public Skin getGuiSkin()
@@ -212,11 +237,23 @@ public class GameInstance implements Disposable
         return new Array<String>(starClassTags);
     }
 
+    private SpaceGame game;
+    public void setGame(SpaceGame game)
+    {
+        this.game = game;
+    }
+
+    public CameraManager getCameraManager()
+    {
+        return game.getCameraManager();
+    }
+
     @Override
     public void dispose()
     {
         disposeOfStarData();
         disposeOfPlanetData();
+        disposeOfGUIData();
     }
 
     private void disposeOfStarData()
@@ -232,6 +269,14 @@ public class GameInstance implements Disposable
         for(PlanetClass planetType : planetClasses.values())
         {
             planetType.dispose();
+        }
+    }
+
+    private void disposeOfGUIData()
+    {
+        for(Skin skin : this.skins.values())
+        {
+            skin.dispose();
         }
     }
 }

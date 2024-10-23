@@ -79,4 +79,9 @@ public class Planet
     {
         return planetClass;
     }
+
+    public float getHabitability()
+    {
+        return this.habitability;
+    }
 }

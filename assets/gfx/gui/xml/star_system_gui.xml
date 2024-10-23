@@ -1,0 +1,12 @@
+<GUIScreen callback_file = "00_callbacks.lua">
+    <TextButton
+        id = "galaxy_screen_btn"
+        x = "0.5"
+        y = "0"
+        width = "0.085"
+        height = "0.085"
+        on_click = "galaxy_screen_btn_on_click"
+        text = "Go to Galaxy!"
+        skin = "uiskin.json">
+    </TextButton>
+</GUIScreen>

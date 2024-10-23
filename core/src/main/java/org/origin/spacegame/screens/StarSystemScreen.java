@@ -14,6 +14,7 @@ import org.origin.spacegame.SpaceGame;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;
+import org.origin.spacegame.gui.ScriptedGUIScene;
 import org.origin.spacegame.input.InputUtilities;
 import org.origin.spacegame.utilities.CameraManager;
 
@@ -34,11 +35,15 @@ public class StarSystemScreen implements Screen, InputProcessor
     TextButton visitSurfaceBtn;
     Label habitabilityLabel;
     Label sizeLabel;
+    Label planetClassLabel;
+
+    private ScriptedGUIScene scene;
 
     public StarSystemScreen(SpaceGame game)
     {
         this.game = game;
-        buildGUI();
+        this.scene = new ScriptedGUIScene("star_system_gui.xml");
+        //buildGUI();
     }
 
     private void buildGUI()
@@ -83,12 +88,19 @@ public class StarSystemScreen implements Screen, InputProcessor
         this.planetManagementWindow.setVisible(false);
 
         visitSurfaceBtn = new TextButton("Visit Surface", guiSkin);
-        habitabilityLabel = new Label("Planet Habitability: X", guiSkin);
-        sizeLabel = new Label("Planet Size: X", guiSkin);
+        habitabilityLabel = new Label("Habitability: X", guiSkin);
+        sizeLabel = new Label("Size: X", guiSkin);
+        planetClassLabel = new Label("Planet Class: ", guiSkin);
 
-        planetManagementWindow.add(visitSurfaceBtn);
-        planetManagementWindow.add(habitabilityLabel);
-        planetManagementWindow.add(sizeLabel);
+        VerticalGroup verticalGroup = new VerticalGroup();
+        verticalGroup.columnLeft().addActor(visitSurfaceBtn);
+        verticalGroup.addActor(habitabilityLabel);
+        verticalGroup.addActor(sizeLabel);
+        verticalGroup.addActor(planetClassLabel);
+        planetManagementWindow.top().left().add(verticalGroup);
+        //planetManagementWindow.top().left().add(visitSurfaceBtn);
+        //planetManagementWindow.center().left().add(habitabilityLabel);
+        //planetManagementWindow.add(sizeLabel);
 
         return planetManagementWindow;
     }
@@ -97,13 +109,16 @@ public class StarSystemScreen implements Screen, InputProcessor
     public void show()
     {
         Gdx.app.log("StarSystemScreenDebug", "Showing System View...");
-        systemNameLabel.setText("System #" + GameInstance.getInstance().getSelectedStarSystem().id);
-        InputUtilities.getInputMultiplexer().addProcessor(stage);
+        //updateText();
+        //InputUtilities.getInputMultiplexer().addProcessor(stage);
+        InputUtilities.getInputMultiplexer().addProcessor(scene.getStage());
         InputUtilities.getInputMultiplexer().addProcessor(this);
     }
 
-
-
+    private void updateText()
+    {
+        systemNameLabel.setText("System #" + GameInstance.getInstance().getSelectedStarSystem().id);
+    }
 
     /**
      * @param delta The time in seconds since the last render.
@@ -112,9 +127,22 @@ public class StarSystemScreen implements Screen, InputProcessor
     @Override
     public void render(float delta)
     {
-        //Gdx.app.log("SystemScreen", "Render " + delta);
         StarSystem selectedSystem = GameInstance.getInstance().getSelectedStarSystem();
         InputUtilities.detectCameraMovement(game.getCameraManager());
+        //renderGUI(selectedSystem);
+
+        scene.act();
+        game.getCameraManager().update();
+        game.getBatch().setProjectionMatrix(game.getCameraManager().getCurrentCamera().combined);
+
+        //Draw the star system.
+        GameInstance.getInstance().getState().renderSystemView(game.getBatch(), GameInstance.getInstance().getSelectedStarSystem());
+
+        scene.draw();
+    }
+
+    public void renderGUI(StarSystem selectedSystem)
+    {
         if(!enterPositionSet)
         {
             game.getCameraManager().getCurrentCamera().position.x = selectedSystem.getCenter().x;
@@ -125,19 +153,8 @@ public class StarSystemScreen implements Screen, InputProcessor
         //Detect GUI input before we detect planet input.
         stage.act();
 
-        game.getCameraManager().update();
-        game.getBatch().setProjectionMatrix(game.getCameraManager().getCurrentCamera().combined);
-
-        //Detect input in the Star System.
-
-
-        //Draw the star system.
-        GameInstance.getInstance().getState().renderSystemView(game.getBatch(), GameInstance.getInstance().getSelectedStarSystem());
-
         //Draw the GUI.
         stage.draw();
-
-        //Draw the system.
     }
 
     /**
@@ -227,7 +244,16 @@ public class StarSystemScreen implements Screen, InputProcessor
         }
         if(!anyPlanetTouched)
             this.planetManagementWindow.setVisible(false);
+        if(planetManagementWindow.isVisible())
+            updatePlanetManagementWindow();
         return true;
+    }
+
+    private void updatePlanetManagementWindow()
+    {
+        this.sizeLabel.setText("Size: " + GameInstance.getInstance().getSelectedPlanet().getSize());
+        this.planetClassLabel.setText("Planet Class: " + GameInstance.getInstance().getSelectedPlanet().getPlanetClass().getTag());
+        this.habitabilityLabel.setText("Habitability: " + Math.round(GameInstance.getInstance().getSelectedPlanet().getHabitability()*100));
     }
 
     private void onPlanetTouched(float iX, float iY, Planet planet)
