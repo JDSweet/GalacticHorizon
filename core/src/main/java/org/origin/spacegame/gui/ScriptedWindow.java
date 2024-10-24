@@ -2,41 +2,23 @@ package org.origin.spacegame.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.origin.spacegame.game.GameInstance;
 
-//This button is defined in XML and receives a reference to the GUI script engine for callback referencing.
-//It gets skins from the GameInstance's list of skins.
-/*
-*
-* The ScriptedTextButton has several attributes in XML:
-*   text - The default string of text that is going to be displayed.
-*   on_click - The function that is going to be called by this button when it is pressed.
-*   skin - The GUI skin this button will use.
-*   x - The optional X coordinate of this button on the screen (as a fraction of the screen width).
-*       This is overridden by any container this element is in that controls/manipulates its position.
-*   y - The optional y coordinate of this button on the screen (as a fraction of the screen's width).
-*       This is overridden by any container this element is in that controls/manipulates its position.
-*   width - See above.
-*   height - See above.
-*   padding_up - If this widget is part of a layer or group, then this controls the up padding.
-*   padding_down - If this widget is part of a layer or group, then this controls the down padding.
-*   padding_left - If this widget is part of a layer or group, then this controls the left padding.
-*   padding_right - If this widget is part of a layer or group, then this controls the right padding.
-* */
-public class ScriptedTextButton extends TextButton implements ScriptableGUIComponent
+public class ScriptedWindow extends Window implements ScriptableGUIComponent
 {
     private LuaValue onClickCallbackFunc;
     private LuaValue onShowCallbackFunc;
     private LuaValue onHideCallbackFunc;
-
     private String debugTag;
 
-    public ScriptedTextButton(XmlReader.Element self, LuaValue ctxt)
+    public ScriptedWindow(XmlReader.Element self, LuaValue ctxt)
     {
         super(self.getAttribute("text"), GameInstance.getInstance().getSkin(self.getAttribute("skin")));
         this.debugTag = getClass().getTypeName() + " Debug";
@@ -68,6 +50,59 @@ public class ScriptedTextButton extends TextButton implements ScriptableGUICompo
             padLeft(Gdx.graphics.getWidth() * Float.parseFloat(self.getAttribute("padding_left")));
         if(self.hasAttribute("padding_right"))
             padRight(Gdx.graphics.getWidth() * Float.parseFloat(self.getAttribute("padding_right")));
+        if(self.hasAttribute("alignment"))
+        {
+            switch(self.getAttribute("alignment"))
+            {
+                case "top-left":
+                    top().left();
+                    break;
+                case "bottom-left":
+                    bottom().left();
+                    break;
+                case "center-left":
+                    center().left();
+                    break;
+                case "top-right":
+                    top().right();
+                    break;
+                case "bottom-right":
+                    bottom().right();
+                    break;
+                case "center-right":
+                    center().right();
+                    break;
+                default:
+                    Gdx.app.log(debugTag, "Unidentified alignment " + self.getAttribute("alignment"));
+            }
+        }
+
+        if(self.hasAttribute("align"))
+        {
+            switch(self.getAttribute("align"))
+            {
+                case "top-left":
+                    top().left();
+                    break;
+                case "bottom-left":
+                    bottom().left();
+                    break;
+                case "center-left":
+                    center().left();
+                    break;
+                case "top-right":
+                    top().right();
+                    break;
+                case "bottom-right":
+                    bottom().right();
+                    break;
+                case "center-right":
+                    center().right();
+                    break;
+                default:
+                    Gdx.app.log(debugTag, "Unidentified alignment " + self.getAttribute("alignment"));
+            }
+        }
 
         addListener(new ChangeListener() {
             @Override

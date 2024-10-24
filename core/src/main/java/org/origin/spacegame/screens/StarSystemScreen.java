@@ -192,7 +192,7 @@ public class StarSystemScreen implements Screen, InputProcessor
     public void hide()
     {
         Gdx.app.log("StarSystemScreenDebug ", "Hiding the Star System Screen!");
-        InputUtilities.getInputMultiplexer().removeProcessor(stage);
+        InputUtilities.getInputMultiplexer().removeProcessor(scene.getStage());
         InputUtilities.getInputMultiplexer().removeProcessor(this);
     }
 

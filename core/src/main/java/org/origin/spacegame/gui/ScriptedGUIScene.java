@@ -16,7 +16,7 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 import org.origin.spacegame.game.GameInstance;
 
 //This class reads GUI elements into the game.
-public class ScriptedGUIScene
+public class ScriptedGUIScene implements ScriptableGUIComponent
 {
     protected LuaValue globals;
     protected XmlReader reader;
@@ -27,6 +27,7 @@ public class ScriptedGUIScene
     protected Stage stage;
     protected String debugTag;
     Array<String> validGUIComponents;
+    public Array<ScriptableGUIComponent> children;
 
     //Each scripted scene has a list of GUI components referred to by unique IDs stored within.
     protected ArrayMap<String, Actor> components;
@@ -42,6 +43,7 @@ public class ScriptedGUIScene
             "Window",
             "Label"
         );
+        children = new Array<ScriptableGUIComponent>();
 
         XmlReader reader = new XmlReader();
         Element root = reader.parse(Gdx.files.internal(xmlDefinesFolder + xmlFile));
@@ -74,6 +76,26 @@ public class ScriptedGUIScene
         return stage;
     }
 
+    //Called when the scene is shown.
+    @Override
+    public void show()
+    {
+        for(ScriptableGUIComponent child : children)
+        {
+            child.show();
+        }
+    }
+
+    //Called when the scene is hidden.
+    @Override
+    public void hide()
+    {
+        for(ScriptableGUIComponent child : children)
+        {
+            child.hide();
+        }
+    }
+
     public void act()
     {
         stage.act();
@@ -91,6 +113,12 @@ public class ScriptedGUIScene
             ScriptedTextButton button = new ScriptedTextButton(child, this.globals);
             Gdx.app.log(debugTag, "Text button " + button.getName() + " created at (" + button.getX() + ", " + button.getY() + ") ");
             stage.addActor(button);
+        }
+        if(child.getName().equals("Label"))
+        {
+            ScriptedLabel label = new ScriptedLabel(child, this.globals);
+            Gdx.app.log(debugTag, "Label " + label.getName() + " created at (" + label.getX() + ", " + label.getY() + ") ");
+            stage.addActor(label);
         }
     }
 }
