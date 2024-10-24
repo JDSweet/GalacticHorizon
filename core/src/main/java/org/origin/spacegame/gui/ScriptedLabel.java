@@ -30,11 +30,11 @@ public class ScriptedLabel extends Label implements ScriptableGUIComponent
         else
             Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_click has not been defined.");
         if(self.hasAttribute("on_show") && ctxt != null)
-            this.onCreateCallbackFunc = ctxt.get(self.getAttribute("on_show"));
+            this.onShowCallbackFunc = ctxt.get(self.getAttribute("on_show"));
         else
             Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_show has not been defined.");
         if(self.hasAttribute("on_hide") && ctxt != null)
-            this.onCreateCallbackFunc = ctxt.get(self.getAttribute("on_hide"));
+            this.onHideCallbackFunc = ctxt.get(self.getAttribute("on_hide"));
         else
             Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_hide has not been defined.");
 

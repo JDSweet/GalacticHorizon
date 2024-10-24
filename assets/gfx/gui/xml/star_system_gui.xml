@@ -11,7 +11,7 @@
     </TextButton>
     <Label
             id = "system_name_label"
-            x = "0.5"
+            x = "0.38"
             y = "0"
             width = "0.085"
             height = "0.085"
@@ -21,4 +21,23 @@
             text = "System #X"
             skin = "uiskin.json">
     </Label>
+    <Window
+            id = "system_name_label"
+            x = "0.38"
+            y = "0"
+            width = "0.085"
+            height = "0.085"
+            on_create = "system_name_label_on_create"
+            on_show = "system_name_label_on_show"
+            on_hide = "system_name_label_on_hide"
+            text = "System #X"
+            skin = "uiskin.json">
+        <TextButton
+                id = "visit_planet_btn"
+                on_show = "visit_planet_btn_on_show"
+                on_hide = "visit_planet_btn_on_hide"
+                on_click = "visit_planet_btn_on_click">
+
+        </TextButton>
+    </Window>
 </GUIScreen>

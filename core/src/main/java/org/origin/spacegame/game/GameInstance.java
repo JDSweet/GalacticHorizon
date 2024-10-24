@@ -248,6 +248,16 @@ public class GameInstance implements Disposable
         return game.getCameraManager();
     }
 
+    public boolean isSystemSelected()
+    {
+        return this.selectedStarSystem == null;
+    }
+
+    public boolean isPlanetSelected()
+    {
+        return this.selectedPlanet == null;
+    }
+
     @Override
     public void dispose()
     {

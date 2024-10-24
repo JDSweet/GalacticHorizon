@@ -111,14 +111,16 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         if(child.getName().equals("TextButton"))
         {
             ScriptedTextButton button = new ScriptedTextButton(child, this.globals);
-            Gdx.app.log(debugTag, "Text button " + button.getName() + " created at (" + button.getX() + ", " + button.getY() + ") ");
+            Gdx.app.log(debugTag, "Text button " + button.getClass().getTypeName() + " created at (" + button.getX() + ", " + button.getY() + ") ");
             stage.addActor(button);
+            children.add(button);
         }
         if(child.getName().equals("Label"))
         {
             ScriptedLabel label = new ScriptedLabel(child, this.globals);
-            Gdx.app.log(debugTag, "Label " + label.getName() + " created at (" + label.getX() + ", " + label.getY() + ") ");
+            Gdx.app.log(debugTag, "Label " + label.getClass().getTypeName() + " created at (" + label.getX() + ", " + label.getY() + ") ");
             stage.addActor(label);
+            children.add(label);
         }
     }
 }

@@ -43,7 +43,6 @@ public class StarSystemScreen implements Screen, InputProcessor
     {
         this.game = game;
         this.scene = new ScriptedGUIScene("star_system_gui.xml");
-        //buildGUI();
     }
 
     private void buildGUI()
@@ -72,15 +71,6 @@ public class StarSystemScreen implements Screen, InputProcessor
     private Window buildPlanetManagementWindow()
     {
         Skin guiSkin = GameInstance.getInstance().getGuiSkin();
-        TextButton closeBtn = new TextButton("X", guiSkin);
-        closeBtn.setColor(Color.RED);
-        closeBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                planetManagementWindow.setVisible(false);
-                Gdx.app.log("StarSystemScreen","Planet Overview Window closed manually!");
-            }
-        });
 
         this.planetManagementWindow = new Window("Planet X Overview", guiSkin);
         this.planetManagementWindow.setWidth(400);
@@ -113,11 +103,7 @@ public class StarSystemScreen implements Screen, InputProcessor
         //InputUtilities.getInputMultiplexer().addProcessor(stage);
         InputUtilities.getInputMultiplexer().addProcessor(scene.getStage());
         InputUtilities.getInputMultiplexer().addProcessor(this);
-    }
-
-    private void updateText()
-    {
-        systemNameLabel.setText("System #" + GameInstance.getInstance().getSelectedStarSystem().id);
+        this.scene.show();
     }
 
     /**
@@ -194,6 +180,7 @@ public class StarSystemScreen implements Screen, InputProcessor
         Gdx.app.log("StarSystemScreenDebug ", "Hiding the Star System Screen!");
         InputUtilities.getInputMultiplexer().removeProcessor(scene.getStage());
         InputUtilities.getInputMultiplexer().removeProcessor(this);
+        this.scene.hide();
     }
 
     /**
