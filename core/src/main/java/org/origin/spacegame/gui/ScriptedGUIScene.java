@@ -115,7 +115,7 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         }
         if(child.getName().equals("Window"))
         {
-            ScriptedWindow window = new ScriptedWindow(child, ctxt);
+            ScriptedWindow window = new ScriptedWindow(child, ctxt, this);
         }
         if(child.getName().equals("Table"))
         {
