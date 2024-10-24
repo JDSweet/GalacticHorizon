@@ -1,27 +1,29 @@
 package org.origin.spacegame.gui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
-import com.badlogic.gdx.utils.XmlReader.Element;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.origin.spacegame.game.GameInstance;
 
-public class ScriptedWindow extends Window implements ScriptableGUIComponent
+public class ScriptedVerticalGroup extends VerticalGroup implements ScriptableGUIComponent
 {
+    private String debugID;
+    private String debugTag;
+    private ScriptedGUIScene scene;
+    private Array<ScriptableGUIComponent> children;
+
     private LuaValue onClickCallbackFunc;
     private LuaValue onShowCallbackFunc;
     private LuaValue onHideCallbackFunc;
-    private String debugTag;
-    private Array<ScriptableGUIComponent> children;
-    private ScriptedGUIScene scene;
-    private String debugID;
 
-    public ScriptedWindow(XmlReader.Element self, LuaValue ctxt, ScriptedGUIScene scene)
+    public ScriptedVerticalGroup(XmlReader.Element self, LuaValue ctxt, ScriptedGUIScene scene)
     {
-        super(self.getAttribute("title"), GameInstance.getInstance().getSkin(self.getAttribute("skin")));
+        //super(self.getAttribute("title"), GameInstance.getInstance().getSkin(self.getAttribute("skin")));
+        super();
+
         this.children = new Array<ScriptableGUIComponent>();
         this.debugTag = getClass().getSimpleName() + " Debug";
         this.scene = scene;
@@ -68,22 +70,22 @@ public class ScriptedWindow extends Window implements ScriptableGUIComponent
             switch(self.getAttribute("alignment"))
             {
                 case "top-left":
-                    top().left();
+                    columnTop().columnLeft();
                     break;
                 case "bottom-left":
-                    bottom().left();
+                    columnBottom().columnLeft();
                     break;
                 case "center-left":
-                    center().left();
+                    columnCenter().columnLeft();
                     break;
                 case "top-right":
-                    top().right();
+                    columnTop().columnRight();
                     break;
                 case "bottom-right":
-                    bottom().right();
+                    columnBottom().columnRight();
                     break;
                 case "center-right":
-                    center().right();
+                    columnCenter().columnRight();
                     break;
                 default:
                     Gdx.app.log(debugTag, "Unidentified alignment " + self.getAttribute("alignment"));
@@ -95,37 +97,33 @@ public class ScriptedWindow extends Window implements ScriptableGUIComponent
             switch(self.getAttribute("align"))
             {
                 case "top-left":
-                    top().left();
+                    columnTop().columnLeft();
                     break;
                 case "bottom-left":
-                    bottom().left();
+                    columnBottom().columnLeft();
                     break;
                 case "center-left":
-                    center().left();
+                    columnCenter().columnLeft();
                     break;
                 case "top-right":
-                    top().right();
+                    columnTop().columnRight();
                     break;
                 case "bottom-right":
-                    bottom().right();
+                    columnBottom().columnRight();
                     break;
                 case "center-right":
-                    center().right();
+                    columnCenter().columnRight();
                     break;
                 default:
-                    Gdx.app.log(debugTag, "Unidentified alignment " + self.getAttribute("alignment"));
+                    Gdx.app.log(debugTag, "Unidentified alignment " + self.getAttribute("align"));
             }
         }
-
         for(int i = 0; i < self.getChildCount(); i++)
         {
             readChild(self.getChild(i), scene, ctxt);
         }
     }
 
-    /**
-     *
-     */
     @Override
     public void show()
     {
@@ -160,14 +158,14 @@ public class ScriptedWindow extends Window implements ScriptableGUIComponent
     }
 
     @Override
-    public void readChild(Element child, ScriptedGUIScene scene, LuaValue ctxt)
+    public void readChild(XmlReader.Element child, ScriptedGUIScene scene, LuaValue ctxt)
     {
         if(child.getName().equals("TextButton"))
         {
             ScriptedTextButton button = new ScriptedTextButton(child, ctxt, scene);
             Gdx.app.log(debugTag, "Text button " + button.getClass().getTypeName() + " created at (" + button.getX() + ", " + button.getY() + ") ");
             //stage.addActor(button);
-            this.add(button);
+            this.addActor(button);
             children.add(button);
         }
         if(child.getName().equals("Label"))
@@ -175,21 +173,19 @@ public class ScriptedWindow extends Window implements ScriptableGUIComponent
             ScriptedLabel label = new ScriptedLabel(child, ctxt, scene);
             Gdx.app.log(debugTag, "Label " + label.getClass().getTypeName() + " created at (" + label.getX() + ", " + label.getY() + ") ");
             //stage.addActor(label);
-            this.add(label);
+            this.addActor(label);
             children.add(label);
         }
         if(child.getName().equals("Window"))
         {
             ScriptedWindow window = new ScriptedWindow(child, ctxt, scene);
             //stage.addActor(window);
-            this.add(window);
+            this.addActor(window);
             children.add(window);
         }
-        if(child.getName().equals("VerticalGroup"))
+        if(child.getName().equals("Table"))
         {
-            ScriptedVerticalGroup group = new ScriptedVerticalGroup(child, ctxt, scene);
-            this.add(group);
-            children.add(group);
+
         }
     }
 

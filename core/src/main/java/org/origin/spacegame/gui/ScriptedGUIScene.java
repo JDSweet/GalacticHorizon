@@ -1,28 +1,20 @@
 package org.origin.spacegame.gui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
-import org.origin.spacegame.game.GameInstance;
+import org.origin.spacegame.Constants;
 
 //This class reads GUI elements into the game.
 public class ScriptedGUIScene implements ScriptableGUIComponent
 {
     protected LuaValue globals;
     protected XmlReader reader;
-    protected String guiScriptFolder = "assets/gfx/gui/scripts/";
-    protected String xmlDefinesFolder = "assets/gfx/gui/xml/";
-    protected String defaultCallbackFile = "00_callbacks.lua";
     protected String luaCallbackFile;
     protected Stage stage;
     protected String debugTag;
@@ -30,7 +22,7 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
     public Array<ScriptableGUIComponent> children;
 
     //Each scripted scene has a list of GUI components referred to by unique IDs stored within.
-    protected ArrayMap<String, Actor> components;
+    protected ArrayMap<String, ScriptableGUIComponent> components;
 
     public ScriptedGUIScene(String xmlFile)
     {
@@ -46,20 +38,20 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         children = new Array<ScriptableGUIComponent>();
 
         XmlReader reader = new XmlReader();
-        Element root = reader.parse(Gdx.files.internal(xmlDefinesFolder + xmlFile));
+        Element root = reader.parse(Gdx.files.internal(Constants.FileConstants.GUI_XML_DIR + xmlFile));
         if(root.hasAttribute("callback_file"))
             this.luaCallbackFile = root.getAttribute("callback_file");
         else
-            this.luaCallbackFile = defaultCallbackFile;
+            this.luaCallbackFile = Constants.FileConstants.DEFAULT_GUI_CALLBACK_FILE;
 
         //Now we create our Lua environment for this GUI Scene.
         this.globals = JsePlatform.standardGlobals();
-        this.components = new ArrayMap<String, Actor>();
+        this.components = new ArrayMap<String, ScriptableGUIComponent>();
         this.stage = new Stage();
 
         //We're going to compile our lua file and execute the code.
         //This ensures that components on this scene have a valid
-        globals.get("dofile").call(Gdx.files.internal(guiScriptFolder + luaCallbackFile).path());
+        globals.get("dofile").call(Gdx.files.internal(Constants.FileConstants.GUI_SCRIPTS_DIR + luaCallbackFile).path());
 
         for(int i = 0; i < root.getChildCount(); i++)
         {
@@ -69,6 +61,8 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
             else
                 Gdx.app.log(debugTag, "Component " + child.getName() + " is not a valid component.");
         }
+
+        registerAll();
     }
 
     public Stage getStage()
@@ -96,6 +90,27 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         }
     }
 
+    public ScriptableGUIComponent getWidgetByID(String id)
+    {
+        return components.get(id);
+    }
+
+    public void registerWidgetByID(String id, ScriptableGUIComponent component)
+    {
+        this.components.put(id, component);
+    }
+
+    private void registerAll()
+    {
+        for(ScriptableGUIComponent c : children)
+        {
+            if(!this.components.containsKey(c.getDebugID()))
+            {
+                registerWidgetByID(c.getDebugID(), c);
+            }
+        }
+    }
+
     @Override
     public void readChild(Element child, ScriptedGUIScene scene, LuaValue ctxt)
     {
@@ -108,7 +123,7 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         }
         if(child.getName().equals("Label"))
         {
-            ScriptedLabel label = new ScriptedLabel(child, this.globals);
+            ScriptedLabel label = new ScriptedLabel(child, this.globals, scene);
             Gdx.app.log(debugTag, "Label " + label.getClass().getTypeName() + " created at (" + label.getX() + ", " + label.getY() + ") ");
             stage.addActor(label);
             children.add(label);
@@ -116,11 +131,19 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         if(child.getName().equals("Window"))
         {
             ScriptedWindow window = new ScriptedWindow(child, ctxt, this);
+            stage.addActor(window);
+            children.add(window);
         }
         if(child.getName().equals("Table"))
         {
 
         }
+    }
+
+    @Override
+    public String getDebugID()
+    {
+        return "root";
     }
 
     public void act()

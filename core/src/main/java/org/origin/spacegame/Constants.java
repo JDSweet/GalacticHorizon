@@ -23,6 +23,14 @@ public class Constants
     public static int MIN_PLANET_COUNT = 1;
     public static int MAX_PLANET_COUNT = 12;
 
+    public static class FileConstants
+    {
+        public static String DEFAULT_GUI_CALLBACK_FILE = "00_callbacks.lua";
+        public static String GUI_SCRIPTS_DIR = "assets/scripts/gui/";
+        public static String GAMEPLAY_SCRIPTS_DIR = "assets/scripts/gameplay/";
+        public static String GUI_XML_DIR = "assets/gfx/ui/xml/";
+    }
+
     public static class InputConstants
     {
         public static int TILE_MAP_NO_SYSTEM_VAL = -1;

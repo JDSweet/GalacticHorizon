@@ -35,22 +35,30 @@ public class ScriptedTextButton extends TextButton implements ScriptableGUICompo
     private LuaValue onHideCallbackFunc;
 
     private ScriptedGUIScene scene;
+    private String debugID;
 
     private String debugTag;
 
     public ScriptedTextButton(XmlReader.Element self, LuaValue ctxt, ScriptedGUIScene scene)
     {
         super(self.getAttribute("text"), GameInstance.getInstance().getSkin(self.getAttribute("skin")));
-        this.debugTag = getClass().getTypeName() + " Debug";
+        this.debugID = self.getAttribute("id");
+        this.debugTag = getClass().getSimpleName() + " " + debugID;
         this.scene = scene;
-
-        if(ctxt == null)
-            Gdx.app.log(debugTag, "The Lua Context is null.");
+        scene.registerWidgetByID(debugID, this);
 
         if(self.hasAttribute("on_click") && ctxt != null)
             this.onClickCallbackFunc = ctxt.get(self.getAttribute("on_click"));
         else
             Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_click has not been defined.");
+        if(self.hasAttribute("on_show") && ctxt != null)
+            this.onShowCallbackFunc = ctxt.get(self.getAttribute("on_show"));
+        else
+            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_show has not been defined.");
+        if(self.hasAttribute("on_hide") && ctxt != null)
+            this.onHideCallbackFunc = ctxt.get(self.getAttribute("on_hide"));
+        else
+            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_hide has not been defined.");
         if(self.hasAttribute("x"))
             setX(Gdx.graphics.getWidth() * Float.parseFloat(self.getAttribute("x")));
         if(self.hasAttribute("X"))
@@ -121,5 +129,10 @@ public class ScriptedTextButton extends TextButton implements ScriptableGUICompo
     public void readChild(XmlReader.Element child, ScriptedGUIScene scene, LuaValue ctxt)
     {
 
+    }
+
+    @Override
+    public String getDebugID() {
+        return this.debugID;
     }
 }

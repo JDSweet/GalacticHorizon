@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.JsePlatform;
 import org.origin.spacegame.SpaceGame;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
@@ -27,72 +29,20 @@ public class StarSystemScreen implements Screen, InputProcessor
     //A button to take you back to the galaxy view
     //is at the bottom center of the screen.
     private Stage stage;
-    private Label systemNameLabel;
-    private TextButton goToGalaxyScreenButton;
 
     //Planet management window.
     private Window planetManagementWindow;
-    TextButton visitSurfaceBtn;
-    Label habitabilityLabel;
-    Label sizeLabel;
-    Label planetClassLabel;
 
     private ScriptedGUIScene scene;
+
+    private LuaValue gameplayCallbacks;
 
     public StarSystemScreen(SpaceGame game)
     {
         this.game = game;
         this.scene = new ScriptedGUIScene("star_system_gui.xml");
-    }
-
-    private void buildGUI()
-    {
-        this.stage = new Stage();
-        Table systemScreenTable = new Table();
-        this.goToGalaxyScreenButton = new TextButton("Galaxy Screen", GameInstance.getInstance().getGuiSkin());
-        this.systemNameLabel = new Label("System #-1", GameInstance.getInstance().getGuiSkin());
-        goToGalaxyScreenButton.addListener(new ChangeListener()
-        {
-            @Override
-            public void changed(ChangeEvent event, Actor actor)
-            {
-                game.getCameraManager().setRenderView(CameraManager.RenderView.GALACTIC_VIEW);
-                Gdx.app.log("StarSystemScreenDebug", "Galaxy Button Clicked!");
-            }
-        });
-        systemScreenTable.setX(Gdx.graphics.getWidth()/2f);
-        systemScreenTable.setY(systemScreenTable.getHeight());
-        systemScreenTable.add(systemNameLabel).padBottom(100).padRight(20);
-        systemScreenTable.add(goToGalaxyScreenButton).padBottom(100);
-        stage.addActor(systemScreenTable);
-        stage.addActor(buildPlanetManagementWindow());
-    }
-
-    private Window buildPlanetManagementWindow()
-    {
-        Skin guiSkin = GameInstance.getInstance().getGuiSkin();
-
-        this.planetManagementWindow = new Window("Planet X Overview", guiSkin);
-        this.planetManagementWindow.setWidth(400);
-        this.planetManagementWindow.setHeight(600);
-        this.planetManagementWindow.setVisible(false);
-
-        visitSurfaceBtn = new TextButton("Visit Surface", guiSkin);
-        habitabilityLabel = new Label("Habitability: X", guiSkin);
-        sizeLabel = new Label("Size: X", guiSkin);
-        planetClassLabel = new Label("Planet Class: ", guiSkin);
-
-        VerticalGroup verticalGroup = new VerticalGroup();
-        verticalGroup.columnLeft().addActor(visitSurfaceBtn);
-        verticalGroup.addActor(habitabilityLabel);
-        verticalGroup.addActor(sizeLabel);
-        verticalGroup.addActor(planetClassLabel);
-        planetManagementWindow.top().left().add(verticalGroup);
-        //planetManagementWindow.top().left().add(visitSurfaceBtn);
-        //planetManagementWindow.center().left().add(habitabilityLabel);
-        //planetManagementWindow.add(sizeLabel);
-
-        return planetManagementWindow;
+        this.gameplayCallbacks = JsePlatform.standardGlobals();
+        //gameplayCallbacks.get("dofile").call(Gdx.files.internal(guiScriptFolder + luaCallbackFile).path());
     }
 
     @Override
@@ -218,30 +168,37 @@ public class StarSystemScreen implements Screen, InputProcessor
                 (float)screenY, 0f));
             float tx = touchPos.x;
             float ty = touchPos.y;
+            /*
+            * Lua:
+            * window = scene:getWidgetByID('planet_overview_window')
+            * window:setVisible(false)
+            * window:isVisible()
+            *
+            * */
 
-            //If planet is not touched, then we set anyPlanetTouched to false.
-            if(!planet.getPlanetClass().isStar() && planet.isTouched(tx, ty))
+            //If planet is not a star, and it has been touched, we set anyPlanetTouched to true.
+            /*if(!planet.getPlanetClass().isStar() && planet.isTouched(tx, ty))
             {
                 anyPlanetTouched = true;
                 onPlanetTouched(tx, ty, planet);
                 if(this.planetManagementWindow.isVisible())
                     this.planetManagementWindow.setVisible(true);
                 break;
-            }
+            }*/
         }
-        if(!anyPlanetTouched)
+        /*if(!anyPlanetTouched)
             this.planetManagementWindow.setVisible(false);
         if(planetManagementWindow.isVisible())
-            updatePlanetManagementWindow();
+            updatePlanetManagementWindow();*/
         return true;
     }
 
-    private void updatePlanetManagementWindow()
+    /*private void updatePlanetManagementWindow()
     {
         this.sizeLabel.setText("Size: " + GameInstance.getInstance().getSelectedPlanet().getSize());
         this.planetClassLabel.setText("Planet Class: " + GameInstance.getInstance().getSelectedPlanet().getPlanetClass().getTag());
         this.habitabilityLabel.setText("Habitability: " + Math.round(GameInstance.getInstance().getSelectedPlanet().getHabitability()*100));
-    }
+    }*/
 
     private void onPlanetTouched(float iX, float iY, Planet planet)
     {

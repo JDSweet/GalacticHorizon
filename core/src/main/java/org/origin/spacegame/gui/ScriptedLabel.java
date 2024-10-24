@@ -16,12 +16,15 @@ public class ScriptedLabel extends Label implements ScriptableGUIComponent
     private LuaValue onCreateCallbackFunc;
 
     private ScriptedGUIScene scene;
+    private String debugID;
 
-    public ScriptedLabel(Element self, LuaValue ctxt)
+    public ScriptedLabel(Element self, LuaValue ctxt, ScriptedGUIScene scene)
     {
         super(self.getAttribute("text"), GameInstance.getInstance().getSkin(self.getAttribute("skin")));
+        this.debugID = self.getAttribute("id");
         this.debugTag = getClass().getTypeName() + " Debug";
         this.scene = scene;
+        scene.registerWidgetByID(debugID, this);
 
         if(ctxt == null)
             Gdx.app.log(debugTag, "The Lua Context is null.");
@@ -89,5 +92,10 @@ public class ScriptedLabel extends Label implements ScriptableGUIComponent
     public void readChild(Element child, ScriptedGUIScene scene, LuaValue ctxt)
     {
 
+    }
+
+    @Override
+    public String getDebugID() {
+        return debugID;
     }
 }

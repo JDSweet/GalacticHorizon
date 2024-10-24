@@ -98,7 +98,7 @@ public class GameInstance implements Disposable
     private void loadSkins()
     {
         Array<FileHandle> skinFileHandles = new Array<FileHandle>();
-        FileHandle[] skinFolderFileHandles = Gdx.files.internal("assets/gfx/gui/skins/").list();
+        FileHandle[] skinFolderFileHandles = Gdx.files.internal("assets/gfx/ui/skins/").list();
 
         //Get the skin JSON files.
         for(FileHandle skinFolderFileHandle : skinFolderFileHandles)
@@ -116,7 +116,7 @@ public class GameInstance implements Disposable
     @Deprecated
     private void loadDefaultSkin()
     {
-        this.guiSkin = new Skin(Gdx.files.internal("assets/gfx/gui/skins/uiskin.json"));
+        this.guiSkin = new Skin(Gdx.files.internal("assets/gfx/ui/skins/uiskin.json"));
     }
 
     public Skin getGuiSkin()
