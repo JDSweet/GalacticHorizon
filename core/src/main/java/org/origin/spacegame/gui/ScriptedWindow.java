@@ -28,6 +28,17 @@ public class ScriptedWindow extends Window implements ScriptableGUIComponent
         this.debugID = self.getAttribute("id");
         scene.registerWidgetByID(debugID, this);
 
+        if(self.hasAttribute("visible"))
+        {
+            String attribVal = self.getAttribute("visible");
+            if(attribVal.equalsIgnoreCase("yes"))
+                attribVal = "true";
+            else if(attribVal.equalsIgnoreCase("no"))
+                attribVal = "false";
+            boolean visibility = Boolean.parseBoolean(attribVal);
+            setVisible(visibility);
+        }
+
         if(ctxt == null)
             Gdx.app.log(debugTag, "The Lua Context is null.");
 

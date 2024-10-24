@@ -5,13 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
+import org.origin.spacegame.Constants;
 import org.origin.spacegame.SpaceGame;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
@@ -36,13 +39,18 @@ public class StarSystemScreen implements Screen, InputProcessor
     private ScriptedGUIScene scene;
 
     private LuaValue gameplayCallbacks;
+    private LuaValue onClickCallback;
+    private LuaValue onPlanetClickedCallback;
 
     public StarSystemScreen(SpaceGame game)
     {
         this.game = game;
         this.scene = new ScriptedGUIScene("star_system_gui.xml");
         this.gameplayCallbacks = JsePlatform.standardGlobals();
-        //gameplayCallbacks.get("dofile").call(Gdx.files.internal(guiScriptFolder + luaCallbackFile).path());
+
+        gameplayCallbacks.get("dofile").call(Gdx.files.internal(Constants.FileConstants.GAMEPLAY_SCRIPTS_DIR + "00_star_system_screen_gameplay_callbacks.lua").path());
+        this.onClickCallback = gameplayCallbacks.get("on_click");
+        this.onPlanetClickedCallback = gameplayCallbacks.get("on_planet_clicked");
     }
 
     @Override
@@ -168,6 +176,7 @@ public class StarSystemScreen implements Screen, InputProcessor
                 (float)screenY, 0f));
             float tx = touchPos.x;
             float ty = touchPos.y;
+
             /*
             * Lua:
             * window = scene:getWidgetByID('planet_overview_window')
@@ -177,37 +186,41 @@ public class StarSystemScreen implements Screen, InputProcessor
             * */
 
             //If planet is not a star, and it has been touched, we set anyPlanetTouched to true.
-            /*if(!planet.getPlanetClass().isStar() && planet.isTouched(tx, ty))
+            if(!planet.getPlanetClass().isStar() && planet.isTouched(tx, ty))
             {
-                anyPlanetTouched = true;
-                onPlanetTouched(tx, ty, planet);
-                if(this.planetManagementWindow.isVisible())
-                    this.planetManagementWindow.setVisible(true);
+                onPlanetClicked(touchPos, planet);
                 break;
-            }*/
+            }
+            else
+            {
+                this.onClickCallback.invoke(new LuaValue[]
+                    {
+                        CoerceJavaToLua.coerce(touchPos),
+                        CoerceJavaToLua.coerce(planet),
+                        CoerceJavaToLua.coerce(scene),
+                        CoerceJavaToLua.coerce(GameInstance.getInstance()),
+                        CoerceJavaToLua.coerce(GameInstance.getInstance().getState())
+                    }
+                );
+            }
+
         }
-        /*if(!anyPlanetTouched)
-            this.planetManagementWindow.setVisible(false);
-        if(planetManagementWindow.isVisible())
-            updatePlanetManagementWindow();*/
         return true;
     }
 
-    /*private void updatePlanetManagementWindow()
-    {
-        this.sizeLabel.setText("Size: " + GameInstance.getInstance().getSelectedPlanet().getSize());
-        this.planetClassLabel.setText("Planet Class: " + GameInstance.getInstance().getSelectedPlanet().getPlanetClass().getTag());
-        this.habitabilityLabel.setText("Habitability: " + Math.round(GameInstance.getInstance().getSelectedPlanet().getHabitability()*100));
-    }*/
-
-    private void onPlanetTouched(float iX, float iY, Planet planet)
+    private void onPlanetClicked(Vector3 touchPos, Planet planet)
     {
         Gdx.app.log("StarSystemScreen", "Planet " + planet.id + " touched!");
         GameInstance.getInstance().selectPlanet(planet);
-        this.planetManagementWindow.getTitleLabel().setText("Planet " + planet.id + " Overview");
-
-        if(!planet.getPlanetClass().isStar())
-            this.planetManagementWindow.setVisible(true);
+        this.onPlanetClickedCallback.invoke(new LuaValue[]
+            {
+                CoerceJavaToLua.coerce(touchPos),
+                CoerceJavaToLua.coerce(planet),
+                CoerceJavaToLua.coerce(scene),
+                CoerceJavaToLua.coerce(GameInstance.getInstance()),
+                CoerceJavaToLua.coerce(GameInstance.getInstance().getState())
+            }
+        );
     }
 
     @Override

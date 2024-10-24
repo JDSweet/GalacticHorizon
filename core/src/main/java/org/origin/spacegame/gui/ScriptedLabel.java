@@ -24,7 +24,18 @@ public class ScriptedLabel extends Label implements ScriptableGUIComponent
         this.debugID = self.getAttribute("id");
         this.debugTag = getClass().getTypeName() + " Debug";
         this.scene = scene;
-        scene.registerWidgetByID(debugID, this);
+        if(this.scene != null)
+            scene.registerWidgetByID(debugID, this);
+        if(self.hasAttribute("visible"))
+        {
+            String attribVal = self.getAttribute("visible");
+            if(attribVal.equalsIgnoreCase("yes"))
+                attribVal = "true";
+            else if(attribVal.equalsIgnoreCase("no"))
+                attribVal = "false";
+            boolean visibility = Boolean.parseBoolean(attribVal);
+            setVisible(visibility);
+        }
 
         if(ctxt == null)
             Gdx.app.log(debugTag, "The Lua Context is null.");

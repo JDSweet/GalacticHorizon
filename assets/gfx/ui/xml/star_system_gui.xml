@@ -32,7 +32,8 @@
             on_hide = "planet_overview_window_on_hide"
             title = "Planet #X"
             skin = "uiskin.json"
-            align = "top-left">
+            align = "top-left"
+            visible = "no">
         <VerticalGroup id = "planet_info_v_group" align = "center-left">
             <TextButton
                     id = "visit_planet_btn"

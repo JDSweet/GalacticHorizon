@@ -45,7 +45,19 @@ public class ScriptedTextButton extends TextButton implements ScriptableGUICompo
         this.debugID = self.getAttribute("id");
         this.debugTag = getClass().getSimpleName() + " " + debugID;
         this.scene = scene;
-        scene.registerWidgetByID(debugID, this);
+        if(this.scene != null)
+            scene.registerWidgetByID(debugID, this);
+
+        if(self.hasAttribute("visible"))
+        {
+            String attribVal = self.getAttribute("visible");
+            if(attribVal.equalsIgnoreCase("yes"))
+                attribVal = "true";
+            else if(attribVal.equalsIgnoreCase("no"))
+                attribVal = "false";
+            boolean visibility = Boolean.parseBoolean(attribVal);
+            setVisible(visibility);
+        }
 
         if(self.hasAttribute("on_click") && ctxt != null)
             this.onClickCallbackFunc = ctxt.get(self.getAttribute("on_click"));
