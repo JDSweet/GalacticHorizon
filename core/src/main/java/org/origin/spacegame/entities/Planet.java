@@ -34,7 +34,7 @@ public class Planet
         else
             this.habitability = RandomNumberUtility.nextFloat(planetClass.getMinHabitability(),
                 planetClass.getMaxHabitability());
-        if(planetClass.getMinSize() <= planetClass.getMaxSize())
+        if(planetClass.getMaxSize() <= planetClass.getMinSize())
             this.size = planetClass.getMinSize();
         else
             this.size = RandomNumberUtility.nextInt(planetClass.getMinSize(),
@@ -60,6 +60,11 @@ public class Planet
             return false;
     }
 
+    public int getHabitabilityRounded()
+    {
+        return Math.round(getHabitability()*100);
+    }
+
     public int getSize()
     {
         return size;
@@ -83,5 +88,10 @@ public class Planet
     public float getHabitability()
     {
         return this.habitability;
+    }
+
+    public int getID()
+    {
+        return this.id;
     }
 }
