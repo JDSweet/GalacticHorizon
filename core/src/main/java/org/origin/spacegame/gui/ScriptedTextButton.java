@@ -34,12 +34,15 @@ public class ScriptedTextButton extends TextButton implements ScriptableGUICompo
     private LuaValue onShowCallbackFunc;
     private LuaValue onHideCallbackFunc;
 
+    private ScriptedGUIScene scene;
+
     private String debugTag;
 
-    public ScriptedTextButton(XmlReader.Element self, LuaValue ctxt)
+    public ScriptedTextButton(XmlReader.Element self, LuaValue ctxt, ScriptedGUIScene scene)
     {
         super(self.getAttribute("text"), GameInstance.getInstance().getSkin(self.getAttribute("skin")));
         this.debugTag = getClass().getTypeName() + " Debug";
+        this.scene = scene;
 
         if(ctxt == null)
             Gdx.app.log(debugTag, "The Lua Context is null.");
@@ -112,5 +115,11 @@ public class ScriptedTextButton extends TextButton implements ScriptableGUICompo
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else
             Gdx.app.log(debugTag, "No on_hide callback function defined for " + debugTag);
+    }
+
+    @Override
+    public void readChild(XmlReader.Element child, ScriptedGUIScene scene, LuaValue ctxt)
+    {
+
     }
 }

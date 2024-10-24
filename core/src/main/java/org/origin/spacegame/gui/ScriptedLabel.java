@@ -15,12 +15,13 @@ public class ScriptedLabel extends Label implements ScriptableGUIComponent
     private LuaValue onHideCallbackFunc;
     private LuaValue onCreateCallbackFunc;
 
+    private ScriptedGUIScene scene;
+
     public ScriptedLabel(Element self, LuaValue ctxt)
     {
         super(self.getAttribute("text"), GameInstance.getInstance().getSkin(self.getAttribute("skin")));
         this.debugTag = getClass().getTypeName() + " Debug";
-
-        this.debugTag = getClass().getTypeName() + " Debug";
+        this.scene = scene;
 
         if(ctxt == null)
             Gdx.app.log(debugTag, "The Lua Context is null.");
@@ -82,5 +83,11 @@ public class ScriptedLabel extends Label implements ScriptableGUIComponent
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else
             Gdx.app.log(debugTag, "No on_hide callback function defined for " + debugTag);
+    }
+
+    @Override
+    public void readChild(Element child, ScriptedGUIScene scene, LuaValue ctxt)
+    {
+
     }
 }

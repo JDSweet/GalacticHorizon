@@ -18,10 +18,13 @@ public class ScriptedWindow extends Window implements ScriptableGUIComponent
     private LuaValue onHideCallbackFunc;
     private String debugTag;
 
-    public ScriptedWindow(XmlReader.Element self, LuaValue ctxt)
+    private ScriptedGUIScene scene;
+
+    public ScriptedWindow(XmlReader.Element self, LuaValue ctxt, ScriptedGUIScene scene)
     {
         super(self.getAttribute("text"), GameInstance.getInstance().getSkin(self.getAttribute("skin")));
         this.debugTag = getClass().getTypeName() + " Debug";
+        this.scene = scene;
 
         if(ctxt == null)
             Gdx.app.log(debugTag, "The Lua Context is null.");
@@ -147,5 +150,11 @@ public class ScriptedWindow extends Window implements ScriptableGUIComponent
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else
             Gdx.app.log(debugTag, "No on_hide callback function defined for " + debugTag);
+    }
+
+    @Override
+    public void readChild(Element child, ScriptedGUIScene scene, LuaValue ctxt)
+    {
+
     }
 }

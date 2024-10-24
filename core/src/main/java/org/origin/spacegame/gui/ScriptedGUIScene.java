@@ -65,7 +65,7 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         {
             Element child = root.getChild(i);
             if(validGUIComponents.contains(child.getName(), false))
-                readLegitimateChild(child);
+                readChild(child, this, globals);
             else
                 Gdx.app.log(debugTag, "Component " + child.getName() + " is not a valid component.");
         }
@@ -96,21 +96,12 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         }
     }
 
-    public void act()
-    {
-        stage.act();
-    }
-
-    public void draw()
-    {
-        stage.draw();
-    }
-
-    protected void readLegitimateChild(Element child)
+    @Override
+    public void readChild(Element child, ScriptedGUIScene scene, LuaValue ctxt)
     {
         if(child.getName().equals("TextButton"))
         {
-            ScriptedTextButton button = new ScriptedTextButton(child, this.globals);
+            ScriptedTextButton button = new ScriptedTextButton(child, this.globals, this);
             Gdx.app.log(debugTag, "Text button " + button.getClass().getTypeName() + " created at (" + button.getX() + ", " + button.getY() + ") ");
             stage.addActor(button);
             children.add(button);
@@ -122,5 +113,23 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
             stage.addActor(label);
             children.add(label);
         }
+        if(child.getName().equals("Window"))
+        {
+            ScriptedWindow window = new ScriptedWindow(child, ctxt);
+        }
+        if(child.getName().equals("Table"))
+        {
+
+        }
+    }
+
+    public void act()
+    {
+        stage.act();
+    }
+
+    public void draw()
+    {
+        stage.draw();
     }
 }
