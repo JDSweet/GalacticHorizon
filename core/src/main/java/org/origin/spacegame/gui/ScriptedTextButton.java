@@ -121,6 +121,7 @@ public class ScriptedTextButton extends TextButton implements ScriptableGUICompo
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else
             Gdx.app.log(debugTag, "No on_show callback function defined for " + debugTag);
+        enable();
     }
 
     /**
@@ -135,6 +136,7 @@ public class ScriptedTextButton extends TextButton implements ScriptableGUICompo
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else
             Gdx.app.log(debugTag, "No on_hide callback function defined for " + debugTag);
+        disable();
     }
 
     @Override
@@ -146,5 +148,21 @@ public class ScriptedTextButton extends TextButton implements ScriptableGUICompo
     @Override
     public String getDebugID() {
         return this.debugID;
+    }
+
+    boolean enabled = true;
+    @Override
+    public void enable() {
+        enabled = true;
+    }
+
+    @Override
+    public void disable() {
+        enabled = false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 }

@@ -204,8 +204,28 @@ public class ScriptedWindow extends Window implements ScriptableGUIComponent
         }
     }
 
+
     @Override
     public String getDebugID() {
         return debugID;
+    }
+
+    private boolean enabled = true;
+
+    @Override
+    public void enable()
+    {
+
+    }
+
+    @Override
+    public void disable()
+    {
+
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 }

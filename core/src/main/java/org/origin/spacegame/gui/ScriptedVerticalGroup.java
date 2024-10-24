@@ -148,6 +148,7 @@ public class ScriptedVerticalGroup extends VerticalGroup implements ScriptableGU
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else
             Gdx.app.log(debugTag, "No on_show callback function defined for " + debugTag);
+        enable();
     }
 
     /**
@@ -166,6 +167,7 @@ public class ScriptedVerticalGroup extends VerticalGroup implements ScriptableGU
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else
             Gdx.app.log(debugTag, "No on_hide callback function defined for " + debugTag);
+        disable();
     }
 
     @Override
@@ -203,5 +205,21 @@ public class ScriptedVerticalGroup extends VerticalGroup implements ScriptableGU
     @Override
     public String getDebugID() {
         return debugID;
+    }
+
+    boolean enabled = true;
+    @Override
+    public void enable() {
+        enabled = true;
+    }
+
+    @Override
+    public void disable() {
+        enabled = false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 }

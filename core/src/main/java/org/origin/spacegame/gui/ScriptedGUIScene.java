@@ -65,9 +65,14 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         registerAll();
     }
 
-    public Stage getStage()
+    public void enableWidget(String widgetID)
     {
-        return stage;
+
+    }
+
+    public void disableWidget(String widgetID)
+    {
+
     }
 
     //Called when the scene is shown.
@@ -140,10 +145,36 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
         }
     }
 
+    public Stage getStage()
+    {
+        return this.stage;
+    }
+
     @Override
     public String getDebugID()
     {
         return "root";
+    }
+
+    private boolean enabled = true;
+    @Override
+    public void enable()
+    {
+        enabled = true;
+        show();
+    }
+
+    @Override
+    public void disable()
+    {
+        enabled = false;
+        hide();
+    }
+
+    @Override
+    public boolean isEnabled()
+    {
+        return enabled;
     }
 
     public void act()
