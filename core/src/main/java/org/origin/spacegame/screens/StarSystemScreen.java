@@ -47,7 +47,6 @@ public class StarSystemScreen implements Screen, InputProcessor
         this.game = game;
         this.scene = new ScriptedGUIScene("star_system_gui.xml");
         this.gameplayCallbacks = JsePlatform.standardGlobals();
-
         gameplayCallbacks.get("dofile").call(Gdx.files.internal(Constants.FileConstants.GAMEPLAY_SCRIPTS_DIR + "00_star_system_screen_gameplay_callbacks.lua").path());
         this.onClickCallback = gameplayCallbacks.get("on_click");
         this.onPlanetClickedCallback = gameplayCallbacks.get("on_planet_clicked");
@@ -57,8 +56,8 @@ public class StarSystemScreen implements Screen, InputProcessor
     public void show()
     {
         Gdx.app.log("StarSystemScreenDebug", "Showing System View...");
-        //updateText();
-        //InputUtilities.getInputMultiplexer().addProcessor(stage);
+        game.getCameraManager().getCurrentCamera().position.x = Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_WIDTH/2f;
+        game.getCameraManager().getCurrentCamera().position.y = Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_WIDTH/2f;
         InputUtilities.getInputMultiplexer().addProcessor(scene.getStage());
         InputUtilities.getInputMultiplexer().addProcessor(this);
         this.scene.show();
@@ -188,6 +187,7 @@ public class StarSystemScreen implements Screen, InputProcessor
             //If planet is not a star, and it has been touched, we set anyPlanetTouched to true.
             if(!planet.getPlanetClass().isStar() && planet.isTouched(tx, ty))
             {
+                GameInstance.getInstance().selectPlanet(planet);
                 onPlanetClicked(touchPos, planet);
                 break;
             }
