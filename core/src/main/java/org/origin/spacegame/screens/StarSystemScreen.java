@@ -1,16 +1,11 @@
 package org.origin.spacegame.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
@@ -19,9 +14,8 @@ import org.origin.spacegame.SpaceGame;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;
-import org.origin.spacegame.gui.ScriptedGUIScene;
 import org.origin.spacegame.input.InputUtilities;
-import org.origin.spacegame.utilities.CameraManager;
+import org.origin.spacegame.gui.ScriptedGUIScene;
 
 public class StarSystemScreen implements Screen, InputProcessor
 {

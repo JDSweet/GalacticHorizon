@@ -77,3 +77,15 @@ end
 function planet_size_label_on_hide(widget, game_instance, game_state)
     print('[Lua Debug] PLanet habitability label hiding...')
 end
+
+function empire_management_btn_on_click(widget, game_instance, game_state)
+    print('[Lua Debug] PLanet habitability label hiding...')
+end
+
+function empire_economy_btn_on_click(widget, game_instance, game_state)
+    print('[Lua Debug] PLanet habitability label hiding...')
+end
+
+function empire_military_btn_on_click(widget, game_instance, game_state)
+    print('[Lua Debug] PLanet habitability label hiding...')
+end

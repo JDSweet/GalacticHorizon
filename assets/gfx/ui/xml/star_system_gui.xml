@@ -9,6 +9,16 @@
         text = "Go to Galaxy!"
         skin = "uiskin.json">
     </TextButton>
+    <TextButton
+            id = "empire_management_btn"
+            x = "0.0"
+            y = "0.91"
+            width = "0.085"
+            height = "0.09"
+            on_click = "empire_management_btn_on_click"
+            text = "Empire"
+            skin = "uiskin.json">
+    </TextButton>
     <Label
             id = "system_name_label"
             x = "0.38"

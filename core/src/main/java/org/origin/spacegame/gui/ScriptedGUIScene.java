@@ -5,13 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.XmlReader;
-import com.badlogic.gdx.utils.XmlReader.Element;
+
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
+
 import org.origin.spacegame.Constants;
 
-//This class reads GUI elements into the game.
-public class ScriptedGUIScene implements ScriptableGUIComponent
+public class ScriptedGUIScene  implements ScriptableGUIComponent
 {
     protected LuaValue globals;
     protected XmlReader reader;
@@ -33,12 +33,13 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
             "Table",
             "VerticalGroup",
             "Window",
-            "Label"
+            "Label",
+            "Image"
         );
         children = new Array<ScriptableGUIComponent>();
 
         XmlReader reader = new XmlReader();
-        Element root = reader.parse(Gdx.files.internal(Constants.FileConstants.GUI_XML_DIR + xmlFile));
+        XmlReader.Element root = reader.parse(Gdx.files.internal(Constants.FileConstants.GUI_XML_DIR + xmlFile));
         if(root.hasAttribute("callback_file"))
             this.luaCallbackFile = root.getAttribute("callback_file");
         else
@@ -55,7 +56,7 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
 
         for(int i = 0; i < root.getChildCount(); i++)
         {
-            Element child = root.getChild(i);
+            XmlReader.Element child = root.getChild(i);
             if(validGUIComponents.contains(child.getName(), false))
                 readChild(child, this, globals);
             else
@@ -117,26 +118,26 @@ public class ScriptedGUIScene implements ScriptableGUIComponent
     }
 
     @Override
-    public void readChild(Element child, ScriptedGUIScene scene, LuaValue ctxt)
+    public void readChild(XmlReader.Element child, ScriptedGUIScene scene, LuaValue ctxt)
     {
         if(child.getName().equals("TextButton"))
         {
             ScriptedTextButton button = new ScriptedTextButton(child, this.globals, this);
-            Gdx.app.log(debugTag, "Text button " + button.getClass().getTypeName() + " created at (" + button.getX() + ", " + button.getY() + ") ");
-            stage.addActor(button);
+            Gdx.app.log(debugTag, "Text button " + button.getClass().getTypeName() + " created at (" + button.widget.getX() + ", " + button.widget.getY() + ") ");
+            stage.addActor(button.widget);
             children.add(button);
         }
         if(child.getName().equals("Label"))
         {
             ScriptedLabel label = new ScriptedLabel(child, this.globals, scene);
-            Gdx.app.log(debugTag, "Label " + label.getClass().getTypeName() + " created at (" + label.getX() + ", " + label.getY() + ") ");
-            stage.addActor(label);
+            Gdx.app.log(debugTag, "Label " + label.getClass().getTypeName() + " created at (" + label.widget.getX() + ", " + label.widget.getY() + ") ");
+            stage.addActor(label.widget);
             children.add(label);
         }
         if(child.getName().equals("Window"))
         {
             ScriptedWindow window = new ScriptedWindow(child, ctxt, this);
-            stage.addActor(window);
+            stage.addActor(window.widget);
             children.add(window);
         }
         if(child.getName().equals("Table"))
