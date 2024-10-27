@@ -89,3 +89,24 @@ end
 function empire_military_btn_on_click(widget, game_instance, game_state)
     print('[Lua Debug] PLanet habitability label hiding...')
 end
+
+----------------------- Planet Class Label ------------------------------
+function planet_class_label_on_create(widget, game_instance, game_state)
+    print('[Lua Debug] PLanet habitability label hiding...')
+end
+
+function planet_class_label_on_show(widget, game_instance, game_state)
+    print('[Lua Debug] System class label showing...')
+        if game_instance:isPlanetSelected() then
+            widget:setText('Planet Class ' .. 'no_class')
+            print('No system selected.')
+        else
+            print('System selected')
+            widget:setText('Planet Class ' .. game_instance:getSelectedPlanet():getPlanetClass():getTag())
+        end
+end
+
+function planet_class_label_on_hide(widget, game_instance, game_state)
+    print('[Lua Debug] PLanet habitability label hiding...')
+end
+--------------------------------------------------------------------------

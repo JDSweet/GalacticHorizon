@@ -26,7 +26,7 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
     public ScriptableWidgetContainer(Element self, LuaValue ctxt, Actor widget, ScriptedGUIScene scene)
     {
         this.debugID = self.getAttribute("id");
-        this.debugTag = getClass().getTypeName() + " Debug";
+        this.debugTag = getClass().getSimpleName();
         this.widget = widget;
         this.scene = scene;
         this.children = new Array<ScriptableGUIComponent>();

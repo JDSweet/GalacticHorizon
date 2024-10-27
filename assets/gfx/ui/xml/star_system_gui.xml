@@ -69,6 +69,14 @@
                     text = "Planet Size: X"
                     skin = "uiskin.json">
             </Label>
+            <Label
+                    id = "planet_class_label"
+                    on_create = "planet_class_label_on_create"
+                    on_show = "planet_class_label_on_show"
+                    on_hide = "planet_class_label_on_hide"
+                    text = "Planet Class: Clazz"
+                    skin = "uiskin.json">
+            </Label>
         </VerticalGroup>
     </Window>
 </GUIScreen>

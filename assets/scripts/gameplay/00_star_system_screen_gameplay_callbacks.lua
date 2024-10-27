@@ -11,6 +11,8 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
     print('[Lua Debug] Planet un-selected.')
 end
 
+-- This function selects the planet that was clicked and sets the data fields for
+-- all the different widgets relating to planet management based on that selection.
 function on_planet_clicked(touchPos, planet, scene, game_instance, game_state)
     game_instance:selectPlanet(planet)
 
@@ -23,7 +25,9 @@ function on_planet_clicked(touchPos, planet, scene, game_instance, game_state)
 
     local hab_label = scene:getWidgetByID('planet_habitability_label'):getWidget()
     local size_label = scene:getWidgetByID('planet_size_label'):getWidget()
+    local planet_class = scene:getWidgetByID('planet_class_label'):getWidget()
     hab_label:setText('Habitability: ' .. game_instance:getSelectedPlanet():getHabitabilityRounded())
     size_label:setText('Planet Size: ' .. game_instance:getSelectedPlanet():getSize())
+    planet_class:setText('Planet Class: ' .. game_instance:getSelectedPlanet():getPlanetClass():getTag())
     print('[Lua Debug] Planet ' .. planet.id .. " selected.")
 end
