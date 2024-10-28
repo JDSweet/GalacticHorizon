@@ -11,14 +11,11 @@ import com.badlogic.gdx.utils.XmlReader;
 //import org.luaj.vm2.ast.Chunk;
 //import org.luaj.vm2.script.LuaScriptEngine;
 //import org.luaj.vm2.script.LuaScriptEngineFactory;
-import org.origin.spacegame.SpaceGame;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
-import org.origin.spacegame.utilities.CameraManager;
 
-import java.io.File;
 import java.util.Random;
 
 public class GameInstance implements Disposable

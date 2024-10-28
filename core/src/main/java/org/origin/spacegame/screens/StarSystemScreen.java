@@ -10,7 +10,7 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 import org.origin.spacegame.Constants;
-import org.origin.spacegame.SpaceGame;
+import org.origin.spacegame.game.SpaceGame;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;

@@ -18,6 +18,18 @@ public class Planet
     private int size = 0;
     private float habitability = 0f;
 
+    /*
+    *
+    * To Do: In order to add zones (habitable zone, freezing zone, melting zone), we need to be able
+    * to get a list of each planet class that can spawn in each zone, and then randomly pick a planet from said
+    * list of planet classes.
+    *
+    * */
+    public Planet(int id, Vector2 position, float orbitalRadius)
+    {
+        this(id, position, orbitalRadius, GameInstance.getInstance().getPlanetClass(null));
+    }
+
     public Planet(int id, Vector2 position, float orbitalRadius, String planetClassTag)
     {
         this(id, position, orbitalRadius, GameInstance.getInstance().getPlanetClass(planetClassTag));
@@ -29,6 +41,12 @@ public class Planet
         this.position = position;
         this.orbitalRadius = orbitalRadius;
         this.planetClass = planetClass;
+        /*
+        *
+        * if(orbitalRadius <= Constants.MELTINGZONE)
+        *   planetClass = GameInstance.getInstance().getPlanetClass("pc_molten");
+        *
+        * */
         if(planetClass.getMaxHabitability() <= planetClass.getMinHabitability())
             this.habitability = planetClass.getMinHabitability();
         else
@@ -58,6 +76,15 @@ public class Planet
             return true;
         else
             return false;
+    }
+
+    public void setPlanetClass(String tag, boolean resize, boolean regenerateHabitability)
+    {
+        this.planetClass = GameInstance.getInstance().getPlanetClass(tag);
+        if(regenerateHabitability)
+            this.habitability = RandomNumberUtility.nextFloat(planetClass.getMinHabitability(), planetClass.getMaxHabitability());
+        if(resize)
+            this.size = RandomNumberUtility.nextInt(planetClass.getMinSize(), planetClass.getMaxSize());
     }
 
     public int getHabitabilityRounded()

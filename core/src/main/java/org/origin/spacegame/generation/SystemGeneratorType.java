@@ -1,4 +1,4 @@
-package org.origin.spacegame.utilities;
+package org.origin.spacegame.generation;
 
 public enum SystemGeneratorType
 {

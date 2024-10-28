@@ -1,15 +1,13 @@
-package org.origin.spacegame;
+package org.origin.spacegame.game;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.input.InputUtilities;
 import org.origin.spacegame.screens.GalaxyScreen;
 import org.origin.spacegame.screens.PlanetScreen;
 import org.origin.spacegame.screens.StarSystemScreen;
-import org.origin.spacegame.utilities.CameraManager;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class SpaceGame extends Game//ApplicationAdapter

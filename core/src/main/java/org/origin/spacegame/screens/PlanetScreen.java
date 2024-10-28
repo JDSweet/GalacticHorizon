@@ -6,11 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import org.origin.spacegame.SpaceGame;
+import org.origin.spacegame.game.SpaceGame;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.input.InputUtilities;
-import org.origin.spacegame.utilities.CameraManager;
+import org.origin.spacegame.game.CameraManager;
 
 public class PlanetScreen implements Screen
 {

@@ -7,7 +7,9 @@ import com.badlogic.gdx.utils.IntMap;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
-import org.origin.spacegame.utilities.*;
+import org.origin.spacegame.generation.PlanetOrbitGenerator;
+import org.origin.spacegame.generation.SystemGeneratorType;
+import org.origin.spacegame.generation.TileMapStarSystemGenerator;
 
 public class GameState
 {

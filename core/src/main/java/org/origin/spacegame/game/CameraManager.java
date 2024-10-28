@@ -1,4 +1,4 @@
-package org.origin.spacegame.utilities;
+package org.origin.spacegame.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;

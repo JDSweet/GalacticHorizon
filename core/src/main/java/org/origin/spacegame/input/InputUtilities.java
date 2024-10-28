@@ -4,12 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import org.origin.spacegame.Constants;
-import org.origin.spacegame.entities.StarSystem;
-import org.origin.spacegame.game.GameInstance;
-import org.origin.spacegame.utilities.CameraManager;
+import org.origin.spacegame.game.CameraManager;
 
 public class InputUtilities
 {

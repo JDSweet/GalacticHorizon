@@ -1,4 +1,4 @@
-package org.origin.spacegame.utilities;
+package org.origin.spacegame.generation;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.game.GameInstance;
+import org.origin.spacegame.utilities.RandomNumberUtility;
 
 import java.util.Random;
 
