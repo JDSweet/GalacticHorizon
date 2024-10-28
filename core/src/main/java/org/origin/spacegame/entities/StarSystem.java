@@ -8,6 +8,7 @@ import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.game.GameState;
+import org.origin.spacegame.generation.OrbitalZone;
 
 public class StarSystem
 {
@@ -73,7 +74,18 @@ public class StarSystem
     public void addAllPlanets(Array<Planet> planets)
     {
         this.planets.addAll(planets);
+        for(Planet p : planets)
+        {
+            if(p.getPlanetClass().isStar())
+                this.addStar(p);
+        }
     }
+
+    public Array<Planet> getAllStars()
+    {
+        return this.stars;
+    }
+
 
     public Vector2 getGalacticPosition()
     {

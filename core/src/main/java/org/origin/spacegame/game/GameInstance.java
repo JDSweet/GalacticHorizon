@@ -16,6 +16,7 @@ import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
 import org.origin.spacegame.generation.OrbitalZone;
+import org.origin.spacegame.utilities.StringToType;
 
 import java.util.Random;
 
@@ -135,8 +136,13 @@ public class GameInstance implements Disposable
     /**
      * &#064;returns a list of all planet classes that are flagged as being able to spawn in the given orbital zone.
      */
-    public Array<PlanetClass> getPlanetClassesThatCanSpawnInZone(OrbitalZone zone)
+    public Array<PlanetClass> getPlanetClassesThatCanSpawnInZone(OrbitalZone zone, boolean includeStars)
     {
+        Array<PlanetClass> retval = new Array<PlanetClass>();
+        for(PlanetClass planetClass : this.planetClasses.values)
+        {
+
+        }
         return null;
     }
 
@@ -173,19 +179,42 @@ public class GameInstance implements Disposable
         float maxHabitability = Float.parseFloat(root.getAttribute("max_habitability"));
         int minSize = Integer.parseInt(root.getAttribute("min_size"));
         int maxSize = Integer.parseInt(root.getAttribute("max_size"));
-        boolean onlySpawnsInHabitableZone = yesOrNoToTrueOrFalse(root.getAttribute("only_spawns_in_habitable_zone"));
-        boolean isStar = yesOrNoToTrueOrFalse(root.getAttribute("star"));
-        boolean canColonize = yesOrNoToTrueOrFalse(root.getAttribute("can_colonize"));
+        //boolean onlySpawnsInHabitableZone = yesOrNoToTrueOrFalse(root.getAttribute("only_spawns_in_habitable_zone"));
+        boolean isStar = StringToType.yesOrNoToTrueOrFalse(root.getAttribute("star"));
+        boolean canColonize = StringToType.yesOrNoToTrueOrFalse(root.getAttribute("can_colonize"));
+        boolean isTerrestrial = true;
+
+        float habZoneRadius = 0f;
+        float meltZoneRadius = 0f;
+        float freezeZoneRadius = 0f;
+
+        if(isStar)
+        {
+            meltZoneRadius = Float.parseFloat(root.getAttribute("melting_zone_radius"));
+            habZoneRadius = Float.parseFloat(root.getAttribute("habitable_zone_radius"));
+            freezeZoneRadius = Float.parseFloat(root.getAttribute("freezing_zone_radius"));
+            isTerrestrial = false;
+        }
+
+        if(root.hasAttribute("terrestrial"))
+        {
+            String terrestrial = root.getAttribute("terrestrial");
+            isTerrestrial = StringToType.yesOrNoToTrueOrFalse("terrestrial");
+        }
+
+        String spawningZone = "HABITABLE";
+        if(root.hasAttribute("spawning_zone"))
+            spawningZone = root.getAttribute("spawning_zone");
+        else
+            Gdx.app.log("Spawning Zone Debug", "Planet Class " + root.getName() + " has no valid defined spawning zone.");
         PlanetClass pc = new PlanetClass(tag, gfx, minHabitability,
-            maxHabitability, minSize, maxSize, onlySpawnsInHabitableZone,
-            isStar, canColonize);
+                maxHabitability, minSize, maxSize, spawningZone,
+                isStar, canColonize, meltZoneRadius,
+                habZoneRadius, freezeZoneRadius);
         return pc;
     }
 
-    private boolean yesOrNoToTrueOrFalse(String str)
-    {
-        return str.equalsIgnoreCase("yes");
-    }
+
 
     public void loadStarClasses()
     {

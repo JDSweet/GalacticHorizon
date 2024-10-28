@@ -19,6 +19,8 @@ public class Planet
     private int size = 0;
     private float habitability = 0f;
 
+    private StarSystem starSystem;
+
     /*
     *
     * To Do: In order to add zones (habitable zone, freezing zone, melting zone), we need to be able
@@ -26,17 +28,17 @@ public class Planet
     * list of planet classes.
     *
     * */
-    public Planet(int id, Vector2 position, float orbitalRadius)
+    public Planet(int id, Vector2 position, float orbitalRadius, StarSystem system)
     {
-        this(id, position, orbitalRadius, GameInstance.getInstance().getPlanetClass(null));
+        this(id, position, orbitalRadius, GameInstance.getInstance().getPlanetClass(null), system);
     }
 
-    public Planet(int id, Vector2 position, float orbitalRadius, String planetClassTag)
+    public Planet(int id, Vector2 position, float orbitalRadius, String planetClassTag, StarSystem system)
     {
-        this(id, position, orbitalRadius, GameInstance.getInstance().getPlanetClass(planetClassTag));
+        this(id, position, orbitalRadius, GameInstance.getInstance().getPlanetClass(planetClassTag), system);
     }
 
-    public Planet(int id, Vector2 position, float orbitalRadius, PlanetClass planetClass)
+    public Planet(int id, Vector2 position, float orbitalRadius, PlanetClass planetClass, StarSystem system)
     {
         this.id = id;
         this.position = position;
@@ -69,6 +71,16 @@ public class Planet
         batch.draw(planetClass.getGfx(), position.x, position.y,
             size,
             size);
+    }
+
+    public float distanceToPlanet(Planet other)
+    {
+        return position.dst(other.position);
+    }
+
+    public StarSystem getSystem()
+    {
+        return this.starSystem;
     }
 
     public boolean isTouched(float x, float y)

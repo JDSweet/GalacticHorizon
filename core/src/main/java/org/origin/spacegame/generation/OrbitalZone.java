@@ -4,5 +4,6 @@ public enum OrbitalZone
 {
     MELTING,
     HABITABLE,
-    FREEZING
+    FREEZING,
+    ANY
 }

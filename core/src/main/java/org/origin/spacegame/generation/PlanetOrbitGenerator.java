@@ -53,6 +53,8 @@ public class PlanetOrbitGenerator
     public Array<Planet> generatePlanets(StarSystem system)
     {
         Array<Planet> retval = new Array<Planet>();
+        Array<Planet> starsInSystem = new Array<Planet>();
+        Array<Planet> nonStarPlanets = new Array<Planet>();
 
         int minPlanetCount = Constants.MIN_PLANET_COUNT;
         int maxPlanetCount = Constants.MAX_PLANET_COUNT;
@@ -102,8 +104,6 @@ public class PlanetOrbitGenerator
                 }
             }
 
-
-
             if(numStarsInSystem >= Constants.StarSystemConstants.MAX_STARS_IN_SYSTEM)
             {
                 //Now, we're going to remove all star planet classes from the list of possible planet classes to
@@ -118,12 +118,65 @@ public class PlanetOrbitGenerator
                 planetClass = GameInstance.getInstance().getPlanetClass(planetClassTag);
             }
 
+
             Planet planet = generatePlanet(system, planetClass, curOrbitalRadius);
+            if(planetClass.isStar())
+                starsInSystem.add(planet);
+            else
+                nonStarPlanets.add(planet);
+            //if(planetClass.isGasGiant())
             Gdx.app.log("PlanetGeneratorDebug", "Planet " + planet.id
                 + " generated at " + planet.getPosition().toString());
             lastOrbitalRadius = curOrbitalRadius;
             retval.add(planet);
         }
+
+        // Now we are going to cycle through the list of generated planets.
+        // We are going to get a list of all stars in the star system.
+        // Then we are going to get a list of orbital minimum and
+        // maximum radii for each "zone" (melting, habitable, freezing).
+        // These radii will be defined in the star's planet-class.
+
+        // For each planet that isn't a star
+        //      For each star
+        //          If planet.orbitalZone is colder than star.getOrbitalZoneOf(planet) then
+        //              planet.orbitalZone = star.getOrbitalZoneOf(planet)
+        //
+        //
+
+        for(Planet planet : nonStarPlanets)
+        {
+            OrbitalZone zone = OrbitalZone.ANY;
+            for(Planet star : starsInSystem)
+            {
+                OrbitalZone newOrbitalZone = ((Star)star).getOrbitalZoneOf(planet);
+                if(zone == OrbitalZone.ANY)
+                    zone = OrbitalZone.FREEZING;
+                if(zone == OrbitalZone.FREEZING && newOrbitalZone != OrbitalZone.FREEZING)
+                    zone = newOrbitalZone;
+                if(zone == OrbitalZone.HABITABLE && newOrbitalZone != OrbitalZone.MELTING)
+                    zone = newOrbitalZone;
+                if(zone == OrbitalZone.ANY)
+                    Gdx.app.log("PlanetOrbitGenerator Debug", "This state should never be reached.");
+            }
+
+            switch(zone)
+            {
+                case FREEZING:
+                    Gdx.app.log("PlanetOrbitGenerator Debug", "The planet " + planet.getID() + " is in the FREEZING zone with an orbital radius of " + planet.getOrbitalRadius());
+                    break;
+                case HABITABLE:
+                    Gdx.app.log("PlanetOrbitGenerator Debug", "The planet " + planet.getID() + " is in the HABITABLE zone.");
+                    break;
+                case MELTING:
+                    Gdx.app.log("PlanetOrbitGenerator Debug", "The planet " + planet.getID() + " is in the MELTING zone.");
+                    break;
+                case ANY:
+                    Gdx.app.log("PlanetOrbitGenerator Debug", "This state should never be reached.");
+                    break;
+            }
+        }
+
         return retval;
     }
 
@@ -140,11 +193,11 @@ public class PlanetOrbitGenerator
         Planet retval = null;
         if(planetClass.isStar())
         {
-            retval = new Star(planetCount++, position, orbitalRadius, planetClass);
+            retval = new Star(planetCount++, position, orbitalRadius, planetClass, system);
         }
         else
         {
-            retval = new Planet(planetCount++, position, orbitalRadius, planetClass);
+            retval = new Planet(planetCount++, position, orbitalRadius, planetClass, system);
         }
         return retval;
     }
