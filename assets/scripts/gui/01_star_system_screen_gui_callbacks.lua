@@ -71,32 +71,32 @@ function planet_size_label_on_create(widget, game_instance, game_state)
 end
 
 function planet_size_label_on_show(widget, game_instance, game_state)
-    print('[Lua Debug] PLanet habitability label showing...')
+    print('[Lua Debug] PLanet size label showing...')
 end
 
 function planet_size_label_on_hide(widget, game_instance, game_state)
-    print('[Lua Debug] PLanet habitability label hiding...')
+    print('[Lua Debug] PLanet size label hiding...')
 end
 
 function empire_management_btn_on_click(widget, game_instance, game_state)
-    print('[Lua Debug] PLanet habitability label hiding...')
+    print('[Lua Debug] Empire management button clicked...')
 end
 
 function empire_economy_btn_on_click(widget, game_instance, game_state)
-    print('[Lua Debug] PLanet habitability label hiding...')
+    print('[Lua Debug] Empire economy button clicked...')
 end
 
 function empire_military_btn_on_click(widget, game_instance, game_state)
-    print('[Lua Debug] PLanet habitability label hiding...')
+    print('[Lua Debug] Empire military button clicked...')
 end
 
 ----------------------- Planet Class Label ------------------------------
 function planet_class_label_on_create(widget, game_instance, game_state)
-    print('[Lua Debug] PLanet habitability label hiding...')
+    print('[Lua Debug] PLanet class label hiding...')
 end
 
 function planet_class_label_on_show(widget, game_instance, game_state)
-    print('[Lua Debug] System class label showing...')
+    print('[Lua Debug] Planet class label showing...')
         if game_instance:isPlanetSelected() then
             widget:setText('Planet Class ' .. 'no_class')
             print('No system selected.')
@@ -107,6 +107,6 @@ function planet_class_label_on_show(widget, game_instance, game_state)
 end
 
 function planet_class_label_on_hide(widget, game_instance, game_state)
-    print('[Lua Debug] PLanet habitability label hiding...')
+    print('[Lua Debug] PLanet class label hiding...')
 end
 --------------------------------------------------------------------------
