@@ -15,6 +15,7 @@ import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.Planet;
 import org.origin.spacegame.entities.StarSystem;
+import org.origin.spacegame.generation.OrbitalZone;
 
 import java.util.Random;
 
@@ -129,6 +130,14 @@ public class GameInstance implements Disposable
     public PlanetClass getPlanetClass(String tag)
     {
         return planetClasses.get(tag);
+    }
+
+    /**
+     * &#064;returns a list of all planet classes that are flagged as being able to spawn in the given orbital zone.
+     */
+    public Array<PlanetClass> getPlanetClassesThatCanSpawnInZone(OrbitalZone zone)
+    {
+        return null;
     }
 
     //Loads planet classes from XML files in the assets/common/planet_classes folder.
