@@ -3,7 +3,7 @@
              max_habitability = "0"
              min_size = "6"
              max_size = "18"
-             only_spawns_in_habitable_zone = "false"
+             spawning_zone = "MELTING"
              star = "no"
              can_colonize = "yes"
              textureFile = "assets/gfx/planets/pc_molten.png"

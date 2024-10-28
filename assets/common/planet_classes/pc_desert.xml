@@ -3,7 +3,7 @@
              max_habitability = "0.6"
              min_size = "8"
              max_size = "18"
-             only_spawns_in_habitable_zone = "true"
+             spawning_zone = "HABITABLE"
              star = "no"
              can_colonize = "yes"
              textureFile = "assets/gfx/planets/pc_toxic.png"

@@ -3,11 +3,12 @@
              max_habitability = "0"
              min_size = "18"
              max_size = "25"
-             only_spawns_in_habitable_zone = "false"
+             spawning_zone = "ANY"
              star = "no"
              can_colonize = "yes"
              textureFile = "assets/gfx/planets/pc_gas_giant_02.png"
              can_be_moon = "no"
              gas_giant = "yes"
+             terrestrial = "no"
 >
 </PlanetClass>
