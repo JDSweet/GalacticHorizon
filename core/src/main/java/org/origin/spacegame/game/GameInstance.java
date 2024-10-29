@@ -136,14 +136,20 @@ public class GameInstance implements Disposable
     /**
      * &#064;returns a list of all planet classes that are flagged as being able to spawn in the given orbital zone.
      */
-    public Array<PlanetClass> getPlanetClassesThatCanSpawnInZone(OrbitalZone zone, boolean includeStars)
+    @SuppressWarnings("GDXJavaUnsafeIterator")
+    public Array<PlanetClass> getPlanetClassesThatCanSpawnInZone(OrbitalZone zone, boolean includeStars, boolean terrestrialOnly)
     {
         Array<PlanetClass> retval = new Array<PlanetClass>();
-        for(PlanetClass planetClass : this.planetClasses.values)
+        for(PlanetClass planetClass : this.planetClasses.values())
         {
-
+            OrbitalZone l_zone = planetClass.getSpawningZone();
+            if(l_zone == zone || l_zone == OrbitalZone.ANY)
+            {
+                if(!includeStars && !planetClass.isStar())
+                    retval.add(planetClass);
+            }
         }
-        return null;
+        return retval;
     }
 
     //Loads planet classes from XML files in the assets/common/planet_classes folder.
@@ -210,7 +216,7 @@ public class GameInstance implements Disposable
         PlanetClass pc = new PlanetClass(tag, gfx, minHabitability,
                 maxHabitability, minSize, maxSize, spawningZone,
                 isStar, canColonize, meltZoneRadius,
-                habZoneRadius, freezeZoneRadius);
+                habZoneRadius, freezeZoneRadius, isTerrestrial);
         return pc;
     }
 

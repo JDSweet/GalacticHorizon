@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.game.GameInstance;
+import org.origin.spacegame.generation.OrbitalZone;
 import org.origin.spacegame.utilities.RandomNumberUtility;
 
 public class Planet
@@ -18,6 +19,7 @@ public class Planet
 
     private int size = 0;
     private float habitability = 0f;
+    private OrbitalZone orbitalZone; //This is mostly for debug purposes
 
     private StarSystem starSystem;
 
@@ -44,6 +46,7 @@ public class Planet
         this.position = position;
         this.orbitalRadius = orbitalRadius;
         this.planetClass = planetClass;
+        this.orbitalZone = OrbitalZone.ANY;
         /*
         *
         * if(orbitalRadius <= Constants.MELTINGZONE)
@@ -98,6 +101,17 @@ public class Planet
             this.habitability = RandomNumberUtility.nextFloat(planetClass.getMinHabitability(), planetClass.getMaxHabitability());
         if(resize)
             this.size = RandomNumberUtility.nextInt(planetClass.getMinSize(), planetClass.getMaxSize());
+        this.rect = new Rectangle(position.x, position.y, size, size);
+    }
+
+    public void setOrbitalZone(OrbitalZone zone)
+    {
+        this.orbitalZone = zone;
+    }
+
+    public OrbitalZone getOrbitalZone()
+    {
+        return this.orbitalZone;
     }
 
     public int getHabitabilityRounded()

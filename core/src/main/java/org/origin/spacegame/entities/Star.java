@@ -11,6 +11,7 @@ public class Star extends Planet
     public Star(int id, Vector2 position, float orbitalRadius, PlanetClass pc, StarSystem system)
     {
         super(id, position, orbitalRadius, pc, system);
+
     }
 
     //If the distance of the given planet from me is the radius.

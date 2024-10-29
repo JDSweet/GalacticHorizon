@@ -3,6 +3,7 @@ package org.origin.spacegame.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -233,12 +234,17 @@ public class StarSystemScreen implements Screen, InputProcessor
     }
 
     @Override
-    public boolean mouseMoved(int screenX, int screenY) {
+    public boolean mouseMoved(int screenX, int screenY)
+    {
+
         return false;
     }
 
     @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return false;
+    public boolean scrolled(float amountX, float amountY)
+    {
+        OrthographicCamera cam = game.getCameraManager().getCurrentCamera();
+        cam.zoom += (amountY);
+        return true;
     }
 }

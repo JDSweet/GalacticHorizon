@@ -14,13 +14,13 @@ public class PlanetClass implements Disposable
     private int minSize;
     private int maxSize;
     //boolean onlySpawnsInHabitableZone;
-    boolean isStar;
+    boolean isStar, isTerrestrial;
     boolean canColonize;
     OrbitalZone spawningZone;
     float meltRadius, habRadius, freezeRadius;
 
     public PlanetClass(String tag, Texture gfx, float minHabitability, float maxHabitability, int minSize,
-                       int maxSize, String spawningZone, boolean isStar, boolean canColonize, float meltRadius, float habRadius, float freezeRadius)
+                       int maxSize, String spawningZone, boolean isStar, boolean canColonize, float meltRadius, float habRadius, float freezeRadius, boolean isTerrestrial)
     {
         this.tag = tag;
         this.gfx = gfx;
@@ -35,6 +35,7 @@ public class PlanetClass implements Disposable
         this.meltRadius = meltRadius;
         this.habRadius = habRadius;
         this.freezeRadius = freezeRadius;
+        this.isTerrestrial = isTerrestrial;
     }
 
     public Texture getGfx()
@@ -72,6 +73,11 @@ public class PlanetClass implements Disposable
 
     public void setMinHabitability(float minHabitability) {
         this.minHabitability = minHabitability;
+    }
+
+    public boolean isTerrestrial()
+    {
+        return this.isTerrestrial;
     }
 
     public float getMaxHabitability() {

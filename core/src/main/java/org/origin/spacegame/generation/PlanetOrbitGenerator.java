@@ -3,6 +3,7 @@ package org.origin.spacegame.generation;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.NumberUtils;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.entities.Planet;
@@ -141,7 +142,10 @@ public class PlanetOrbitGenerator
         //      For each star
         //          If planet.orbitalZone is colder than star.getOrbitalZoneOf(planet) then
         //              planet.orbitalZone = star.getOrbitalZoneOf(planet)
-        //
+        //      Valid planet classes = GameInstance.getInstance().getPlanetClassesThatCanSpawnInZone(planet.orbitalZone)
+        //      int min = 0, max = planet classes.size
+        //      planet class = random.nextInt(min, max)
+        //      planet.setPlanetClass(class)
         //
 
         for(Planet planet : nonStarPlanets)
@@ -159,6 +163,16 @@ public class PlanetOrbitGenerator
                 if(zone == OrbitalZone.ANY)
                     Gdx.app.log("PlanetOrbitGenerator Debug", "This state should never be reached.");
             }
+
+            Array<PlanetClass> validPlanetClasses = GameInstance.getInstance()
+                                                        .getPlanetClassesThatCanSpawnInZone(zone, false, true);
+            int min = 0;
+            int max = validPlanetClasses.size;
+            Gdx.app.log("FUCK", "The number of planet classes that can spawn in zone " + zone.name() + " is " + max);
+            int index = RandomNumberUtility.nextInt(min, max);
+            PlanetClass clazz = validPlanetClasses.get(index);
+            planet.setPlanetClass(clazz.getTag(), true, true);
+            planet.setOrbitalZone(zone);
 
             switch(zone)
             {
