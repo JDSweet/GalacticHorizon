@@ -26,8 +26,11 @@ function on_planet_clicked(touchPos, planet, scene, game_instance, game_state)
     local hab_label = scene:getWidgetByID('planet_habitability_label'):getWidget()
     local size_label = scene:getWidgetByID('planet_size_label'):getWidget()
     local planet_class = scene:getWidgetByID('planet_class_label'):getWidget()
+    local orbital_zone = scene:getWidgetByID('oz_debug_label'):getWidget()
     hab_label:setText('Habitability: ' .. game_instance:getSelectedPlanet():getHabitabilityRounded())
     size_label:setText('Planet Size: ' .. game_instance:getSelectedPlanet():getSize())
     planet_class:setText('Planet Class: ' .. game_instance:getSelectedPlanet():getPlanetClass():getTag())
+    orbital_zone:setText('Orbital Zone ' .. game_instance:getSelectedPlanet():getOrbitalZone():name())
+
     print('[Lua Debug] Planet ' .. planet.id .. " selected.")
 end

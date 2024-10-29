@@ -77,6 +77,14 @@
                     text = "Planet Class: Clazz"
                     skin = "uiskin.json">
             </Label>
+            <Label
+                    id = "oz_debug_label"
+                    on_create = "oz_debug_label_on_create"
+                    on_show = "oz_debug_label_on_show"
+                    on_hide = "oz_debug_label_on_hide"
+                    text = "Orbital Zone: ANY"
+                    skin = "uiskin.json">
+            </Label>
         </VerticalGroup>
     </Window>
 </GUIScreen>
