@@ -13,8 +13,8 @@ import com.badlogic.gdx.utils.XmlReader;
 //import org.luaj.vm2.script.LuaScriptEngineFactory;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.StarClass;
-import org.origin.spacegame.entities.Planet;
-import org.origin.spacegame.entities.StarSystem;
+import org.origin.spacegame.entities.stellarobj.Planet;
+import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.generation.OrbitalZone;
 import org.origin.spacegame.utilities.StringToType;
 

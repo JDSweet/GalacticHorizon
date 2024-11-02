@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.game.SpaceGame;
-import org.origin.spacegame.entities.StarSystem;
+import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.input.InputUtilities;
 import org.origin.spacegame.game.CameraManager;

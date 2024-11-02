@@ -1,9 +1,10 @@
-package org.origin.spacegame.entities;
+package org.origin.spacegame.entities.stellarobj;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.PlanetClass;
+import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.generation.OrbitalZone;
 
 public class Star extends Planet

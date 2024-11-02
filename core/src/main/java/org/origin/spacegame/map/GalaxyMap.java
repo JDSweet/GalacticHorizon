@@ -1,4 +1,6 @@
 package org.origin.spacegame.map;
 
-public class GalaxyMap {
+public class GalaxyMap
+{
+
 }

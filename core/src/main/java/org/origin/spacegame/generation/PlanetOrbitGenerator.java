@@ -3,12 +3,11 @@ package org.origin.spacegame.generation;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.NumberUtils;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.PlanetClass;
-import org.origin.spacegame.entities.Planet;
-import org.origin.spacegame.entities.Star;
-import org.origin.spacegame.entities.StarSystem;
+import org.origin.spacegame.entities.stellarobj.Planet;
+import org.origin.spacegame.entities.stellarobj.Star;
+import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.utilities.RandomNumberUtility;
 

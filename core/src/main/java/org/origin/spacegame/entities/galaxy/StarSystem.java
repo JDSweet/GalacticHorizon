@@ -1,4 +1,4 @@
-package org.origin.spacegame.entities;
+package org.origin.spacegame.entities.galaxy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -6,9 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.StarClass;
+import org.origin.spacegame.entities.fleets.Fleet;
+import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.game.GameInstance;
-import org.origin.spacegame.game.GameState;
-import org.origin.spacegame.generation.OrbitalZone;
 
 public class StarSystem
 {
