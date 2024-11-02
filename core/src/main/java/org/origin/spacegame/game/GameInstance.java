@@ -87,6 +87,7 @@ public class GameInstance implements Disposable
         loadPlanetClasses();
         loadStarClasses();
         loadDefaultSkin();
+        loadShipClasses();
     }
 
     public void selectPlanet(Planet planet)
@@ -279,7 +280,7 @@ public class GameInstance implements Disposable
         XmlReader.Element root = reader.parse(handle);
         String tag = root.getAttribute("tag");
         Texture gfx = new Texture(Gdx.files.internal(root.getAttribute("texture")));
-        ShipClassType type = ShipClassType.UNDEFINED;
+        ShipClassType type;
         String typeTag = root.getAttribute("type");
         Vector2 maxVel = new Vector2();
         switch(typeTag)
@@ -295,9 +296,10 @@ public class GameInstance implements Disposable
             default:
                 type = ShipClassType.UNDEFINED;
         }
-        String[] maxVelStrVals = root.getAttribute("max_vel").replaceAll("\\s","").split(",");
+        String[] maxVelStrVals = root.getAttribute("max_vel").replaceAll("[(){}<>\\[\\]]", "").replaceAll("\\s","").split(",");
         maxVel.set(Float.parseFloat(maxVelStrVals[0]), Float.parseFloat(maxVelStrVals[1]));
-        return new ShipClass(tag, gfx, maxVel, type);
+        float maxAccel = Float.parseFloat(root.getAttribute("max_accel"));
+        return new ShipClass(tag, gfx, maxVel, maxAccel, type);
     }
 
     public void selectStarSystem(StarSystem system)

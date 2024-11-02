@@ -2,6 +2,7 @@ package org.origin.spacegame.data;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 
 /*
 * Examples of ship class include (but aren't necessarily limited to):
@@ -9,19 +10,21 @@ import com.badlogic.gdx.math.Vector2;
 * destroyer, carrier, troop transport, free merchant,
 * colony ship, science ship, etc.
 * */
-public class ShipClass
+public class ShipClass implements Disposable
 {
     private String tag;
     private Texture gfx;
     private Vector2 maxVel;
     private ShipClassType type;
+    private float maxAccel;
 
-    public ShipClass(String tag, Texture gfx, Vector2 maxVel, ShipClassType type)
+    public ShipClass(String tag, Texture gfx, Vector2 maxVel, float maxAccel, ShipClassType type)
     {
         this.tag = tag;
         this.gfx = gfx;
         this.maxVel = maxVel;
         this.type = type;
+        this.maxAccel = maxAccel;
     }
 
     public String getTag()
@@ -42,6 +45,17 @@ public class ShipClass
     public ShipClassType getType()
     {
         return this.type;
+    }
+
+    public float getMaxAcceleration()
+    {
+        return this.maxAccel;
+    }
+
+    @Override
+    public void dispose()
+    {
+        this.gfx.dispose();
     }
 
     // This essentially represents whether ships of this ship class are civilian or military.
