@@ -3,6 +3,7 @@ package org.origin.spacegame.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.utils.XmlReader;
 //import org.luaj.vm2.script.LuaScriptEngine;
 //import org.luaj.vm2.script.LuaScriptEngineFactory;
 import org.origin.spacegame.data.PlanetClass;
+import org.origin.spacegame.data.ShipClass;
+import org.origin.spacegame.data.ShipClass.ShipClassType;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.entities.galaxy.StarSystem;
@@ -34,6 +37,7 @@ public class GameInstance implements Disposable
     private GameState state;
     private ArrayMap<String, StarClass> starClasses;
     private ArrayMap<String, PlanetClass> planetClasses;
+    private ArrayMap<String, ShipClass> shipClasses;
     private XmlReader xmlReader;
     private Random random;
     private Skin guiSkin;
@@ -47,6 +51,7 @@ public class GameInstance implements Disposable
         state = new GameState();
         starClasses = new ArrayMap<String, StarClass>();
         planetClasses = new ArrayMap<String, PlanetClass>();
+        shipClasses = new ArrayMap<String, ShipClass>();
         xmlReader = new XmlReader();
         this.random = new Random();
         this.skins = new ArrayMap<String, Skin>();
@@ -220,8 +225,6 @@ public class GameInstance implements Disposable
         return pc;
     }
 
-
-
     public void loadStarClasses()
     {
 
@@ -254,6 +257,47 @@ public class GameInstance implements Disposable
         float habZoneMaxRadius = Float.parseFloat(root.getAttribute("hab_max_radius"));
         float energyProdBonus = Float.parseFloat(root.getAttribute("energy_prod_bonus"));
         return new StarClass(tag, starPlanetClassTag, gfx, habZoneMinRadius, habZoneMaxRadius, energyProdBonus);
+    }
+
+    //Loads planet classes from XML files in the assets/common/planet_classes folder.
+    public void loadShipClasses()
+    {
+        FileHandle[] shipClassXMLDefinePaths = Gdx.files.internal("assets/common/ship_classes/").list();
+        Gdx.app.log("Loading Ship Class XML Files...", "Testing. " + shipClassXMLDefinePaths.length + " ship classes detected.");
+        for(FileHandle shipClassDefinePath : shipClassXMLDefinePaths)
+        {
+            if(shipClassDefinePath.extension().equals("xml"))
+            {
+                ShipClass sc = loadShipClass(xmlReader, shipClassDefinePath);
+                shipClasses.put(sc.getTag(), sc);
+            }
+        }
+    }
+
+    private ShipClass loadShipClass(XmlReader reader, FileHandle handle)
+    {
+        XmlReader.Element root = reader.parse(handle);
+        String tag = root.getAttribute("tag");
+        Texture gfx = new Texture(Gdx.files.internal(root.getAttribute("texture")));
+        ShipClassType type = ShipClassType.UNDEFINED;
+        String typeTag = root.getAttribute("type");
+        Vector2 maxVel = new Vector2();
+        switch(typeTag)
+        {
+            case "MILITARY":
+            case "military":
+                type = ShipClassType.MILITARY;
+                break;
+            case "CIVILIAN":
+            case "civilian":
+                type = ShipClassType.CIVILIAN;
+                break;
+            default:
+                type = ShipClassType.UNDEFINED;
+        }
+        String[] maxVelStrVals = root.getAttribute("max_vel").replaceAll("\\s","").split(",");
+        maxVel.set(Float.parseFloat(maxVelStrVals[0]), Float.parseFloat(maxVelStrVals[1]));
+        return new ShipClass(tag, gfx, maxVel, type);
     }
 
     public void selectStarSystem(StarSystem system)

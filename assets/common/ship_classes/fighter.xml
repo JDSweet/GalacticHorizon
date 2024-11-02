@@ -1,0 +1,6 @@
+<Ship
+        tag = "fighter"
+        type = "military"
+        texture = ""
+        max_vel = "0.1,0.1">
+</Ship>
