@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.fleets.Fleet;
+import org.origin.spacegame.entities.ships.Ship;
 import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.game.GameInstance;
 
@@ -18,6 +19,7 @@ public class StarSystem
     public Array<Fleet> fleets;
     private Vector2 centroid;
     private Array<Planet> stars;
+    private Array<Ship> ships;
 
     private Vector2 galacticPosition;
 
@@ -39,6 +41,7 @@ public class StarSystem
         this.starType = starType;
         this.stars = new Array<Planet>();
         this.galacticPosition = new Vector2(galacticX, galacticY);
+        this.ships = new Array<Ship>();
 
         float xCenter = (0f + Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_WIDTH)/2f;
         float yCenter = (0f + Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_HEIGHT)/2f;
@@ -47,17 +50,36 @@ public class StarSystem
 
     //Renders this star system, including its star and all constituent planets, to their positions.
     //System View must be enabled for this to work.
-    public void renderSystemToSystemView(SpriteBatch batch)
+    public void renderSystemToSystemView(SpriteBatch batch, float delta)
     {
         /*batch.draw(getStarClass().getGfx(),
             Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_WIDTH/2f,
             Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_HEIGHT/2f,
                Constants.StarSystemConstants.STAR_RENDER_SIZE,
                Constants.StarSystemConstants.STAR_RENDER_SIZE);*/
+        renderPlanetsToSystemView(batch, delta);
+        renderShipsToSystemView(batch, delta);
+    }
+
+    private void renderPlanetsToSystemView(SpriteBatch batch, float delta)
+    {
         for(Planet p : planets)
         {
             p.renderPlanet(batch);
         }
+    }
+
+    private void renderShipsToSystemView(SpriteBatch batch, float delta)
+    {
+        for(Ship s : ships)
+        {
+            s.renderShip(batch, delta);
+        }
+    }
+
+    public void addShip(Ship s)
+    {
+        this.ships.add(s);
     }
 
     public Array<Planet> getPlanets()

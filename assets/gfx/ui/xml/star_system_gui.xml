@@ -10,6 +10,16 @@
         skin = "uiskin.json">
     </TextButton>
     <TextButton
+            id = "spawn_ship_btn"
+            x = "0.89"
+            y = "0"
+            width = "0.085"
+            height = "0.085"
+            on_click = "spawn_ship_btn_on_click"
+            text = "Spawn Ship"
+            skin = "uiskin.json">
+    </TextButton>
+    <TextButton
             id = "empire_management_btn"
             x = "0.0"
             y = "0.91"

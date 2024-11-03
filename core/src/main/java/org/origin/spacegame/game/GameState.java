@@ -2,9 +2,14 @@ package org.origin.spacegame.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import org.origin.spacegame.Constants;
+import org.origin.spacegame.data.ShipClass;
+import org.origin.spacegame.entities.polities.IPolity;
+import org.origin.spacegame.entities.polities.StellarNation;
+import org.origin.spacegame.entities.ships.Ship;
 import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.generation.PlanetOrbitGenerator;
@@ -16,12 +21,17 @@ public class GameState
     private IntMap<StarSystem> starSystems;
     private IntMap<Planet> planets;
     private PlanetOrbitGenerator planetOrbitGenerator;
+    private Array<IPolity> polities;
+    private Array<Ship> ships;
+    private int playerPolityIndex;
 
     public GameState()
     {
         this.starSystems = new IntMap<StarSystem>();
         this.planets = new IntMap<Planet>();
+        this.ships = new Array<Ship>();
         planetOrbitGenerator = new PlanetOrbitGenerator();
+        this.polities = new Array<IPolity>(32);
     }
 
     public void initialize()
@@ -34,6 +44,7 @@ public class GameState
         Gdx.app.log("Galaxy being generated...", "The star system generator is running.");
         SystemGeneratorType genType = SystemGeneratorType.TILE_MAP;
         generateStarSystems(Constants.STAR_SYSTEM_COUNT, genType);
+        generatePolities(32, 0);
     }
 
     private void generateStarSystems(int systemCount, SystemGeneratorType genType)
@@ -51,17 +62,64 @@ public class GameState
         }
     }
 
-    //This checks whether the given origin point is too close to any of the star systems in the given list.
-    private boolean isTooCloseToAnotherSystem(StarSystem origin, Array<StarSystem> starSystemArray)
+    private void generatePolities(int count, int playerPolityIndex)
     {
-        for(StarSystem s1 : starSystemArray)
+        this.playerPolityIndex = playerPolityIndex;
+        if(playerPolityIndex < 0 || playerPolityIndex >= count)
         {
-            if(origin == s1)
-                continue;
-            if(systemsAreTooClose(origin, s1))
-                return true;
+            Gdx.app.log("GameInstance.generatePolities Debug", "The player polity index " + playerPolityIndex + " is invalid. Player being set to 0.");
+            this.playerPolityIndex = 0;
         }
-        return false;
+        for(int i = 0; i < count; i++)
+        {
+            this.polities.add(new StellarNation(i));
+        }
+    }
+
+    private static int shipMaxID = 0;
+
+    public void spawnShip(String shipClassTag, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
+    {
+        ShipClass shipClass = GameInstance.getInstance().getShipClass(shipClassTag);
+        IPolity polity = getPolity(polityID);
+        StarSystem selectedStarSystem = GameInstance.getInstance().getSelectedStarSystem();
+        //GameInstance.getInstance().log("Ship Spawn Debug", "System " + selectedStarSystem.id);
+        Ship ship = new Ship(shipMaxID++, polityID, selectedStarSystem, pos, vel, facing, shipClass);
+        this.ships.add(ship);
+        polity.addShip(ship);
+        selectedStarSystem.addShip(ship);
+        Gdx.app.log("GameState.spawnShip() Debug", "Ship spawned at " + pos.toString());
+    }
+
+    public int getPlayerID()
+    {
+        return this.playerPolityIndex;
+    }
+
+    public IPolity getPlayer()
+    {
+        return this.polities.get(playerPolityIndex);
+    }
+
+    public IPolity getPolity(int idx)
+    {
+        return polities.get(idx);
+    }
+
+    public void setPlayer(IPolity polity)
+    {
+        setPlayer(((StellarNation)polity).getID());
+    }
+
+    public void setPlayer(int idx)
+    {
+        this.playerPolityIndex = idx;
+    }
+
+    public StarSystem getRandomStarSystem()
+    {
+        Array<StarSystem> systems = this.starSystems.values().toArray();
+        return systems.random();
     }
 
     private boolean systemsAreTooClose(StarSystem one, StarSystem two)
@@ -87,7 +145,7 @@ public class GameState
     public void renderSystemView(SpriteBatch batch, StarSystem system)
     {
         batch.begin();
-        system.renderSystemToSystemView(batch);
+        system.renderSystemToSystemView(batch, Gdx.graphics.getDeltaTime());
         batch.end();
     }
 

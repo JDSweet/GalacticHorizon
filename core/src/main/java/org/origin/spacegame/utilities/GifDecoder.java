@@ -15,7 +15,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 
-public class GifDecoder {
+//Source: https://gamedev.stackexchange.com/a/136661/60136
+public class GifDecoder
+{
     /**
      * File read status: No errors.
      */

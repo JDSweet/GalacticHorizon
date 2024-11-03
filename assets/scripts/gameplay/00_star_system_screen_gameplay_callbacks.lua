@@ -7,8 +7,20 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
     --local window = window_wrapper.widget;
     if window:isVisible() then
         window:setVisible(false)
+        game_instance:deselectPlanet();
+        print('[Lua Debug] Planet un-selected.')
     end
-    print('[Lua Debug] Planet un-selected.')
+    --spawnShip(String shipClassTag, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
+    if(game_instance:isSpawnModeEnabled()) then
+        local pos = game_instance:vec2();
+        pos.x = touchPos.x;
+        pos.y = touchPos.y;
+        local facing = game_instance:vec2(0, 0);
+        local ship_class = "battleship";
+        local vel = game_instance:vec2(0, 0);
+        local player_idx = game_state:getPlayerID();
+        game_state:spawnShip(ship_class, pos, vel, facing, player_idx)
+    end
 end
 
 -- This function selects the planet that was clicked and sets the data fields for

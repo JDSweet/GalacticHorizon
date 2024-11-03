@@ -23,13 +23,11 @@ import org.origin.spacegame.utilities.StringToType;
 
 import java.util.Random;
 
-public class GameInstance implements Disposable
-{
+public class GameInstance implements Disposable {
     private static GameInstance instance;
 
-    public static GameInstance getInstance()
-    {
-        if(instance == null)
+    public static GameInstance getInstance() {
+        if (instance == null)
             instance = new GameInstance();
         return instance;
     }
@@ -46,8 +44,7 @@ public class GameInstance implements Disposable
     private ArrayMap<String, Skin> skins;
 
 
-    public GameInstance()
-    {
+    public GameInstance() {
         state = new GameState();
         starClasses = new ArrayMap<String, StarClass>();
         planetClasses = new ArrayMap<String, PlanetClass>();
@@ -67,75 +64,62 @@ public class GameInstance implements Disposable
         Gdx.app.log("ScriptEngine", ret);*/
     }
 
-    public Random getRandom()
-    {
+    public Random getRandom() {
         return random;
     }
 
-    public GameState getState()
-    {
+    public GameState getState() {
         return state;
     }
 
-    public Skin getSkin(String skinName)
-    {
+    public Skin getSkin(String skinName) {
         return this.guiSkin;
     }
 
-    public void loadData()
-    {
+    public void loadData() {
         loadPlanetClasses();
         loadStarClasses();
         loadDefaultSkin();
         loadShipClasses();
     }
 
-    public void selectPlanet(Planet planet)
-    {
+    public void selectPlanet(Planet planet) {
         this.selectedPlanet = planet;
     }
 
-    public Planet getSelectedPlanet()
-    {
+    public Planet getSelectedPlanet() {
         return selectedPlanet;
     }
 
-    private void loadSkins()
-    {
+    private void loadSkins() {
         Array<FileHandle> skinFileHandles = new Array<FileHandle>();
         FileHandle[] skinFolderFileHandles = Gdx.files.internal("assets/gfx/ui/skins/").list();
 
         //Get the skin JSON files.
-        for(FileHandle skinFolderFileHandle : skinFolderFileHandles)
-        {
-            if(skinFolderFileHandle.extension().equals(".json"))
+        for (FileHandle skinFolderFileHandle : skinFolderFileHandles) {
+            if (skinFolderFileHandle.extension().equals(".json"))
                 skinFileHandles.add(skinFolderFileHandle);
         }
 
-        for(FileHandle skinFileHandle : skinFileHandles)
-        {
+        for (FileHandle skinFileHandle : skinFileHandles) {
             this.skins.put(skinFileHandle.nameWithoutExtension(), new Skin(skinFileHandle));
         }
     }
 
     @Deprecated
-    private void loadDefaultSkin()
-    {
+    private void loadDefaultSkin() {
         this.guiSkin = new Skin(Gdx.files.internal("assets/gfx/ui/skins/uiskin.json"));
     }
 
-    public Skin getGuiSkin()
-    {
+    public Skin getGuiSkin() {
         return this.guiSkin;
     }
 
-    public StarClass getStarClass(String tag)
-    {
+    public StarClass getStarClass(String tag) {
         return starClasses.get(tag);
     }
 
-    public PlanetClass getPlanetClass(String tag)
-    {
+    public PlanetClass getPlanetClass(String tag) {
         return planetClasses.get(tag);
     }
 
@@ -143,15 +127,12 @@ public class GameInstance implements Disposable
      * &#064;returns a list of all planet classes that are flagged as being able to spawn in the given orbital zone.
      */
     @SuppressWarnings("GDXJavaUnsafeIterator")
-    public Array<PlanetClass> getPlanetClassesThatCanSpawnInZone(OrbitalZone zone, boolean includeStars, boolean terrestrialOnly)
-    {
+    public Array<PlanetClass> getPlanetClassesThatCanSpawnInZone(OrbitalZone zone, boolean includeStars, boolean terrestrialOnly) {
         Array<PlanetClass> retval = new Array<PlanetClass>();
-        for(PlanetClass planetClass : this.planetClasses.values())
-        {
+        for (PlanetClass planetClass : this.planetClasses.values()) {
             OrbitalZone l_zone = planetClass.getSpawningZone();
-            if(l_zone == zone || l_zone == OrbitalZone.ANY)
-            {
-                if(!includeStars && !planetClass.isStar())
+            if (l_zone == zone || l_zone == OrbitalZone.ANY) {
+                if (!includeStars && !planetClass.isStar())
                     retval.add(planetClass);
             }
         }
@@ -159,8 +140,7 @@ public class GameInstance implements Disposable
     }
 
     //Loads planet classes from XML files in the assets/common/planet_classes folder.
-    public void loadPlanetClasses()
-    {
+    public void loadPlanetClasses() {
         /*FileHandle[] planetTexturePaths = Gdx.files.internal("assets/gfx/planets/").list();
         Gdx.app.log("Loading Planet Textures...", "Testing. " + planetTexturePaths.length + " planets detected.");
         for(FileHandle planetTexturePath : planetTexturePaths)
@@ -172,18 +152,15 @@ public class GameInstance implements Disposable
 
         FileHandle[] planetXMLDefinePaths = Gdx.files.internal("assets/common/planet_classes/").list();
         Gdx.app.log("Loading Planet XML Files...", "Testing. " + planetXMLDefinePaths.length + " planet classes detected.");
-        for(FileHandle planetDefinePath : planetXMLDefinePaths)
-        {
-            if(planetDefinePath.extension().equals("xml"))
-            {
+        for (FileHandle planetDefinePath : planetXMLDefinePaths) {
+            if (planetDefinePath.extension().equals("xml")) {
                 PlanetClass pc = loadPlanetClass(xmlReader, planetDefinePath);
                 planetClasses.put(pc.getTag(), pc);
             }
         }
     }
 
-    private PlanetClass loadPlanetClass(XmlReader reader, FileHandle handle)
-    {
+    private PlanetClass loadPlanetClass(XmlReader reader, FileHandle handle) {
         XmlReader.Element root = reader.parse(handle);
         String tag = root.getAttribute("tag");
         Texture gfx = new Texture(Gdx.files.internal(root.getAttribute("textureFile")));
@@ -200,34 +177,31 @@ public class GameInstance implements Disposable
         float meltZoneRadius = 0f;
         float freezeZoneRadius = 0f;
 
-        if(isStar)
-        {
+        if (isStar) {
             meltZoneRadius = Float.parseFloat(root.getAttribute("melting_zone_radius"));
             habZoneRadius = Float.parseFloat(root.getAttribute("habitable_zone_radius"));
             freezeZoneRadius = Float.parseFloat(root.getAttribute("freezing_zone_radius"));
             isTerrestrial = false;
         }
 
-        if(root.hasAttribute("terrestrial"))
-        {
+        if (root.hasAttribute("terrestrial")) {
             String terrestrial = root.getAttribute("terrestrial");
             isTerrestrial = StringToType.yesOrNoToTrueOrFalse("terrestrial");
         }
 
         String spawningZone = "HABITABLE";
-        if(root.hasAttribute("spawning_zone"))
+        if (root.hasAttribute("spawning_zone"))
             spawningZone = root.getAttribute("spawning_zone");
         else
             Gdx.app.log("Spawning Zone Debug", "Planet Class " + root.getName() + " has no valid defined spawning zone.");
         PlanetClass pc = new PlanetClass(tag, gfx, minHabitability,
-                maxHabitability, minSize, maxSize, spawningZone,
-                isStar, canColonize, meltZoneRadius,
-                habZoneRadius, freezeZoneRadius, isTerrestrial);
+            maxHabitability, minSize, maxSize, spawningZone,
+            isStar, canColonize, meltZoneRadius,
+            habZoneRadius, freezeZoneRadius, isTerrestrial);
         return pc;
     }
 
-    public void loadStarClasses()
-    {
+    public void loadStarClasses() {
 
         /*FileHandle[] starTexturePaths = Gdx.files.internal("assets/gfx/stars/").list();
         Gdx.app.log("Loading Star Textures...", "Testing. " + starTexturePaths.length + " stars detected.");
@@ -239,8 +213,7 @@ public class GameInstance implements Disposable
         }*/
         Gdx.app.log("GameInstance", "Loading Star Class XML Files...");
         FileHandle[] starClassDefinesPaths = Gdx.files.internal("assets/common/star_classes/").list();
-        for(FileHandle starClassDefinePath : starClassDefinesPaths)
-        {
+        for (FileHandle starClassDefinePath : starClassDefinesPaths) {
             //starClasses.put(fileName, new StarClass(fileName, new Texture(starTexturePath), 1.0f));
             StarClass starClass = loadStarClass(this.xmlReader, starClassDefinePath);
             Gdx.app.log("GameInstance: ", "Star Class " + starClass.getTag() + " has been loaded.");
@@ -248,8 +221,7 @@ public class GameInstance implements Disposable
         }
     }
 
-    private StarClass loadStarClass(XmlReader reader, FileHandle handle)
-    {
+    private StarClass loadStarClass(XmlReader reader, FileHandle handle) {
         XmlReader.Element root = reader.parse(handle);
         String tag = root.getAttribute("tag");
         String starPlanetClassTag = root.getAttribute("star_planet_class");
@@ -261,30 +233,25 @@ public class GameInstance implements Disposable
     }
 
     //Loads planet classes from XML files in the assets/common/planet_classes folder.
-    public void loadShipClasses()
-    {
+    public void loadShipClasses() {
         FileHandle[] shipClassXMLDefinePaths = Gdx.files.internal("assets/common/ship_classes/").list();
         Gdx.app.log("Loading Ship Class XML Files...", "Testing. " + shipClassXMLDefinePaths.length + " ship classes detected.");
-        for(FileHandle shipClassDefinePath : shipClassXMLDefinePaths)
-        {
-            if(shipClassDefinePath.extension().equals("xml"))
-            {
+        for (FileHandle shipClassDefinePath : shipClassXMLDefinePaths) {
+            if (shipClassDefinePath.extension().equals("xml")) {
                 ShipClass sc = loadShipClass(xmlReader, shipClassDefinePath);
                 shipClasses.put(sc.getTag(), sc);
             }
         }
     }
 
-    private ShipClass loadShipClass(XmlReader reader, FileHandle handle)
-    {
+    private ShipClass loadShipClass(XmlReader reader, FileHandle handle) {
         XmlReader.Element root = reader.parse(handle);
         String tag = root.getAttribute("tag");
         Texture gfx = new Texture(Gdx.files.internal(root.getAttribute("texture")));
         ShipClassType type;
         String typeTag = root.getAttribute("type");
         Vector2 maxVel = new Vector2();
-        switch(typeTag)
-        {
+        switch (typeTag) {
             case "MILITARY":
             case "military":
                 type = ShipClassType.MILITARY;
@@ -296,84 +263,116 @@ public class GameInstance implements Disposable
             default:
                 type = ShipClassType.UNDEFINED;
         }
-        String[] maxVelStrVals = root.getAttribute("max_vel").replaceAll("[(){}<>\\[\\]]", "").replaceAll("\\s","").split(",");
+        String[] maxVelStrVals = root.getAttribute("max_vel").replaceAll("[(){}<>\\[\\]]", "").replaceAll("\\s", "").split(",");
         maxVel.set(Float.parseFloat(maxVelStrVals[0]), Float.parseFloat(maxVelStrVals[1]));
         float maxAccel = Float.parseFloat(root.getAttribute("max_accel"));
         return new ShipClass(tag, gfx, maxVel, maxAccel, type);
     }
 
-    public void selectStarSystem(StarSystem system)
-    {
+    public void selectStarSystem(StarSystem system) {
         this.selectedStarSystem = system;
     }
 
-    public StarSystem getSelectedStarSystem()
-    {
+    public StarSystem getSelectedStarSystem() {
         return selectedStarSystem;
     }
 
-    public Array<String> getPlanetClassTags()
-    {
+    public Array<String> getPlanetClassTags() {
         Array<String> planetClassTags = planetClasses.keys().toArray();
         return new Array<String>(planetClassTags);
     }
 
-    public Array<String> getStarClassTags()
-    {
+    public ShipClass getShipClass(String tag) {
+        return this.shipClasses.get(tag);
+    }
+
+    public Array<String> getStarClassTags() {
         Array<String> starClassTags = starClasses.keys().toArray();
         return new Array<String>(starClassTags);
     }
 
     private SpaceGame game;
-    public void setGame(SpaceGame game)
-    {
+
+    public void setGame(SpaceGame game) {
         this.game = game;
     }
 
-    public CameraManager getCameraManager()
-    {
+    public CameraManager getCameraManager() {
         return game.getCameraManager();
     }
 
-    public boolean isSystemSelected()
-    {
+    public boolean isSystemSelected() {
         return this.selectedStarSystem == null;
     }
 
-    public boolean isPlanetSelected()
-    {
+    public boolean isPlanetSelected() {
         return this.selectedPlanet == null;
     }
 
-    @Override
-    public void dispose()
+    public void deselectPlanet()
     {
+        this.selectedPlanet = null;
+    }
+
+    public void deselectSystem()
+    {
+        this.selectedStarSystem = null;
+    }
+
+    @Override
+    public void dispose() {
         disposeOfStarData();
         disposeOfPlanetData();
         disposeOfGUIData();
     }
 
-    private void disposeOfStarData()
-    {
-        for(StarClass starType : starClasses.values())
-        {
+    private void disposeOfStarData() {
+        for (StarClass starType : starClasses.values()) {
             starType.dispose();
         }
     }
 
-    private void disposeOfPlanetData()
-    {
-        for(PlanetClass planetType : planetClasses.values())
-        {
+    private void disposeOfPlanetData() {
+        for (PlanetClass planetType : planetClasses.values()) {
             planetType.dispose();
         }
     }
 
-    private void disposeOfGUIData()
-    {
-        for(Skin skin : this.skins.values())
-        {
+    private void disposeOfGUIData() {
+        for (Skin skin : this.skins.values()) {
             skin.dispose();
         }
+    }
+
+    private boolean shipSpawnMode = false;
+    public void toggleShipSpawnMode()
+    {
+        this.shipSpawnMode = !shipSpawnMode;
+    }
+
+    public boolean isSpawnModeEnabled()
+    {
+        return this.shipSpawnMode;
+    }
+
+    public void log(String tag, String txt)
+    {
+        Gdx.app.log(tag, txt);
+    }
+
+    public Vector2 vec2()
+    {
+        return new Vector2();
+    }
+
+    public Vector2 vec2(float x, float y)
+    {
+        return new Vector2(x, y);
+    }
+
+    public Vector2 vec2(Vector2 other)
+    {
+        log("GameInstance Debug", "Vector 2 created at " + other.toString());
+        return new Vector2(other);
     }
 }

@@ -110,3 +110,9 @@ function planet_class_label_on_hide(widget, game_instance, game_state)
     print('[Lua Debug] PLanet class label hiding...')
 end
 --------------------------------------------------------------------------
+
+function spawn_ship_btn_on_click(widget, game_instance, game_state)
+    --Toggle the map to spawn ships.
+    game_instance:toggleShipSpawnMode();
+    game_instance:log('SpawnShipBtn Debug', 'Ship Spawn Mode ' .. tostring(game_instance:isSpawnModeEnabled()))
+end

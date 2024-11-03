@@ -162,15 +162,16 @@ public class StarSystemScreen implements Screen, InputProcessor
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button)
     {
-        //Gdx.app.log("SystemScreen", "Click detected!");
-        boolean anyPlanetTouched = false;
-        for(Planet planet : GameInstance.getInstance().getSelectedStarSystem().getPlanets())
-        {
-            Vector3 touchPos = game.getCameraManager().getCurrentCamera().unproject(new Vector3((float)screenX,
-                (float)screenY, 0f));
-            float tx = touchPos.x;
-            float ty = touchPos.y;
+        Vector3 touchPos = game.getCameraManager().getCurrentCamera().unproject(new Vector3((float)screenX,
+            (float)screenY, 0f));
+        float tx = touchPos.x;
+        float ty = touchPos.y;
+        boolean isPlanetClicked = false;
+        StarSystem selectedSystem = GameInstance.getInstance().getSelectedStarSystem();
 
+        //Gdx.app.log("SystemScreen", "Click detected!");
+        for(Planet planet : selectedSystem.getPlanets())
+        {
             /*
             * Lua:
             * window = scene:getWidgetByID('planet_overview_window')
@@ -184,22 +185,23 @@ public class StarSystemScreen implements Screen, InputProcessor
             {
                 GameInstance.getInstance().selectPlanet(planet);
                 onPlanetClicked(touchPos, planet);
+                isPlanetClicked = true;
                 break;
             }
-            else
-            {
-                this.onClickCallback.invoke(new LuaValue[]
-                    {
-                        CoerceJavaToLua.coerce(touchPos),
-                        CoerceJavaToLua.coerce(planet),
-                        CoerceJavaToLua.coerce(scene),
-                        CoerceJavaToLua.coerce(GameInstance.getInstance()),
-                        CoerceJavaToLua.coerce(GameInstance.getInstance().getState())
-                    }
-                );
-            }
-
         }
+        if(!isPlanetClicked)
+        {
+            this.onClickCallback.invoke(new LuaValue[]
+                {
+                    CoerceJavaToLua.coerce(touchPos),
+                    CoerceJavaToLua.coerce(selectedSystem),
+                    CoerceJavaToLua.coerce(scene),
+                    CoerceJavaToLua.coerce(GameInstance.getInstance()),
+                    CoerceJavaToLua.coerce(GameInstance.getInstance().getState())
+                }
+            );
+        }
+
         return true;
     }
 
