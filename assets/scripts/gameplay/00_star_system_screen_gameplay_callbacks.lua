@@ -1,6 +1,8 @@
 
 planet_overview_window_visible = false;
 
+game_state_ships_spawned_cnt = 1;
+game_state_ships_spawned = {}
 
 function on_click(touchPos, star_system, scene, game_instance, game_state)
     local window = scene:getWidgetByID('planet_overview_window'):getWidget()
@@ -19,7 +21,21 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
         local ship_class = "battleship";
         local vel = game_instance:vec2(0, 0);
         local player_idx = game_state:getPlayerID();
-        game_state:spawnShip(ship_class, pos, vel, facing, player_idx)
+        local ship = game_state:spawnShip(ship_class, pos, vel, facing, player_idx)
+        --ship:turnTowards(pos);
+    else
+        local pos = game_instance:vec2();
+        pos:set(touchPos.x, touchPos.y);
+        local ships = game_state:getShips();
+        local size = ships.size;
+        if size > 0 then
+            for i = 0, size-1 do
+                --print('ID ' .. ships:get(i):toString())
+                local ship = ships:get(i);
+                ship:turnAway(pos);
+                ship:thrust(1);
+            end
+        end
     end
 end
 

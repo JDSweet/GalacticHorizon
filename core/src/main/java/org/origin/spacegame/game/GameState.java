@@ -78,7 +78,7 @@ public class GameState
 
     private static int shipMaxID = 0;
 
-    public void spawnShip(String shipClassTag, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
+    public Ship spawnShip(String shipClassTag, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
     {
         ShipClass shipClass = GameInstance.getInstance().getShipClass(shipClassTag);
         IPolity polity = getPolity(polityID);
@@ -89,6 +89,17 @@ public class GameState
         polity.addShip(ship);
         selectedStarSystem.addShip(ship);
         Gdx.app.log("GameState.spawnShip() Debug", "Ship spawned at " + pos.toString());
+        return ship;
+    }
+
+    public Ship getShip(int idx)
+    {
+        return ships.get(idx);
+    }
+
+    public Array<Ship> getShips()
+    {
+        return ships;
     }
 
     public int getPlayerID()

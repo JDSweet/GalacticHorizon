@@ -1,0 +1,16 @@
+<PlanetClass tag = "pc_yellow_dwarf"
+             min_habitability = "0"
+             max_habitability = "0"
+             min_size = "30"
+             max_size = "40"
+             spawning_zone = "ANY"
+             melting_zone_radius = "50"
+             habitable_zone_radius = "90"
+             freezing_zone_radius = "150"
+             star = "yes"
+             can_colonize = "no"
+             textureFile = "assets/gfx/stars/yellow_star_01.png"
+             can_be_moon = "no"
+             gas_giant = "no"
+>
+</PlanetClass>

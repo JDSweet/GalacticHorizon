@@ -26,10 +26,12 @@ public class Ship implements Identifiable
     private StarSystem systemLocation;
 
     private float delta = 0f;
-    private float accel = 0f;
+    private float accel = 0.1f;
 
     public Vector2 collisionCenter;
     public Array<Vector2> collisionPoints;
+
+    private static float spriteOffset = 90f;
 
     public Ship(int id, int ownerIdx, StarSystem systemLocation, Vector2 pos, Vector2 vel, Vector2 facing, ShipClass shipClass)
     {
@@ -42,6 +44,9 @@ public class Ship implements Identifiable
         this.shipClass = shipClass;
         this.sprite = new Sprite(shipClass.getGfx());
         this.accel = shipClass.getMaxAcceleration();
+        this.sprite.setRotation(0);
+        this.sprite.setSize(1f, 2.5f);
+        this.sprite.setOrigin(sprite.getWidth()/2f, sprite.getHeight()/2f);
     }
 
     public IPolity getOwner()
@@ -54,48 +59,47 @@ public class Ship implements Identifiable
         sprite.setPosition(position.x, position.y);
     }
 
+    //Moves the ship towards the specific point using its speed rating.
     public void thrust(float amnt)
     {
         updateDelta();
         velocity.add(facing.x * accel * delta, facing.y * accel * amnt * delta);
+        position.set(position.x + velocity.x, position.y + velocity.y);
+        sprite.setPosition(position.x, position.y);
     }
 
     // Turns the ship towards the given position in world space.
     // Source: https://gamefromscratch.com/gamedev-math-recipes-rotating-to-face-a-point/
     public void turnTowards(Vector2 direction)
     {
-        /*this.facing.set(direction);
-        float angle = MathUtils.atan2(facing.y, facing.x);
-        angle = angle * (180f/MathUtils.PI);
-        turn(angle);*/
         turnTowards(direction.x, direction.y);
     }
 
     public void turnTowards(float x, float y)
     {
-        this.facing.set(x, y);
-        float angle = MathUtils.atan2(facing.y, facing.x);
-        angle = angle * (180f/MathUtils.PI);
-        turn(angle);
+        this.facing.set(x - position.x, y - position.y);
+        float angle = MathUtils.atan2(facing.y, facing.x) * MathUtils.radiansToDegrees;
+        if(angle == sprite.getRotation())
+            Gdx.app.log("Test", "Hey");
+        else
+            turn(angle-spriteOffset);
     }
 
     //Turns the ship away from the given position in world space.
     public void turnAway(Vector2 direction)
     {
-        /*this.facing.set(-direction.x, -direction.y);
-        float angle = MathUtils.atan2(facing.y, facing.x);
-        angle = angle * (180f/MathUtils.PI);
-        turn(angle);*/
         turnAway(direction.x, direction.y);
     }
 
     //Turns the ship away from the given position.
     public void turnAway(float x, float y)
     {
-        this.facing.set(-x, -y);
-        float angle = MathUtils.atan2(facing.y, facing.x);
-        angle = angle * (180f/MathUtils.PI);
-        turn(angle);
+        this.facing.set(-(x - position.x), -(y - position.y));
+        float angle = MathUtils.atan2(facing.y, facing.x) * MathUtils.radiansToDegrees;
+        if(angle == sprite.getRotation())
+            Gdx.app.log("Test", "Hey");
+        else
+            turn(angle-spriteOffset);
     }
 
     // This rotates the ship sprite towards the specified angle by a given turn speed.
@@ -104,15 +108,15 @@ public class Ship implements Identifiable
     public void turn(float angle)
     {
         updateDelta();
-        sprite.rotate((sprite.getRotation() - angle) * delta);
+        //sprite.rotate(angle);
+        Gdx.app.log("ShipTurning Debug", "Ship angle is " + angle);
+        sprite.setOrigin(sprite.getWidth()/2f, sprite.getHeight()/2f);
+        sprite.setRotation(angle);
     }
 
     public void renderShip(SpriteBatch batch, float delta)
     {
-        //Gdx.app.log("Test", "Testing...");
         this.sprite.setPosition(position.x, position.y);
-        //this.sprite.setScale(0.5f);
-        this.sprite.setSize(1f, 2.5f);
         this.sprite.draw(batch);
     }
 

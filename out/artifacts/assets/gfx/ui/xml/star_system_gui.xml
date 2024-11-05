@@ -1,0 +1,100 @@
+<GUIScreen callback_file = "01_star_system_screen_gui_callbacks.lua">
+    <TextButton
+        id = "galaxy_screen_btn"
+        x = "0.5"
+        y = "0"
+        width = "0.085"
+        height = "0.085"
+        on_click = "galaxy_screen_btn_on_click"
+        text = "Go to Galaxy!"
+        skin = "uiskin.json">
+    </TextButton>
+    <TextButton
+            id = "spawn_ship_btn"
+            x = "0.89"
+            y = "0"
+            width = "0.085"
+            height = "0.085"
+            on_click = "spawn_ship_btn_on_click"
+            text = "Spawn Ship"
+            skin = "uiskin.json">
+    </TextButton>
+    <TextButton
+            id = "empire_management_btn"
+            x = "0.0"
+            y = "0.91"
+            width = "0.085"
+            height = "0.09"
+            on_click = "empire_management_btn_on_click"
+            text = "Empire"
+            skin = "uiskin.json">
+    </TextButton>
+    <Label
+            id = "system_name_label"
+            x = "0.38"
+            y = "0"
+            width = "0.085"
+            height = "0.085"
+            on_create = "system_name_label_on_create"
+            on_show = "system_name_label_on_show"
+            on_hide = "system_name_label_on_hide"
+            text = "System #X"
+            skin = "uiskin.json">
+    </Label>
+    <Window
+            id = "planet_overview_window"
+            x = "0"
+            y = "0"
+            width = "0.35"
+            height = "0.7"
+            on_create = "planet_overview_window_on_create"
+            on_show = "planet_overview_window_on_show"
+            on_hide = "planet_overview_window_on_hide"
+            title = "Planet #X"
+            skin = "uiskin.json"
+            align = "top-left"
+            visible = "no">
+        <VerticalGroup id = "planet_info_v_group" align = "center-left">
+            <TextButton
+                    id = "visit_planet_btn"
+                    text = "Visit Planet"
+                    skin = "uiskin.json"
+                    on_show = "visit_planet_btn_on_show"
+                    on_hide = "visit_planet_btn_on_hide"
+                    on_click = "visit_planet_btn_on_click">
+            </TextButton>
+            <Label
+                    id = "planet_habitability_label"
+                    on_create = "planet_habitability_label_on_create"
+                    on_show = "planet_habitability_label_on_show"
+                    on_hide = "planet_habitability_label_on_hide"
+                    text = "Habitability: X"
+                    skin = "uiskin.json">
+            </Label>
+            <Label
+                    id = "planet_size_label"
+                    on_create = "planet_size_label_on_create"
+                    on_show = "planet_size_label_on_show"
+                    on_hide = "planet_size_label_on_hide"
+                    text = "Planet Size: X"
+                    skin = "uiskin.json">
+            </Label>
+            <Label
+                    id = "planet_class_label"
+                    on_create = "planet_class_label_on_create"
+                    on_show = "planet_class_label_on_show"
+                    on_hide = "planet_class_label_on_hide"
+                    text = "Planet Class: Clazz"
+                    skin = "uiskin.json">
+            </Label>
+            <Label
+                    id = "oz_debug_label"
+                    on_create = "oz_debug_label_on_create"
+                    on_show = "oz_debug_label_on_show"
+                    on_hide = "oz_debug_label_on_hide"
+                    text = "Orbital Zone: ANY"
+                    skin = "uiskin.json">
+            </Label>
+        </VerticalGroup>
+    </Window>
+</GUIScreen>
