@@ -72,6 +72,7 @@ public class StarSystemScreen implements Screen, InputProcessor
         scene.act();
         game.getCameraManager().update();
         game.getBatch().setProjectionMatrix(game.getCameraManager().getCurrentCamera().combined);
+        GameInstance.getInstance().getShipCircleRenderer().setProjectionMatrix(game.getCameraManager().getCurrentCamera().combined);
 
         //Draw the star system.
         GameInstance.getInstance().getState().renderSystemView(game.getBatch(), GameInstance.getInstance().getSelectedStarSystem());

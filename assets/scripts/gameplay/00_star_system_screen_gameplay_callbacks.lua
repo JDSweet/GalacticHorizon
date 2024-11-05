@@ -1,9 +1,6 @@
 
 planet_overview_window_visible = false;
 
-game_state_ships_spawned_cnt = 1;
-game_state_ships_spawned = {}
-
 function on_click(touchPos, star_system, scene, game_instance, game_state)
     local window = scene:getWidgetByID('planet_overview_window'):getWidget()
     --local window = window_wrapper.widget;
@@ -26,8 +23,11 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
     else
         local pos = game_instance:vec2();
         pos:set(touchPos.x, touchPos.y);
-        local ships = game_state:getShips();
-        local size = ships.size;
+        local ships = game_instance:getSelectedStarSystem():getShips();
+        local size = -1;
+        if ships ~= nil then
+            size = ships.size;
+        end
         if size > 0 then
             for i = 0, size-1 do
                 --print('ID ' .. ships:get(i):toString())

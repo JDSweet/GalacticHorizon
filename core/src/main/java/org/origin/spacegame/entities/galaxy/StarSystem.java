@@ -2,6 +2,7 @@ package org.origin.spacegame.entities.galaxy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
@@ -57,24 +58,40 @@ public class StarSystem
             Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_HEIGHT/2f,
                Constants.StarSystemConstants.STAR_RENDER_SIZE,
                Constants.StarSystemConstants.STAR_RENDER_SIZE);*/
-        renderPlanetsToSystemView(batch, delta);
-        renderShipsToSystemView(batch, delta);
+
+        renderPlanets(batch, delta);
+        renderShipBackgroundCircles(GameInstance.getInstance().getShipCircleRenderer());
+        renderShips(batch, delta);
     }
 
-    private void renderPlanetsToSystemView(SpriteBatch batch, float delta)
+    private void renderPlanets(SpriteBatch batch, float delta)
     {
+        batch.begin();
         for(Planet p : planets)
         {
             p.renderPlanet(batch);
         }
+        batch.end();
     }
 
-    private void renderShipsToSystemView(SpriteBatch batch, float delta)
+    private void renderShipBackgroundCircles(ShapeRenderer renderer)
     {
+        renderer.begin();
+        for(Ship s : ships)
+        {
+            s.renderBackgroundCircle(renderer);
+        }
+        renderer.end();
+    }
+
+    private void renderShips(SpriteBatch batch, float delta)
+    {
+        batch.begin();
         for(Ship s : ships)
         {
             s.renderShip(batch, delta);
         }
+        batch.end();
     }
 
     public void addShip(Ship s)
@@ -127,6 +144,11 @@ public class StarSystem
     public StarClass getStarClass()
     {
         return GameInstance.getInstance().getStarClass(this.getStarTypeTag());
+    }
+
+    public Array<Ship> getShips()
+    {
+        return this.ships;
     }
 
     public void debugID()

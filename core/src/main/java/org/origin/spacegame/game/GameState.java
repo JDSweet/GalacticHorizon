@@ -80,14 +80,20 @@ public class GameState
 
     public Ship spawnShip(String shipClassTag, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
     {
+        StarSystem selectedStarSystem = GameInstance.getInstance().getSelectedStarSystem();
+        return spawnShip(shipClassTag, selectedStarSystem, pos, vel, facing, polityID);
+    }
+
+    public Ship spawnShip(String shipClassTag, StarSystem system, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
+    {
         ShipClass shipClass = GameInstance.getInstance().getShipClass(shipClassTag);
         IPolity polity = getPolity(polityID);
-        StarSystem selectedStarSystem = GameInstance.getInstance().getSelectedStarSystem();
+
         //GameInstance.getInstance().log("Ship Spawn Debug", "System " + selectedStarSystem.id);
-        Ship ship = new Ship(shipMaxID++, polityID, selectedStarSystem, pos, vel, facing, shipClass);
+        Ship ship = new Ship(shipMaxID++, polityID, system, pos, vel, facing, shipClass);
         this.ships.add(ship);
         polity.addShip(ship);
-        selectedStarSystem.addShip(ship);
+        system.addShip(ship);
         Gdx.app.log("GameState.spawnShip() Debug", "Ship spawned at " + pos.toString());
         return ship;
     }
@@ -155,24 +161,19 @@ public class GameState
 
     public void renderSystemView(SpriteBatch batch, StarSystem system)
     {
-        batch.begin();
         system.renderSystemToSystemView(batch, Gdx.graphics.getDeltaTime());
-        batch.end();
     }
 
     public void renderGalacticMap(SpriteBatch batch)
     {
         batch.begin();
-        //String starSystemRenderDebugTxt = "";
         for(StarSystem system : this.starSystems.values())
         {
             batch.draw(GameInstance.getInstance().getStarClass(system.getStarTypeTag()).getGfx(),
                                                                 system.getGalacticPosition().x,
                                                                 system.getGalacticPosition().y, Constants.STAR_SYSTEM_GALACTIC_MAP_RENDER_WIDTH,
                                                                                                 Constants.STAR_SYSTEM_GALACTIC_MAP_RENDER_HEIGHT);
-            //starSystemRenderDebugTxt += "\n Rendered " + system.starType + " at " + system.getGalacticPosition().toString();
         }
-        //Gdx.app.log("Galaxy Render Debug", starSystemRenderDebugTxt);
         batch.end();
     }
 

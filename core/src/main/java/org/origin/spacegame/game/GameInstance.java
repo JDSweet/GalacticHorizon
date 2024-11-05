@@ -3,6 +3,7 @@ package org.origin.spacegame.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
@@ -42,6 +43,7 @@ public class GameInstance implements Disposable {
     private StarSystem selectedStarSystem;
     private Planet selectedPlanet;
     private ArrayMap<String, Skin> skins;
+    private ShapeRenderer shipCircleRenderer;
 
 
     public GameInstance() {
@@ -52,6 +54,8 @@ public class GameInstance implements Disposable {
         xmlReader = new XmlReader();
         this.random = new Random();
         this.skins = new ArrayMap<String, Skin>();
+        shipCircleRenderer = new ShapeRenderer();
+        shipCircleRenderer.setAutoShapeType(true);
 
         /*String script = "val = 'hello from lua'";
         LuaScriptEngine eng = (LuaScriptEngine) new LuaScriptEngineFactory().getScriptEngine();
@@ -104,6 +108,11 @@ public class GameInstance implements Disposable {
         for (FileHandle skinFileHandle : skinFileHandles) {
             this.skins.put(skinFileHandle.nameWithoutExtension(), new Skin(skinFileHandle));
         }
+    }
+
+    public ShapeRenderer getShipCircleRenderer()
+    {
+        return this.shipCircleRenderer;
     }
 
     @Deprecated
