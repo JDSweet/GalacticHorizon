@@ -17,14 +17,18 @@ public class ShipClass implements Disposable
     private Vector2 maxVel;
     private ShipClassType type;
     private float maxAccel;
+    private float maxHP;
+    private float spriteOffset = 90f;
 
-    public ShipClass(String tag, Texture gfx, Vector2 maxVel, float maxAccel, ShipClassType type)
+    public ShipClass(String tag, Texture gfx, Vector2 maxVel, float maxAccel, float maxHP, float spriteOffset, ShipClassType type)
     {
         this.tag = tag;
         this.gfx = gfx;
         this.maxVel = maxVel;
         this.type = type;
         this.maxAccel = maxAccel;
+        this.maxHP = maxHP;
+        this.spriteOffset = spriteOffset;
     }
 
     public String getTag()
@@ -47,9 +51,19 @@ public class ShipClass implements Disposable
         return this.type;
     }
 
+    public float getSpriteOffset()
+    {
+        return this.spriteOffset;
+    }
+
     public float getMaxAcceleration()
     {
         return this.maxAccel;
+    }
+
+    public float getMaxHP()
+    {
+        return this.maxHP;
     }
 
     @Override

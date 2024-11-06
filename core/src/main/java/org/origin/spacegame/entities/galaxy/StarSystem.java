@@ -49,6 +49,28 @@ public class StarSystem
         this.centroid = new Vector2(xCenter, yCenter);
     }
 
+    public void update()
+    {
+        updatePlanets();
+        updateShips();
+    }
+
+    private void updatePlanets()
+    {
+        for(Planet p : this.planets)
+        {
+            p.update();
+        }
+    }
+
+    private void updateShips()
+    {
+        for(Ship s : this.ships)
+        {
+            s.update();
+        }
+    }
+
     //Renders this star system, including its star and all constituent planets, to their positions.
     //System View must be enabled for this to work.
     public void renderSystemToSystemView(SpriteBatch batch, float delta)

@@ -177,6 +177,14 @@ public class GameState
         batch.end();
     }
 
+    public void update()
+    {
+        for(StarSystem system : this.starSystems.values())
+        {
+            system.update();
+        }
+    }
+
     public Array<StarSystem> getStarSystems()
     {
         return starSystems.values().toArray();

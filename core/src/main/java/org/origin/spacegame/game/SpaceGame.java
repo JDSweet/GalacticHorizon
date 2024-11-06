@@ -70,6 +70,7 @@ public class SpaceGame extends Game//ApplicationAdapter
                 setScreen(planetScreen);
             }
         }
+        GameInstance.getInstance().getState().update();
         super.render();
     }
 

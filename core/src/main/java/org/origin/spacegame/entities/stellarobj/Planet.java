@@ -86,6 +86,11 @@ public class Planet
         return this.starSystem;
     }
 
+    public void update()
+    {
+
+    }
+
     public boolean isTouched(float x, float y)
     {
         if(rect.contains(x, y))

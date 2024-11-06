@@ -275,7 +275,9 @@ public class GameInstance implements Disposable {
         String[] maxVelStrVals = root.getAttribute("max_vel").replaceAll("[(){}<>\\[\\]]", "").replaceAll("\\s", "").split(",");
         maxVel.set(Float.parseFloat(maxVelStrVals[0]), Float.parseFloat(maxVelStrVals[1]));
         float maxAccel = Float.parseFloat(root.getAttribute("max_accel"));
-        return new ShipClass(tag, gfx, maxVel, maxAccel, type);
+        float maxHP = Float.parseFloat(root.getAttribute("hp"));
+        float spriteOffset = Float.parseFloat(root.getAttribute("sprite_offset"));
+        return new ShipClass(tag, gfx, maxVel, maxAccel, maxHP, spriteOffset, type);
     }
 
     public void selectStarSystem(StarSystem system) {

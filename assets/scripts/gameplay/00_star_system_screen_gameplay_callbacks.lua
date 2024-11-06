@@ -14,7 +14,7 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
         local pos = game_instance:vec2();
         pos.x = touchPos.x;
         pos.y = touchPos.y;
-        local facing = game_instance:vec2(0, 0);
+        local facing = game_instance:vec2(pos.x, pos.y);
         local ship_class = "battleship";
         local vel = game_instance:vec2(0, 0);
         local player_idx = game_state:getPlayerID();
@@ -32,8 +32,8 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
             for i = 0, size-1 do
                 --print('ID ' .. ships:get(i):toString())
                 local ship = ships:get(i);
-                ship:turnAway(pos);
-                ship:thrust(1);
+                ship:turnTowards(pos);
+                ship:thrust(0.05);
             end
         end
     end
