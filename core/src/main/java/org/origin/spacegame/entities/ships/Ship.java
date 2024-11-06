@@ -23,24 +23,58 @@ import org.origin.spacegame.game.GameInstance;
 * */
 public class Ship implements Identifiable
 {
+    // This ship's index in the global array of ships. This might eventually be replaced
+    // with a different data type.
     private int id;
+
+    // The index of the ship's owner in the list of polities.
     private int ownerIdx;
+
+    // This ship's position in 2D space, in the world coordinates of the star system screen.
     private Vector2 position;
+
+    //The actual x/y velocity of this ship.
     private Vector2 velocity;
+
+    //What kind of ship are we?
     private ShipClass shipClass;
+
+    //The graphic used to display this ship in system.
     private Sprite sprite;
+
+    //The point (in world coordinates) that this ship is facing towards.
+    // Used to calculate the angle that we should rotate the ship towards.
     private Vector2 facing;
+
+    //The star system this ship is located in.
     private StarSystem systemLocation;
+
+    // The time between frames. This will eventually be replaced
+    // with a different variable that measures the time between
+    // game update ticks.
     private float delta = 0f;
+
+    //The amount this ship is moving per frame.
     private float thrustAmnt = 0.05f;
+
+    //This ship's health.
     private float hp;
+
+    //Is this ship dead?
     private boolean isDead = false;
+
+    // When ships are this far away from their destination point, they stop moving.
+    // They are "there." Lower numbers increase the likelihood of ships
+    // never reaching their target (and thus winding up endlessly circling their target)
+    // or stopping "on top" of each other.
     private float atLocationDst = 8f;
 
     // In degrees. Basically, this lets us account for the fact that some sprites might not
     // be facing the same direction in the actual image file. We can specify the degrees
     // away from the expected orientation that they are facing.
-    private static float spriteOffset = 90f;
+    // This variable has been moved to ShipClass.java, and is now loaded from XML to allow
+    // different ships to have different texture offsets.
+    // private static float spriteOffset = 90f;
 
     public Ship(int id, int ownerIdx, StarSystem systemLocation, Vector2 pos, Vector2 vel, Vector2 facing, ShipClass shipClass)
     {
