@@ -6,13 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.XmlReader;
-//import org.luaj.vm2.ast.Chunk;
-//import org.luaj.vm2.script.LuaScriptEngine;
-//import org.luaj.vm2.script.LuaScriptEngineFactory;
+import com.badlogic.gdx.utils.*;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.JsePlatform;
+import org.origin.spacegame.ai.ScriptedShipState;
 import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.data.ShipClass;
 import org.origin.spacegame.data.ShipClass.ShipClassType;
@@ -22,12 +19,14 @@ import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.generation.OrbitalZone;
 import org.origin.spacegame.utilities.StringToType;
 
+import java.util.Dictionary;
 import java.util.Random;
 
-public class GameInstance implements Disposable {
+public class GameInstance implements Disposable
+{
     private static GameInstance instance;
-
-    public static GameInstance getInstance() {
+    public static GameInstance getInstance()
+    {
         if (instance == null)
             instance = new GameInstance();
         return instance;
@@ -44,9 +43,11 @@ public class GameInstance implements Disposable {
     private Planet selectedPlanet;
     private ArrayMap<String, Skin> skins;
     private ShapeRenderer shipCircleRenderer;
+    private LuaValue shipAIScripts;
+    private ArrayMap<String, ScriptedShipState> shipAIStates;
 
-
-    public GameInstance() {
+    public GameInstance()
+    {
         state = new GameState();
         starClasses = new ArrayMap<String, StarClass>();
         planetClasses = new ArrayMap<String, PlanetClass>();
@@ -56,6 +57,8 @@ public class GameInstance implements Disposable {
         this.skins = new ArrayMap<String, Skin>();
         shipCircleRenderer = new ShapeRenderer();
         shipCircleRenderer.setAutoShapeType(true);
+        this.shipAIScripts = JsePlatform.standardGlobals();
+        this.shipAIStates = new ArrayMap<String, ScriptedShipState>();
 
         /*String script = "val = 'hello from lua'";
         LuaScriptEngine eng = (LuaScriptEngine) new LuaScriptEngineFactory().getScriptEngine();
@@ -80,32 +83,39 @@ public class GameInstance implements Disposable {
         return this.guiSkin;
     }
 
-    public void loadData() {
+    public void loadData()
+    {
+        loadShipAIScripts();
         loadPlanetClasses();
         loadStarClasses();
         loadDefaultSkin();
         loadShipClasses();
     }
 
-    public void selectPlanet(Planet planet) {
+    public void selectPlanet(Planet planet)
+    {
         this.selectedPlanet = planet;
     }
 
-    public Planet getSelectedPlanet() {
+    public Planet getSelectedPlanet()
+    {
         return selectedPlanet;
     }
 
-    private void loadSkins() {
+    private void loadSkins()
+    {
         Array<FileHandle> skinFileHandles = new Array<FileHandle>();
         FileHandle[] skinFolderFileHandles = Gdx.files.internal("assets/gfx/ui/skins/").list();
 
         //Get the skin JSON files.
-        for (FileHandle skinFolderFileHandle : skinFolderFileHandles) {
+        for (FileHandle skinFolderFileHandle : skinFolderFileHandles)
+        {
             if (skinFolderFileHandle.extension().equals(".json"))
                 skinFileHandles.add(skinFolderFileHandle);
         }
 
-        for (FileHandle skinFileHandle : skinFileHandles) {
+        for (FileHandle skinFileHandle : skinFileHandles)
+        {
             this.skins.put(skinFileHandle.nameWithoutExtension(), new Skin(skinFileHandle));
         }
     }
@@ -116,19 +126,23 @@ public class GameInstance implements Disposable {
     }
 
     @Deprecated
-    private void loadDefaultSkin() {
+    private void loadDefaultSkin()
+    {
         this.guiSkin = new Skin(Gdx.files.internal("assets/gfx/ui/skins/uiskin.json"));
     }
 
-    public Skin getGuiSkin() {
+    public Skin getGuiSkin()
+    {
         return this.guiSkin;
     }
 
-    public StarClass getStarClass(String tag) {
+    public StarClass getStarClass(String tag)
+    {
         return starClasses.get(tag);
     }
 
-    public PlanetClass getPlanetClass(String tag) {
+    public PlanetClass getPlanetClass(String tag)
+    {
         return planetClasses.get(tag);
     }
 
@@ -136,11 +150,14 @@ public class GameInstance implements Disposable {
      * &#064;returns a list of all planet classes that are flagged as being able to spawn in the given orbital zone.
      */
     @SuppressWarnings("GDXJavaUnsafeIterator")
-    public Array<PlanetClass> getPlanetClassesThatCanSpawnInZone(OrbitalZone zone, boolean includeStars, boolean terrestrialOnly) {
+    public Array<PlanetClass> getPlanetClassesThatCanSpawnInZone(OrbitalZone zone, boolean includeStars, boolean terrestrialOnly)
+    {
         Array<PlanetClass> retval = new Array<PlanetClass>();
-        for (PlanetClass planetClass : this.planetClasses.values()) {
+        for (PlanetClass planetClass : this.planetClasses.values())
+        {
             OrbitalZone l_zone = planetClass.getSpawningZone();
-            if (l_zone == zone || l_zone == OrbitalZone.ANY) {
+            if (l_zone == zone || l_zone == OrbitalZone.ANY)
+            {
                 if (!includeStars && !planetClass.isStar())
                     retval.add(planetClass);
             }
@@ -148,8 +165,36 @@ public class GameInstance implements Disposable {
         return retval;
     }
 
+    public void loadShipAIScripts()
+    {
+        FileHandle[] xmlFiles = Gdx.files.internal("assets/common/ship_ai_states/").list();
+        FileHandle[] luaFiles = Gdx.files.internal("assets/scripts/ai/ship/").list();
+        for(FileHandle luaFile : luaFiles) //We have to read the lua files first,
+            // because the ScriptedShipState constructor expects the scripts to already be loaded.
+        {
+            this.shipAIScripts.get("dofile").call(luaFile.path());
+        }
+        for(FileHandle xmlFile : xmlFiles)
+        {
+            XmlReader.Element root = this.xmlReader.parse(xmlFile);
+            for(XmlReader.Element child : root.getChildrenByName("ShipAIState"))
+            {
+                ScriptedShipState shipAIState = new ScriptedShipState(child, shipAIScripts);
+                this.shipAIStates.put(shipAIState.getTag(), shipAIState);
+                /*for(ObjectMap.Entry<String, String> attrib : child.getAttributes())
+                {
+                    if(attrib.key.equals("tag"))
+                    {
+
+                    }
+                }*/
+            }
+        }
+    }
+
     //Loads planet classes from XML files in the assets/common/planet_classes folder.
-    public void loadPlanetClasses() {
+    public void loadPlanetClasses()
+    {
         /*FileHandle[] planetTexturePaths = Gdx.files.internal("assets/gfx/planets/").list();
         Gdx.app.log("Loading Planet Textures...", "Testing. " + planetTexturePaths.length + " planets detected.");
         for(FileHandle planetTexturePath : planetTexturePaths)
@@ -161,15 +206,18 @@ public class GameInstance implements Disposable {
 
         FileHandle[] planetXMLDefinePaths = Gdx.files.internal("assets/common/planet_classes/").list();
         Gdx.app.log("Loading Planet XML Files...", "Testing. " + planetXMLDefinePaths.length + " planet classes detected.");
-        for (FileHandle planetDefinePath : planetXMLDefinePaths) {
-            if (planetDefinePath.extension().equals("xml")) {
+        for (FileHandle planetDefinePath : planetXMLDefinePaths)
+        {
+            if (planetDefinePath.extension().equals("xml"))
+            {
                 PlanetClass pc = loadPlanetClass(xmlReader, planetDefinePath);
                 planetClasses.put(pc.getTag(), pc);
             }
         }
     }
 
-    private PlanetClass loadPlanetClass(XmlReader reader, FileHandle handle) {
+    private PlanetClass loadPlanetClass(XmlReader reader, FileHandle handle)
+    {
         XmlReader.Element root = reader.parse(handle);
         String tag = root.getAttribute("tag");
         Texture gfx = new Texture(Gdx.files.internal(root.getAttribute("textureFile")));
@@ -186,14 +234,16 @@ public class GameInstance implements Disposable {
         float meltZoneRadius = 0f;
         float freezeZoneRadius = 0f;
 
-        if (isStar) {
+        if (isStar)
+        {
             meltZoneRadius = Float.parseFloat(root.getAttribute("melting_zone_radius"));
             habZoneRadius = Float.parseFloat(root.getAttribute("habitable_zone_radius"));
             freezeZoneRadius = Float.parseFloat(root.getAttribute("freezing_zone_radius"));
             isTerrestrial = false;
         }
 
-        if (root.hasAttribute("terrestrial")) {
+        if (root.hasAttribute("terrestrial"))
+        {
             String terrestrial = root.getAttribute("terrestrial");
             isTerrestrial = StringToType.yesOrNoToTrueOrFalse("terrestrial");
         }
@@ -210,7 +260,8 @@ public class GameInstance implements Disposable {
         return pc;
     }
 
-    public void loadStarClasses() {
+    public void loadStarClasses()
+    {
 
         /*FileHandle[] starTexturePaths = Gdx.files.internal("assets/gfx/stars/").list();
         Gdx.app.log("Loading Star Textures...", "Testing. " + starTexturePaths.length + " stars detected.");
@@ -230,7 +281,8 @@ public class GameInstance implements Disposable {
         }
     }
 
-    private StarClass loadStarClass(XmlReader reader, FileHandle handle) {
+    private StarClass loadStarClass(XmlReader reader, FileHandle handle)
+    {
         XmlReader.Element root = reader.parse(handle);
         String tag = root.getAttribute("tag");
         String starPlanetClassTag = root.getAttribute("star_planet_class");
@@ -242,25 +294,30 @@ public class GameInstance implements Disposable {
     }
 
     //Loads planet classes from XML files in the assets/common/planet_classes folder.
-    public void loadShipClasses() {
+    public void loadShipClasses()
+    {
         FileHandle[] shipClassXMLDefinePaths = Gdx.files.internal("assets/common/ship_classes/").list();
         Gdx.app.log("Loading Ship Class XML Files...", "Testing. " + shipClassXMLDefinePaths.length + " ship classes detected.");
-        for (FileHandle shipClassDefinePath : shipClassXMLDefinePaths) {
-            if (shipClassDefinePath.extension().equals("xml")) {
+        for (FileHandle shipClassDefinePath : shipClassXMLDefinePaths)
+        {
+            if (shipClassDefinePath.extension().equals("xml"))
+            {
                 ShipClass sc = loadShipClass(xmlReader, shipClassDefinePath);
                 shipClasses.put(sc.getTag(), sc);
             }
         }
     }
 
-    private ShipClass loadShipClass(XmlReader reader, FileHandle handle) {
+    private ShipClass loadShipClass(XmlReader reader, FileHandle handle)
+    {
         XmlReader.Element root = reader.parse(handle);
         String tag = root.getAttribute("tag");
         Texture gfx = new Texture(Gdx.files.internal(root.getAttribute("texture")));
         ShipClassType type;
         String typeTag = root.getAttribute("type");
         Vector2 maxVel = new Vector2();
-        switch (typeTag) {
+        switch (typeTag)
+        {
             case "MILITARY":
             case "military":
                 type = ShipClassType.MILITARY;
@@ -280,43 +337,52 @@ public class GameInstance implements Disposable {
         return new ShipClass(tag, gfx, maxVel, maxAccel, maxHP, spriteOffset, type);
     }
 
-    public void selectStarSystem(StarSystem system) {
+    public void selectStarSystem(StarSystem system)
+    {
         this.selectedStarSystem = system;
     }
 
-    public StarSystem getSelectedStarSystem() {
+    public StarSystem getSelectedStarSystem()
+    {
         return selectedStarSystem;
     }
 
-    public Array<String> getPlanetClassTags() {
+    public Array<String> getPlanetClassTags()
+    {
         Array<String> planetClassTags = planetClasses.keys().toArray();
         return new Array<String>(planetClassTags);
     }
 
-    public ShipClass getShipClass(String tag) {
+    public ShipClass getShipClass(String tag)
+    {
         return this.shipClasses.get(tag);
     }
 
-    public Array<String> getStarClassTags() {
+    public Array<String> getStarClassTags()
+    {
         Array<String> starClassTags = starClasses.keys().toArray();
         return new Array<String>(starClassTags);
     }
 
     private SpaceGame game;
 
-    public void setGame(SpaceGame game) {
+    public void setGame(SpaceGame game)
+    {
         this.game = game;
     }
 
-    public CameraManager getCameraManager() {
+    public CameraManager getCameraManager()
+    {
         return game.getCameraManager();
     }
 
-    public boolean isSystemSelected() {
+    public boolean isSystemSelected()
+    {
         return this.selectedStarSystem == null;
     }
 
-    public boolean isPlanetSelected() {
+    public boolean isPlanetSelected()
+    {
         return this.selectedPlanet == null;
     }
 
@@ -331,26 +397,33 @@ public class GameInstance implements Disposable {
     }
 
     @Override
-    public void dispose() {
+    public void dispose()
+    {
         disposeOfStarData();
         disposeOfPlanetData();
         disposeOfGUIData();
     }
 
-    private void disposeOfStarData() {
-        for (StarClass starType : starClasses.values()) {
+    private void disposeOfStarData()
+    {
+        for (StarClass starType : starClasses.values())
+        {
             starType.dispose();
         }
     }
 
-    private void disposeOfPlanetData() {
-        for (PlanetClass planetType : planetClasses.values()) {
+    private void disposeOfPlanetData()
+    {
+        for (PlanetClass planetType : planetClasses.values())
+        {
             planetType.dispose();
         }
     }
 
-    private void disposeOfGUIData() {
-        for (Skin skin : this.skins.values()) {
+    private void disposeOfGUIData()
+    {
+        for (Skin skin : this.skins.values())
+        {
             skin.dispose();
         }
     }
