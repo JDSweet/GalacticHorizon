@@ -33,7 +33,7 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
                 --print('ID ' .. ships:get(i):toString())
                 local ship = ships:get(i);
                 ship:turnTowards(pos);
-                ship:thrust(0.05);
+                ship:thrust(0.5); --0.05
             end
         end
     end

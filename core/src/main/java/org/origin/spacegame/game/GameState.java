@@ -16,6 +16,10 @@ import org.origin.spacegame.generation.PlanetOrbitGenerator;
 import org.origin.spacegame.generation.SystemGeneratorType;
 import org.origin.spacegame.generation.TileMapStarSystemGenerator;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+
 public class GameState
 {
     private IntMap<StarSystem> starSystems;
@@ -24,6 +28,10 @@ public class GameState
     private Array<IPolity> polities;
     private Array<Ship> ships;
     private int playerPolityIndex;
+    private boolean isPaused = false;
+    private DateManager dateManager;
+    private boolean ticking = false;
+    private float tickSpeed = 0.005f;
 
     public GameState()
     {
@@ -32,6 +40,21 @@ public class GameState
         this.ships = new Array<Ship>();
         planetOrbitGenerator = new PlanetOrbitGenerator();
         this.polities = new Array<IPolity>(32);
+        this.dateManager = new DateManager(LocalDate.of(2100, 1, 1), 0.1f);
+        this.dateManager.register(new Runnable()
+                                  {
+                                      int turnNumber = 0;
+                                      @Override
+                                      public void run()
+                                      {
+                                          Gdx.app.log("System Update", "Turn " + turnNumber++);
+                                          for(StarSystem system : starSystems.values())
+                                          {
+                                              system.update();
+                                              //Gdx.app.log("System Update", "System Updated: " + system.id);
+                                          }
+                                      }
+                                  });
     }
 
     public void initialize()
@@ -179,10 +202,12 @@ public class GameState
 
     public void update()
     {
-        for(StarSystem system : this.starSystems.values())
-        {
-            system.update();
-        }
+//        for(StarSystem system : starSystems.values())
+//        {
+//            system.update();
+//            Gdx.app.log("System Update", "System Updated: " + system.id);
+//        }
+        this.dateManager.update();
     }
 
     public Array<StarSystem> getStarSystems()
@@ -195,6 +220,60 @@ public class GameState
         for(StarSystem system : getStarSystems())
         {
             system.debugID();
+        }
+    }
+
+    public class DateManager
+    {
+        private Array<Runnable> tasks;
+        private LocalDate date;
+        private float deltaTime; //In seconds.
+        private float delayInSeconds; //The ideal amount of time that should elapse between updates.
+
+        public DateManager(LocalDate startDate, float delayInSeconds)
+        {
+            this.date = startDate;
+            this.tasks = new Array<>();
+            this.delayInSeconds = delayInSeconds;
+        }
+
+        public void update()
+        {
+            this.deltaTime += Gdx.graphics.getDeltaTime();
+            if(deltaTime >= delayInSeconds)
+            {
+                for(Runnable task : tasks)
+                {
+                    this.date = date.plusDays(1);
+                    task.run();
+                }
+                this.deltaTime = 0f;
+            }
+        }
+
+        public void setDelayInSeconds(float delay)
+        {
+            this.delayInSeconds = delay;
+        }
+
+        public void register(Runnable task)
+        {
+            this.tasks.add(task);
+        }
+
+        public int getYear()
+        {
+            return date.getYear();
+        }
+
+        public int getMonth()
+        {
+            return date.getMonthValue();
+        }
+
+        public int getDay()
+        {
+            return date.getDayOfMonth();
         }
     }
 }

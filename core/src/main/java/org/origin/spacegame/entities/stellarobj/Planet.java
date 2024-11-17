@@ -91,6 +91,11 @@ public class Planet
 
     }
 
+    public boolean isHabitable()
+    {
+        return this.habitability > 0;
+    }
+
     public boolean isTouched(float x, float y)
     {
         if(rect.contains(x, y))
