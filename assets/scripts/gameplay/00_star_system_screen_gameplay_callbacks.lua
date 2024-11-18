@@ -33,7 +33,7 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
                 --print('ID ' .. ships:get(i):toString())
                 local ship = ships:get(i);
                 ship:turnTowards(pos);
-                ship:thrust(0.5); --0.05
+                ship:thrust(0.5); --0.05 --This thrust is applied per update tick. Before the transition to the DateManager/tick-based system, this was per-frame. That's why the original value was a factor of 10 smaller (60 frames/second vs 4-5 updates/second).
             end
         end
     end
