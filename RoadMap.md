@@ -1,4 +1,4 @@
-Pre-Alpha Space Game Project Roadmap:
+# Pre-Alpha Space Game Project Roadmap:
 
 v 0.3: Planetary Terrain Generation and Solar System mechanics, UI extensions
 - Scale back and temporarily disable the galactic map/galaxy generation.
