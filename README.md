@@ -1,11 +1,11 @@
 # Space Game
 
-This is a 2D grand strategy 4x game based on Paradox Interactive's grand strategy hit Stellaris, developed in Java using the libGdx framework.
+This is a 2D grand strategy 4x game based on Paradox Interactive's grand strategy hit Stellaris, developed in Java using the libGdx framework, with the twist of allowing more in-depth planet development and planet invasion mechanics.
 
-Take control of a civilization as it takes its first steps into the stars. Play the United Nations of Earth, the Agoracian Empire, the Hastari Empire, 
-or the Davonian Empire, or any of many randomly generated/custom-built species as you explore the stars, settle alien worlds, and engage in epic 2D 
-fleet battles.
+Take control of a civilization as it takes its first steps into the stars. Play any of many randomly generated/custom-built species as you explore the stars, settle alien worlds, and engage in epic 2D 
+fleet battles and in-depth land invasions on a thousand worlds.
 
+This is a link to the project road-map: https://github.com/JDSweet/SpaceGame/blob/master/RoadMap.md
 ------------------------------------------------------------------------------
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
