@@ -16,6 +16,9 @@ This is a link to the project road-map: https://github.com/JDSweet/SpaceGame/blo
 4. In order to disable ship spawning mode, click "spawn ship" again.
 5. If ship spawning mode is disabled, and there are currently ships spawned onto the map, you can click anywhere in the star system map, and the ships you spawned in will turn and fly towards that region.
 6. They will stop about 10 world units away from their target destination.
+7. You can use WSAD and the arrow keys to move the camera around.
+8. Enter zooms in, backspace zooms out. Zooming with the keys is clamped to prevent you from zooming "through" the sprites.
+9. Zooming with the mouse is currently supported, but it is unclamped (meaning if you zoom in too much, you'll go through the world and be unable to see anything).
 ------------------------------------------------------------------------------
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
