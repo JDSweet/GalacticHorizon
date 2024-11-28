@@ -91,7 +91,7 @@ public class StarSystem
         batch.begin();
         for(Planet p : planets)
         {
-            p.renderPlanet(batch);
+            p.renderPlanetToSystemMap(batch);
         }
         batch.end();
     }

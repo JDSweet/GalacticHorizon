@@ -17,6 +17,7 @@ import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.generation.OrbitalZone;
+import org.origin.spacegame.map.hex.Terrain;
 import org.origin.spacegame.utilities.StringToType;
 
 import java.util.Dictionary;
@@ -45,6 +46,7 @@ public class GameInstance implements Disposable
     private ShapeRenderer shipCircleRenderer;
     private LuaValue shipAIScripts;
     private ArrayMap<String, ScriptedShipState> shipAIStates;
+    private ArrayMap<String, Terrain> terrains;
 
     public GameInstance()
     {
@@ -59,6 +61,7 @@ public class GameInstance implements Disposable
         shipCircleRenderer.setAutoShapeType(true);
         this.shipAIScripts = JsePlatform.standardGlobals();
         this.shipAIStates = new ArrayMap<String, ScriptedShipState>();
+        this.terrains = new ArrayMap<String, Terrain>();
 
         /*String script = "val = 'hello from lua'";
         LuaScriptEngine eng = (LuaScriptEngine) new LuaScriptEngineFactory().getScriptEngine();
@@ -117,6 +120,20 @@ public class GameInstance implements Disposable
         for (FileHandle skinFileHandle : skinFileHandles)
         {
             this.skins.put(skinFileHandle.nameWithoutExtension(), new Skin(skinFileHandle));
+        }
+    }
+
+    public void loadTerrain()
+    {
+        FileHandle[] files = Gdx.files.internal("assets/common/surface_tiles/").list();
+        for(FileHandle file : files)
+        {
+            if(file.extension().equalsIgnoreCase("xml"))
+            {
+                XmlReader.Element element = xmlReader.parse(file);
+                Terrain terrain = new Terrain(element);
+                terrains.put(terrain.getTag(), terrain);
+            }
         }
     }
 

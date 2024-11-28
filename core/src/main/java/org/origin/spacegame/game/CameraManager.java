@@ -16,6 +16,7 @@ public class CameraManager
     private OrthographicCamera currentCamera;
     private final OrthographicCamera galacticCamera;
     private final OrthographicCamera systemViewCamera;
+    private final OrthographicCamera planetViewCamera;
     private RenderView renderView;
 
     public CameraManager()
@@ -23,6 +24,7 @@ public class CameraManager
         this.currentCamera = null;
         this.galacticCamera = new OrthographicCamera(Constants.GALACTIC_MAP_CAMERA_VIEWPORT_WIDTH, Constants.GALACTIC_MAP_CAMERA_VIEWPORT_HEIGHT);;
         this.systemViewCamera = new OrthographicCamera(Constants.StarSystemConstants.STAR_SYSTEM_VIEWPORT_WIDTH, Constants.StarSystemConstants.STAR_SYSTEM_VIEWPORT_HEIGHT);
+        this.planetViewCamera = new OrthographicCamera(20, 20);
         setRenderView(RenderView.GALACTIC_VIEW);
     }
 
@@ -48,6 +50,8 @@ public class CameraManager
         this.renderView = renderView;
         if(renderView == RenderView.GALACTIC_VIEW)
             this.currentCamera = galacticCamera;
+        else if(renderView == RenderView.PLANET_VIEW)
+            this.currentCamera = planetViewCamera;
         else
             this.currentCamera = systemViewCamera;
         toggleChangeCameraFlag();
@@ -55,7 +59,7 @@ public class CameraManager
 
     public void setRenderView(String renderView)
     {
-        if(renderView.equalsIgnoreCase("galactic"))
+        if(renderView.equalsIgnoreCase("GALACTIC"))
             setRenderView(RenderView.GALACTIC_VIEW);
         if(renderView.equalsIgnoreCase("SYSTEM"))
             setRenderView(RenderView.SYSTEM_VIEW);

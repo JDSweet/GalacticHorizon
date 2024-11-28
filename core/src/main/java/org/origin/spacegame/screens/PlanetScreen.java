@@ -38,7 +38,6 @@ public class PlanetScreen implements Screen
         });
 
 
-
         goToGalaxyScreenButton.setX(Gdx.graphics.getWidth()/2f);
         //goToGalaxyScreenButton.setY(Gdx.graphics.getHeight()/2f);
         stage.addActor(goToGalaxyScreenButton);
@@ -51,7 +50,7 @@ public class PlanetScreen implements Screen
     @Override
     public void show()
     {
-        Gdx.app.log("SystemScreenDebug", "Showing System View...");
+        Gdx.app.log("SystemScreenDebug", "Showing Planet View...");
     }
 
     /**
@@ -69,10 +68,8 @@ public class PlanetScreen implements Screen
             this.enterPositionSet = true;
         }
         game.getCameraManager().update();
-
         game.getBatch().setProjectionMatrix(game.getCameraManager().getCurrentCamera().combined);
-        GameInstance.getInstance().getState().renderSystemView(game.getBatch(), GameInstance.getInstance().getSelectedStarSystem());
-
+        GameInstance.getInstance().getState().renderPlanetMap(game.getBatch(), GameInstance.getInstance().getSelectedPlanet());
         stage.draw();
         stage.act();
     }

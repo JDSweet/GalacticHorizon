@@ -7,6 +7,7 @@ import org.origin.spacegame.data.PlanetClass;
 import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.generation.OrbitalZone;
+import org.origin.spacegame.map.hex.HexCell;
 import org.origin.spacegame.utilities.RandomNumberUtility;
 
 public class Planet
@@ -19,9 +20,10 @@ public class Planet
 
     private int size = 0;
     private float habitability = 0f;
-    private OrbitalZone orbitalZone; //This is mostly for debug purposes
-
+    private OrbitalZone orbitalZone; //This is mostly for debug purposes.
     private StarSystem starSystem;
+
+    private HexCell[][] cells;
 
     /*
     *
@@ -66,7 +68,7 @@ public class Planet
         this.rect = new Rectangle(position.x, position.y, size, size);
     }
 
-    public void renderPlanet(SpriteBatch batch)
+    public void renderPlanetToSystemMap(SpriteBatch batch)
     {
         /*batch.draw(planetClass.getGfx(), position.x, position.y,
             Constants.StarSystemConstants.PLANET_RENDER_SIZE,
@@ -74,6 +76,18 @@ public class Planet
         batch.draw(planetClass.getGfx(), position.x, position.y,
             size,
             size);
+    }
+
+    //Draws the surface of this planet with the passed spritebatch.
+    public void renderPlanetToSurfaceMap(SpriteBatch batch)
+    {
+        for(int x = 0; x < cells.length; x++)
+        {
+            for(int y = 0; y < cells[x].length; x++)
+            {
+
+            }
+        }
     }
 
     public float distanceToPlanet(Planet other)

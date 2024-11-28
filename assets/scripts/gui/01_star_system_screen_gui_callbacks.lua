@@ -27,6 +27,8 @@ function system_name_label_on_hide(widget, game_instance, game_state)
     print('[Lua Debug] System name label hiding...')
 end
 
+------ Visit Planet Button ------
+
 function visit_planet_btn_on_show(widget, game_instance, game_state)
     print('[Lua Debug] Visit planet button showing...')
 end
@@ -37,7 +39,15 @@ end
 
 function visit_planet_btn_on_click(widget, game_instance, game_state)
     print('[Lua Debug] Visit planet button clicked!')
+    if game_instance:getSelectedPlanet():isHabitable() then
+        game_instance:getCameraManager():setRenderView("PLANET");
+    else
+        print('[Lua Debug] Planet is uninhabitable, and thus cannot be visited.');
+    end
+
 end
+
+---------------------------------
 
 function planet_overview_window_on_create(widget, game_instance, game_state)
     print('[Lua Debug] PLanet overview window being created...')
@@ -66,6 +76,8 @@ function planet_habitability_label_on_hide(widget, game_instance, game_state)
     print('[Lua Debug] PLanet habitability label hiding...')
 end
 
+-------------------------------------------------------------
+
 function planet_size_label_on_create(widget, game_instance, game_state)
     print('[Lua Debug] PLanet size label being created...')
 end
@@ -77,6 +89,8 @@ end
 function planet_size_label_on_hide(widget, game_instance, game_state)
     print('[Lua Debug] PLanet size label hiding...')
 end
+
+--------------------------------------------------------------
 
 function empire_management_btn_on_click(widget, game_instance, game_state)
     print('[Lua Debug] Empire management button clicked...')
