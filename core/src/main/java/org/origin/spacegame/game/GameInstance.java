@@ -74,25 +74,34 @@ public class GameInstance implements Disposable
         Gdx.app.log("ScriptEngine", ret);*/
     }
 
-    public Random getRandom() {
+    public Random getRandom()
+    {
         return random;
     }
 
-    public GameState getState() {
+    public GameState getState()
+    {
         return state;
     }
 
-    public Skin getSkin(String skinName) {
+    public Skin getSkin(String skinName)
+    {
         return this.guiSkin;
     }
 
     public void loadData()
     {
         loadShipAIScripts();
+        loadTerrain();
         loadPlanetClasses();
         loadStarClasses();
         loadDefaultSkin();
         loadShipClasses();
+    }
+
+    public Terrain getTerrain(String tag)
+    {
+        return this.terrains.get(tag);
     }
 
     public void selectPlanet(Planet planet)

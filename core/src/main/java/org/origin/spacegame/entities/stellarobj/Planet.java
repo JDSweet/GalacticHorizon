@@ -1,5 +1,6 @@
 package org.origin.spacegame.entities.stellarobj;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -8,6 +9,7 @@ import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.generation.OrbitalZone;
 import org.origin.spacegame.map.hex.HexCell;
+import org.origin.spacegame.map.hex.HexMap;
 import org.origin.spacegame.utilities.RandomNumberUtility;
 
 public class Planet
@@ -23,7 +25,7 @@ public class Planet
     private OrbitalZone orbitalZone; //This is mostly for debug purposes.
     private StarSystem starSystem;
 
-    private HexCell[][] cells;
+    private HexMap map;
 
     /*
     *
@@ -66,6 +68,11 @@ public class Planet
             this.size = RandomNumberUtility.nextInt(planetClass.getMinSize(),
                 planetClass.getMaxSize());
         this.rect = new Rectangle(position.x, position.y, size, size);
+
+        int cellMapWidth = getSize() * 4;
+        int cellMapHeight = getSize() * 2;
+
+        this.map = new HexMap(cellMapWidth, cellMapHeight);
     }
 
     public void renderPlanetToSystemMap(SpriteBatch batch)
@@ -81,13 +88,8 @@ public class Planet
     //Draws the surface of this planet with the passed spritebatch.
     public void renderPlanetToSurfaceMap(SpriteBatch batch)
     {
-        for(int x = 0; x < cells.length; x++)
-        {
-            for(int y = 0; y < cells[x].length; x++)
-            {
-
-            }
-        }
+        map.draw(batch);
+        Gdx.app.log("Planet Debug", "Rendering planet map...");
     }
 
     public float distanceToPlanet(Planet other)

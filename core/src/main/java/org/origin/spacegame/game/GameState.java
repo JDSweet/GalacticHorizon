@@ -45,7 +45,7 @@ public class GameState
             @Override
             public void run()
             {
-                Gdx.app.log("System Update", "Turn " + turnNumber++);
+                //Gdx.app.log("System Update", "Turn " + turnNumber++);
                 for(StarSystem system : starSystems.values())
                 {
                     system.update();

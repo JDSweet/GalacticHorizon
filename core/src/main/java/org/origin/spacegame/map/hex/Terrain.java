@@ -16,6 +16,11 @@ public class Terrain implements ITaggable
         this.gfx = new Texture(element.getAttribute("textureFile"));
     }
 
+    public Texture getGfx()
+    {
+        return this.gfx;
+    }
+
     @Override
     public String getTag()
     {

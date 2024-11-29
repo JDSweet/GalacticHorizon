@@ -31,6 +31,7 @@ public class SpaceGame extends Game//ApplicationAdapter
         //These classes rely on all the initial generation to be finished.
         this.galaxyScreen = new GalaxyScreen(this);
         this.starSystemScreen = new StarSystemScreen(this);
+        this.planetScreen = new PlanetScreen(this);
     }
 
     private void initInput()

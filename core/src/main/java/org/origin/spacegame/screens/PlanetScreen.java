@@ -59,17 +59,19 @@ public class PlanetScreen implements Screen
     @Override
     public void render(float delta)
     {
-        StarSystem selectedSystem = GameInstance.getInstance().getSelectedStarSystem();
+        //StarSystem selectedSystem = GameInstance.getInstance().getSelectedStarSystem();
         InputUtilities.detectCameraMovement(game.getCameraManager());
         if(!enterPositionSet)
         {
-            game.getCameraManager().getCurrentCamera().position.x = selectedSystem.getCenter().x;
-            game.getCameraManager().getCurrentCamera().position.y = selectedSystem.getCenter().y;
+            game.getCameraManager().getCurrentCamera().position.x = 0f;
+            game.getCameraManager().getCurrentCamera().position.y = 0f;
             this.enterPositionSet = true;
         }
         game.getCameraManager().update();
+        game.getBatch().begin();
         game.getBatch().setProjectionMatrix(game.getCameraManager().getCurrentCamera().combined);
         GameInstance.getInstance().getState().renderPlanetMap(game.getBatch(), GameInstance.getInstance().getSelectedPlanet());
+        game.getBatch().end();
         stage.draw();
         stage.act();
     }
