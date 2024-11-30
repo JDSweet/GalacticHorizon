@@ -397,6 +397,8 @@ public class GameInstance implements Disposable
         this.game = game;
     }
 
+
+    //A lot of these "unused" methods are referenced in Lua scripts. DO NOT REMOVE THEM!!!
     public CameraManager getCameraManager()
     {
         return game.getCameraManager();
