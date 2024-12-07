@@ -8,6 +8,12 @@ dependencies {
   runtimeOnly group: 'org.mozilla', name: 'rhino-runtime', version: '1.7.15'
 
 
+  //compile "io.nondev:nonfilesystem-android:$nonfilesystemVersion"
+  //natives "io.nondev:nonlua:$nonluaVersion:natives-armeabi"
+  //natives "io.nondev:nonlua:$nonluaVersion:natives-armeabi-v7a"
+  //natives "io.nondev:nonlua:$nonluaVersion:natives-x86"
+  implementation fileTree(dir: '../libs', include: '*.jar', exclude: '*-sources*.jar')
+
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }

@@ -9,14 +9,28 @@ buildscript {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-
-
+    //classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
   }
 }
 
 allprojects {
   apply plugin: 'eclipse'
   apply plugin: 'idea'
+
+  //Additions
+  version = '1.0'
+  ext {
+    appName = 'my-lua-project'
+    nonluaVersion = '0.3.0-SNAPSHOT'
+    nonfilesystemVersion = '1.0.0-SNAPSHOT'
+  }
+
+  repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+  }
+  //End of Additions
 
   // This allows you to "Build and run using IntelliJ IDEA", an option in IDEA's Settings.
   idea {

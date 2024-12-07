@@ -2,6 +2,8 @@ package org.origin.spacegame.data;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
+import org.origin.spacegame.generation.OrbitalZone;
+import org.origin.spacegame.utilities.StringToType;
 
 public class PlanetClass implements Disposable
 {
@@ -11,12 +13,14 @@ public class PlanetClass implements Disposable
     private float maxHabitability;
     private int minSize;
     private int maxSize;
-    boolean onlySpawnsInHabitableZone;
-    boolean isStar;
+    //boolean onlySpawnsInHabitableZone;
+    boolean isStar, isTerrestrial;
     boolean canColonize;
+    OrbitalZone spawningZone;
+    float meltRadius, habRadius, freezeRadius;
 
     public PlanetClass(String tag, Texture gfx, float minHabitability, float maxHabitability, int minSize,
-                       int maxSize, boolean onlySpawnsInHabitableZone, boolean isStar, boolean canColonize)
+                       int maxSize, String spawningZone, boolean isStar, boolean canColonize, float meltRadius, float habRadius, float freezeRadius, boolean isTerrestrial)
     {
         this.tag = tag;
         this.gfx = gfx;
@@ -24,9 +28,14 @@ public class PlanetClass implements Disposable
         this.maxHabitability = maxHabitability;
         this.minSize = minSize;
         this.maxSize = maxSize;
-        this. onlySpawnsInHabitableZone = onlySpawnsInHabitableZone;
+        //this. onlySpawnsInHabitableZone = onlySpawnsInHabitableZone;
+        this.spawningZone = StringToType.readOrbitalZone(spawningZone);
         this.isStar = isStar;
         this.canColonize = canColonize;
+        this.meltRadius = meltRadius;
+        this.habRadius = habRadius;
+        this.freezeRadius = freezeRadius;
+        this.isTerrestrial = isTerrestrial;
     }
 
     public Texture getGfx()
@@ -40,6 +49,19 @@ public class PlanetClass implements Disposable
         gfx.dispose();
     }
 
+    public float getStarMeltingZoneRadius()
+    {
+        return meltRadius;
+    }
+    public float getStarHabitableZoneRadius()
+    {
+        return habRadius;
+    }
+    public float getStarFreezingZoneRadius()
+    {
+        return freezeRadius;
+    }
+
     public float getMinHabitability() {
         return minHabitability;
     }
@@ -51,6 +73,11 @@ public class PlanetClass implements Disposable
 
     public void setMinHabitability(float minHabitability) {
         this.minHabitability = minHabitability;
+    }
+
+    public boolean isTerrestrial()
+    {
+        return this.isTerrestrial;
     }
 
     public float getMaxHabitability() {
@@ -87,9 +114,14 @@ public class PlanetClass implements Disposable
         return this.canColonize;
     }
 
-    public boolean onlySpawnsInHabitableZone()
+    /*public boolean onlySpawnsInHabitableZone()
     {
         return this.onlySpawnsInHabitableZone;
+    }*/
+
+    public OrbitalZone getSpawningZone()
+    {
+        return this.spawningZone;
     }
 
 }

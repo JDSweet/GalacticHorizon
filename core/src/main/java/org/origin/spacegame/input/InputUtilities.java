@@ -4,12 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import org.origin.spacegame.Constants;
-import org.origin.spacegame.entities.StarSystem;
-import org.origin.spacegame.game.GameInstance;
-import org.origin.spacegame.utilities.CameraManager;
+import org.origin.spacegame.game.CameraManager;
 
 public class InputUtilities
 {
@@ -18,13 +13,13 @@ public class InputUtilities
 
     public static void detectCameraMovement(CameraManager manager)
     {
-        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_UP))
+        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_UP) || Gdx.input.isKeyPressed(Input.Keys.W))
             manager.getCurrentCamera().position.y += (0.4f * manager.getCurrentCamera().zoom);;
-        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN))
+        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN) || Gdx.input.isKeyPressed(Input.Keys.S))
             manager.getCurrentCamera().position.y -= (0.4f * manager.getCurrentCamera().zoom);
-        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT))
+        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Input.Keys.A))
             manager.getCurrentCamera().position.x -= (0.4f * manager.getCurrentCamera().zoom);
-        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT))
+        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D))
             manager.getCurrentCamera().position.x += (0.4f * manager.getCurrentCamera().zoom);
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER) || Gdx.input.isKeyPressed(Input.Keys.PLUS))
             manager.getCurrentCamera().zoom += (0.05f * manager.getCurrentCamera().zoom);

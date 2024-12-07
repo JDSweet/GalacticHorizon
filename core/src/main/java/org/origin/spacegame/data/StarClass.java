@@ -3,6 +3,7 @@ package org.origin.spacegame.data;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.Gdx;
+import org.origin.spacegame.game.GameInstance;
 
 public class StarClass implements Disposable
 {
@@ -19,10 +20,25 @@ public class StarClass implements Disposable
         this.energyOutputMod = energyOutputMod;
         this.minHabRange = minHabRange;
         this.maxHabRange = maxHabRange;
+        this.starPlanetClass = starPlanetClass;
         if(gfx == null)
         {
             Gdx.app.log("StarClass", "Star Class " + tag + " has a null texture.");
         }
+    }
+
+    public PlanetClass getStarPlanetClass()
+    {
+        PlanetClass retval = GameInstance.getInstance().getPlanetClass(this.starPlanetClass);
+        if(retval == null)
+        {
+            Gdx.app.log("StarClass", "Planet Class " + this.starPlanetClass + " is null!");
+        }
+        else
+        {
+            Gdx.app.log("StarClass", "Planet Class " + this.starPlanetClass + " retrieved!");
+        }
+        return retval;
     }
 
     public Texture getGfx()

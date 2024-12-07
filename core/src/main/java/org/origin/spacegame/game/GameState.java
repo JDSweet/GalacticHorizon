@@ -2,27 +2,56 @@ package org.origin.spacegame.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import org.origin.spacegame.Constants;
-import org.origin.spacegame.entities.Planet;
-import org.origin.spacegame.entities.StarSystem;
-import org.origin.spacegame.utilities.PlanetGenerator;
-import org.origin.spacegame.utilities.SystemGeneratorType;
-import org.origin.spacegame.utilities.RandomStarSystemGenerator;
-import org.origin.spacegame.utilities.TileMapStarSystemGenerator;
+import org.origin.spacegame.data.ShipClass;
+import org.origin.spacegame.entities.polities.IPolity;
+import org.origin.spacegame.entities.polities.StellarNation;
+import org.origin.spacegame.entities.ships.Ship;
+import org.origin.spacegame.entities.stellarobj.Planet;
+import org.origin.spacegame.entities.galaxy.StarSystem;
+import org.origin.spacegame.generation.PlanetOrbitGenerator;
+import org.origin.spacegame.generation.SystemGeneratorType;
+import org.origin.spacegame.generation.TileMapStarSystemGenerator;
+
+import java.time.LocalDate;
 
 public class GameState
 {
     private IntMap<StarSystem> starSystems;
     private IntMap<Planet> planets;
-    private PlanetGenerator planetGenerator;
+    private PlanetOrbitGenerator planetOrbitGenerator;
+    private Array<IPolity> polities;
+    private Array<Ship> ships;
+    private int playerPolityIndex;
+    private boolean isPaused = false;
+    private DateUpdateManager dateUpdateManager;
+    private boolean ticking = false;
+    private float tickSpeed = 0.005f;
 
     public GameState()
     {
         this.starSystems = new IntMap<StarSystem>();
         this.planets = new IntMap<Planet>();
-        planetGenerator = new PlanetGenerator();
+        this.ships = new Array<Ship>();
+        planetOrbitGenerator = new PlanetOrbitGenerator();
+        this.polities = new Array<IPolity>(32);
+        this.dateUpdateManager = new DateUpdateManager(LocalDate.of(2100, 1, 1), 0.1f);
+        this.dateUpdateManager.register(new Runnable()
+        {
+            int turnNumber = 0;
+            @Override
+            public void run()
+            {
+                //Gdx.app.log("System Update", "Turn " + turnNumber++);
+                for(StarSystem system : starSystems.values())
+                {
+                    system.update();
+                }
+            }
+        });
     }
 
     public void initialize()
@@ -35,65 +64,99 @@ public class GameState
         Gdx.app.log("Galaxy being generated...", "The star system generator is running.");
         SystemGeneratorType genType = SystemGeneratorType.TILE_MAP;
         generateStarSystems(Constants.STAR_SYSTEM_COUNT, genType);
+        generatePolities(32, 0);
     }
 
     private void generateStarSystems(int systemCount, SystemGeneratorType genType)
     {
-        if(genType == SystemGeneratorType.RANDOM)
-        {
-            RandomStarSystemGenerator generator = new RandomStarSystemGenerator(Constants.MIN_PLANET_COUNT,
-                Constants.MAX_PLANET_COUNT);
-            //This array will be sent to post-processing.
-            Array<StarSystem> starSystemsArray = new Array<StarSystem>();
-            for(int i = 0; i < systemCount; i++)
-            {
-                StarSystem generatedSystem = generator.generateSystem();
-                starSystems.put(generatedSystem.id, generatedSystem);
-
-                for(StarSystem s1 : starSystemsArray)
-                {
-                    while(isTooCloseToAnotherSystem(s1, starSystemsArray))
-                    {
-                        s1.getGalacticPosition().x = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_WIDTH);
-                        s1.getGalacticPosition().y = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_HEIGHT);
-                    }
-                }
-                Gdx.app.log("Star System Generated", "Star System " + generatedSystem.id + " has been generated at (" + generatedSystem.getGalacticPosition().x + ", " + generatedSystem.getGalacticPosition().y + ") with a star type of " + generatedSystem.getStarTypeTag());
-            }
-
-            for(StarSystem s1 : starSystemsArray)
-            {
-                while(isTooCloseToAnotherSystem(s1, starSystemsArray))
-                {
-                    s1.getGalacticPosition().x = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_WIDTH);
-                    s1.getGalacticPosition().y = RandomStarSystemGenerator.getRandom().nextFloat(Constants.GALAXY_HEIGHT);
-                }
-            }
-        }
-        else if (genType == SystemGeneratorType.TILE_MAP)
+        if (genType == SystemGeneratorType.TILE_MAP)
         {
             TileMapStarSystemGenerator generator = new TileMapStarSystemGenerator();
             Array<StarSystem> generatedSystems = generator.generateStarSystems(systemCount);
 
             for(StarSystem system : generatedSystems)
             {
-                system.addAllPlanets(planetGenerator.generatePlanets(system));
+                system.addAllPlanets(planetOrbitGenerator.generatePlanets(system));
                 this.starSystems.put(system.id, system);
             }
         }
     }
 
-    //This checks whether the given origin point is too close to any of the star systems in the given list.
-    private boolean isTooCloseToAnotherSystem(StarSystem origin, Array<StarSystem> starSystemArray)
+    private void generatePolities(int count, int playerPolityIndex)
     {
-        for(StarSystem s1 : starSystemArray)
+        this.playerPolityIndex = playerPolityIndex;
+        if(playerPolityIndex < 0 || playerPolityIndex >= count)
         {
-            if(origin == s1)
-                continue;
-            if(systemsAreTooClose(origin, s1))
-                return true;
+            Gdx.app.log("GameInstance.generatePolities Debug", "The player polity index " + playerPolityIndex + " is invalid. Player being set to 0.");
+            this.playerPolityIndex = 0;
         }
-        return false;
+        for(int i = 0; i < count; i++)
+        {
+            this.polities.add(new StellarNation(i));
+        }
+    }
+
+    private static int shipMaxID = 0;
+
+    public Ship spawnShip(String shipClassTag, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
+    {
+        StarSystem selectedStarSystem = GameInstance.getInstance().getSelectedStarSystem();
+        return spawnShip(shipClassTag, selectedStarSystem, pos, vel, facing, polityID);
+    }
+
+    public Ship spawnShip(String shipClassTag, StarSystem system, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
+    {
+        ShipClass shipClass = GameInstance.getInstance().getShipClass(shipClassTag);
+        IPolity polity = getPolity(polityID);
+
+        //GameInstance.getInstance().log("Ship Spawn Debug", "System " + selectedStarSystem.id);
+        Ship ship = new Ship(shipMaxID++, polityID, system, pos, vel, facing, shipClass);
+        this.ships.add(ship);
+        polity.addShip(ship);
+        system.addShip(ship);
+        Gdx.app.log("GameState.spawnShip() Debug", "Ship spawned at " + pos.toString());
+        return ship;
+    }
+
+    public Ship getShip(int idx)
+    {
+        return ships.get(idx);
+    }
+
+    public Array<Ship> getShips()
+    {
+        return ships;
+    }
+
+    public int getPlayerID()
+    {
+        return this.playerPolityIndex;
+    }
+
+    public IPolity getPlayer()
+    {
+        return this.polities.get(playerPolityIndex);
+    }
+
+    public IPolity getPolity(int idx)
+    {
+        return polities.get(idx);
+    }
+
+    public void setPlayer(IPolity polity)
+    {
+        setPlayer(((StellarNation)polity).getID());
+    }
+
+    public void setPlayer(int idx)
+    {
+        this.playerPolityIndex = idx;
+    }
+
+    public StarSystem getRandomStarSystem()
+    {
+        Array<StarSystem> systems = this.starSystems.values().toArray();
+        return systems.random();
     }
 
     private boolean systemsAreTooClose(StarSystem one, StarSystem two)
@@ -116,27 +179,37 @@ public class GameState
         return null;
     }
 
-    public void renderSystemView(SpriteBatch batch, StarSystem system)
+    public void renderPlanetMap(SpriteBatch batch, Planet planet)
     {
-        batch.begin();
-        system.renderSystemToSystemView(batch);
-        batch.end();
+        planet.renderPlanetToSurfaceMap(batch);
+    }
+
+    public void renderSystemMap(SpriteBatch batch, StarSystem system)
+    {
+        system.renderSystemToSystemView(batch, Gdx.graphics.getDeltaTime());
     }
 
     public void renderGalacticMap(SpriteBatch batch)
     {
         batch.begin();
-        //String starSystemRenderDebugTxt = "";
         for(StarSystem system : this.starSystems.values())
         {
             batch.draw(GameInstance.getInstance().getStarClass(system.getStarTypeTag()).getGfx(),
                                                                 system.getGalacticPosition().x,
                                                                 system.getGalacticPosition().y, Constants.STAR_SYSTEM_GALACTIC_MAP_RENDER_WIDTH,
                                                                                                 Constants.STAR_SYSTEM_GALACTIC_MAP_RENDER_HEIGHT);
-            //starSystemRenderDebugTxt += "\n Rendered " + system.starType + " at " + system.getGalacticPosition().toString();
         }
-        //Gdx.app.log("Galaxy Render Debug", starSystemRenderDebugTxt);
         batch.end();
+    }
+
+    public void update()
+    {
+//        for(StarSystem system : starSystems.values())
+//        {
+//            system.update();
+//            Gdx.app.log("System Update", "System Updated: " + system.id);
+//        }
+        this.dateUpdateManager.update();
     }
 
     public Array<StarSystem> getStarSystems()
@@ -149,6 +222,60 @@ public class GameState
         for(StarSystem system : getStarSystems())
         {
             system.debugID();
+        }
+    }
+
+    public class DateUpdateManager
+    {
+        private Array<Runnable> tasks;
+        private LocalDate date;
+        private float deltaTime; //In seconds.
+        private float delayInSeconds; //The ideal amount of time that should elapse between updates.
+
+        public DateUpdateManager(LocalDate startDate, float delayInSeconds)
+        {
+            this.date = startDate;
+            this.tasks = new Array<>();
+            this.delayInSeconds = delayInSeconds;
+        }
+
+        public void update()
+        {
+            this.deltaTime += Gdx.graphics.getDeltaTime();
+            if(deltaTime >= delayInSeconds)
+            {
+                for(Runnable task : tasks)
+                {
+                    this.date = date.plusDays(1);
+                    task.run();
+                }
+                this.deltaTime = 0f;
+            }
+        }
+
+        public void setDelayInSeconds(float delay)
+        {
+            this.delayInSeconds = delay;
+        }
+
+        public void register(Runnable task)
+        {
+            this.tasks.add(task);
+        }
+
+        public int getYear()
+        {
+            return date.getYear();
+        }
+
+        public int getMonth()
+        {
+            return date.getMonthValue();
+        }
+
+        public int getDay()
+        {
+            return date.getDayOfMonth();
         }
     }
 }

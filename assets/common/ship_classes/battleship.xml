@@ -1,0 +1,2 @@
+<Ship tag = "battleship" type = "military" texture = "assets/gfx/ships/big/lg_ship_01.png"
+      sprite_offset = "90" max_vel = "(0.1,0.1)" max_accel = "0.1" hp = "200"/>

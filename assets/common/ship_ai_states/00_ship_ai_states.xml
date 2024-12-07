@@ -1,0 +1,8 @@
+<ShipAIStates>
+    <ShipAIState
+            tag = "ship_attack_state"/>
+    <ShipAIState
+            tag = "ship_flee_state"/>
+    <ShipAIState
+            tag = "ship_colonize_state"/>
+</ShipAIStates>
