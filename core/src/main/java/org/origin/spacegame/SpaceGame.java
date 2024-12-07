@@ -2,12 +2,17 @@ package org.origin.spacegame;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import org.origin.spacegame.game.GameInstance;
 import org.origin.spacegame.input.InputUtilities;
 import org.origin.spacegame.screens.GalaxyScreen;
 import org.origin.spacegame.screens.SystemScreen;
 import org.origin.spacegame.utilities.CameraManager;
+
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import java.util.List;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class SpaceGame extends Game//ApplicationAdapter
@@ -30,6 +35,8 @@ public class SpaceGame extends Game//ApplicationAdapter
         this.galaxyScreen = new GalaxyScreen(this);
         this.systemScreen = new SystemScreen(this);
         //Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode(Gdx.graphics.getPrimaryMonitor()));
+        //Scriptable s;
+
     }
 
     private void initInput()
