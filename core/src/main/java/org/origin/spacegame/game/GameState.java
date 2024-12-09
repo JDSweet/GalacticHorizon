@@ -31,6 +31,15 @@ public class GameState
     private boolean ticking = false;
     private float tickSpeed = 0.005f;
 
+
+    /*TODO: Move the ship movement behavior out of the dateManager.
+    *   This will require dividing logic into the following functions:
+    *       1. onFrameUpdate();
+    *       2. onTickUpdate();
+    *       3. onRender();
+    *   We can do this by adding these functions to IUpdatable,
+    *   and extracting the relevant logic in all current Updateables.
+    * */
     public GameState()
     {
         this.starSystems = new IntMap<StarSystem>();
