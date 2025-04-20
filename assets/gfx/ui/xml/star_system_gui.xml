@@ -46,7 +46,7 @@
             y = "0.76"
             width = "0.15"
             height="0.08"
-            on_click = "game_mode_select_box_on_click"
+            on_click = "faction_select_box_on_click"
             option1 = "Faction 1"
             option2 = "Faction 2"
             option3 = "Faction 3">

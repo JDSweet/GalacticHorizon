@@ -1,7 +1,9 @@
 package org.origin.spacegame.entities.ships;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -92,6 +94,7 @@ public class Ship implements Identifiable
         this.facing.set(facing);
         this.shipClass = shipClass;
         this.sprite = new Sprite(shipClass.getGfx());
+        //this.sprite.setColor();
         //this.accel = shipClass.getMaxAcceleration();
         this.sprite.setRotation(0);
         this.sprite.setSize(1f, 2.5f);
@@ -108,6 +111,9 @@ public class Ship implements Identifiable
     // turns the ship towards the user's mouse click.
     public void update()
     {
+        //Tints the ship the proper faction color...
+        sprite.setColor(GameInstance.getInstance().getState().getPolity(this.ownerIdx).getColor());
+
         // This ensures that the ship is always rotated towards whatever point
         // it is supposed to be facing. If you comment this out, the ships will still
         // head towards their destination, but their rotation will not update to reflect

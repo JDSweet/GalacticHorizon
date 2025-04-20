@@ -1,5 +1,6 @@
 package org.origin.spacegame.entities.polities;
 
+import com.badlogic.gdx.graphics.Color;
 import org.origin.spacegame.entities.ships.Ship;
 import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.entities.ships.Station;
@@ -36,4 +37,7 @@ public interface IPolity
     boolean isHostileTowards (IPolity other);
 
     boolean isSubjectOf(IPolity other);
+
+    Color getColor();
+    void setColor(Color color);
 }

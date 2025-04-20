@@ -1,5 +1,6 @@
 package org.origin.spacegame.entities.polities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.IPlayable;
 import org.origin.spacegame.Identifiable;
@@ -17,13 +18,14 @@ public class StellarNation implements IPolity, Identifiable, IPlayable
     private Array<StarSystem> systems;
     private Array<Station> stations;
     private boolean isHuman;
+    private Color color;
 
     public StellarNation(int idx)
     {
-        this(idx, false);
+        this(idx, false, Color.BLACK);
     }
 
-    public StellarNation(int idx, boolean isHuman)
+    public StellarNation(int idx, boolean isHuman, Color color)
     {
         this.idx = idx;
         this.isHuman = isHuman;
@@ -31,6 +33,7 @@ public class StellarNation implements IPolity, Identifiable, IPlayable
         this.planets = new Array<>();
         this.systems = new Array<>();
         this.stations = new Array<>();
+        this.color = color;
     }
 
     @Override
@@ -140,5 +143,15 @@ public class StellarNation implements IPolity, Identifiable, IPlayable
     {
         this.isHuman = true;
         GameInstance.getInstance().getState().setPlayer(this.idx);
+    }
+
+    public Color getColor()
+    {
+        return this.color;
+    }
+
+    public void setColor(Color color)
+    {
+        this.color = color;
     }
 }

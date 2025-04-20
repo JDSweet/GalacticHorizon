@@ -127,8 +127,14 @@ end
 
 function spawn_ship_btn_on_click(self, game_instance, game_state)
     --Toggle the map to spawn ships.
-    game_instance:toggleShipSpawnMode();
-    game_instance:log('SpawnShipBtn Debug', 'Ship Spawn Mode ' .. tostring(game_instance:isSpawnModeEnabled()))
+    --game_instance:toggleShipSpawnMode();
+    if game_instance:getString("game_mode") ~= "ship_mode_spawn" then
+        game_instance:setString("game_mode", "ship_mode_spawn")
+    else
+        game_instance:setString("game_mode", "ship_mode_move")
+    end
+    --game_instance:log('SpawnShipBtn Debug', 'Ship Spawn Mode ' .. tostring(game_instance:isSpawnModeEnabled()))
+    game_instance:log("[01_star_system_screen_gui_callbacks.spawn_ship_btn_on_click]", game_instance:getString("game_mode"))
 end
 
 --------------------------------------------------------------------------
@@ -172,13 +178,14 @@ function faction_select_box_on_click(self, game_instance, game_state)
     end
     local selected = self.widget
     if(selected ~= nil) then
-        print('Game mode set to ' .. self.widget:getSelected())
-        if selected == "Faction 1" then
+        print('Faction set to ' .. selected:getSelected())
+        local selection = selected:getSelected()
+        if selection == "Faction 1" then
             game_instance:setString("selected_faction", "faction1")
-        elseif selected == "Faction 2" then
-            game_instance:setString("selected_faction", "faction1")
-        elseif selected == "Faction 3" then
-            game_instance:setString("selected_faction", "faction1")
+        elseif selection == "Faction 2" then
+            game_instance:setString("selected_faction", "faction2")
+        elseif selection == "Faction 3" then
+            game_instance:setString("selected_faction", "faction3")
         end
     end
 end

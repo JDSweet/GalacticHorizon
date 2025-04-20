@@ -7,22 +7,32 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
     if window:isVisible() then
         window:setVisible(false)
         game_instance:deselectPlanet();
-        print('[Lua Debug] Planet un-selected.')
+        print('[00_star_system_screen_gameplay_callbacks.on_click Debug] Planet un-selected.')
     end
     --spawnShip(String shipClassTag, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
-    if(game_instance:isSpawnModeEnabled()) then
+    if(game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_spawn") then
         local pos = game_instance:vec2();
         pos.x = touchPos.x;
         pos.y = touchPos.y;
         local facing = game_instance:vec2(pos.x, pos.y);
         local ship_class = "battleship";
         local vel = game_instance:vec2(0, 0);
-        local player_idx = game_state:getPlayerID();
+        local player_idx = 0 --game_state:getPlayerID();
+        if game_instance:getString("selected_faction") == "faction1" then
+            player_idx = 0
+        elseif game_instance:getString("selected_faction") == "faction2" then
+            player_idx = 1
+        elseif game_instance:getString("selected_faction") == "faction3" then
+            player_idx = 2
+        else
+            player_idx = 6
+        end
+        print('[00_star_system_screen_gameplay_callbacks: Ship Spawning Debug: Player Index] ' .. player_idx)
         local ship = game_state:spawnShip(ship_class, pos, vel, facing, player_idx)
-        --ship:turnTowards(pos);
-    else
-        local pos = game_instance:vec2();
-        pos:set(touchPos.x, touchPos.y);
+        --ship:turnTowards(pos)
+    elseif(game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_move") then
+        local pos = game_instance:vec2()
+        pos:set(touchPos.x, touchPos.y)
         local ships = game_instance:getSelectedStarSystem():getShips();
         local size = -1;
         if ships ~= nil then
@@ -36,6 +46,8 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
                 ship:thrust(0.5); --0.05 --This thrust is applied per update tick. Before the transition to the DateManager/tick-based system, this was per-frame. That's why the original value was a factor of 10 smaller (60 frames/second vs 4-5 updates/second).
             end
         end
+    else
+        print("[00_star_system_screen_gameplay_callbacks.on_click Debug] Current Game mode isn't implemented.")
     end
 end
 

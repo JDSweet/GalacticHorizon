@@ -1,6 +1,7 @@
 package org.origin.spacegame.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -101,7 +102,14 @@ public class GameState
         }
         for(int i = 0; i < count; i++)
         {
-            this.polities.add(new StellarNation(i));
+            Color factionColor = Color.BLACK;
+            if(i == 0)
+                factionColor = Color.BLUE.cpy();
+            else if(i == 1)
+                factionColor = Color.RED.cpy();
+            else if(i == 2)
+                factionColor = Color.GREEN.cpy();
+            this.polities.add(new StellarNation(i, true, factionColor));
         }
     }
 
