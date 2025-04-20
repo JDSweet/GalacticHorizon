@@ -1,6 +1,7 @@
 package org.origin.spacegame.entities.ships;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Identifiable;
+import org.origin.spacegame.ai.ScriptedShipState;
 import org.origin.spacegame.data.ShipClass;
 import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.entities.polities.IPolity;
@@ -69,6 +71,10 @@ public class Ship implements Identifiable
     // or stopping "on top" of each other.
     private float atLocationDst = 8f;
 
+    private Ship target = null;
+
+    private DefaultStateMachine<Ship, ScriptedShipState> stateMachine;
+
     // In degrees. Basically, this lets us account for the fact that some sprites might not
     // be facing the same direction in the actual image file. We can specify the degrees
     // away from the expected orientation that they are facing.
@@ -92,6 +98,7 @@ public class Ship implements Identifiable
         this.sprite.setOrigin(sprite.getWidth()/2f, sprite.getHeight()/2f);
         this.isDead = false;
         this.hp = getShipClass().getMaxHP();
+        this.stateMachine = new DefaultStateMachine<>(this);
         //thrust(0.01f);
     }
 
@@ -231,6 +238,16 @@ public class Ship implements Identifiable
     public float getHP()
     {
         return this.hp;
+    }
+
+    public Ship getTarget()
+    {
+        return target;
+    }
+
+    public void setTarget(Ship target)
+    {
+        this.target = target;
     }
 
     @Override

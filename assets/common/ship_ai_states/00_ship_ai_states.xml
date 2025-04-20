@@ -1,8 +1,8 @@
 <ShipAIStates>
     <ShipAIState
-            tag = "ship_attack_state"/>
+            tag = "ship_search_nearest_target_state"/>
     <ShipAIState
-            tag = "ship_flee_state"/>
+            tag = "ship_approach_nearest_target_state"/>
     <ShipAIState
-            tag = "ship_colonize_state"/>
+            tag = "ship_rotate_and_shoot_nearest_target_state"/>
 </ShipAIStates>

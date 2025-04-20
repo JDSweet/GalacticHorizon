@@ -21,4 +21,8 @@ public class ScriptedShipState extends ScriptedState<Ship>
         Gdx.app.log("ScriptedShipState", "Ship state " + getTag() + " loaded.");
     }
 
+    public String getTag()
+    {
+        return tag;
+    }
 }

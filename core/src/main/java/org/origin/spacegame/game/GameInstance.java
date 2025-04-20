@@ -397,6 +397,19 @@ public class GameInstance implements Disposable
         this.game = game;
     }
 
+    public ScriptedShipState getShipAIState(String tag)
+    {
+        if(shipAIStates.containsKey(tag))
+        {
+            return shipAIStates.get(tag);
+        }
+        else
+        {
+            Gdx.app.log("GameInstance Debug: getShipAIState()", "The ship state " + tag + " does not exist. Returning a null value.");
+            return null;
+        }
+    }
+
 
     //A lot of these "unused" methods are referenced in Lua scripts. DO NOT REMOVE THEM!!!
     public CameraManager getCameraManager()

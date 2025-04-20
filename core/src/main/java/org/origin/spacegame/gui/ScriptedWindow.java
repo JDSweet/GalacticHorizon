@@ -119,5 +119,12 @@ public class ScriptedWindow extends ScriptableWidgetContainer
             ((Window)widget).add(group.widget);
             children.add(group);
         }
+
+        if(child.getName().equals("SelectBox"))
+        {
+            ScriptedSelectBox selectBox = new ScriptedSelectBox(child, ctxt, scene);
+            ((Window)widget).add(selectBox.widget);
+            children.add(selectBox);
+        }
     }
 }

@@ -2,6 +2,7 @@ package org.origin.spacegame.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.XmlReader;
@@ -140,9 +141,11 @@ public class ScriptedGUIScene  implements ScriptableGUIComponent
             stage.addActor(window.widget);
             children.add(window);
         }
-        if(child.getName().equals("Table"))
+        if(child.getName().equals("SelectBox"))
         {
-
+            ScriptedSelectBox selectBox = new ScriptedSelectBox(child, ctxt, scene);
+            stage.addActor(selectBox.widget);
+            children.add(selectBox);
         }
     }
 
