@@ -20,7 +20,7 @@ public class ScriptedTextButton extends ScriptableWidgetContainer
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 onClick.invoke(new LuaValue[]{
-                    CoerceJavaToLua.coerce(widget),
+                    CoerceJavaToLua.coerce(this),
                     CoerceJavaToLua.coerce(GameInstance.getInstance()),
                     CoerceJavaToLua.coerce(GameInstance.getInstance().getState())
                 });

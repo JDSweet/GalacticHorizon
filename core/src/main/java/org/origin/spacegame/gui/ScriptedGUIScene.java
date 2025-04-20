@@ -35,7 +35,8 @@ public class ScriptedGUIScene  implements ScriptableGUIComponent
             "VerticalGroup",
             "Window",
             "Label",
-            "Image"
+            "Image",
+            "SelectBox"
         );
         children = new Array<ScriptableGUIComponent>();
 

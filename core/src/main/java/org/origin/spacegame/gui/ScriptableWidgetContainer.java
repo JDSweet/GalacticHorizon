@@ -91,7 +91,7 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
     public void show()
     {
         if(this.onShowCallbackFunc != null)
-            onShowCallbackFunc.invoke(CoerceJavaToLua.coerce(widget),
+            onShowCallbackFunc.invoke(CoerceJavaToLua.coerce(this),
                 CoerceJavaToLua.coerce(GameInstance.getInstance()),
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else
@@ -106,7 +106,7 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
     public void hide()
     {
         if(this.onHideCallbackFunc != null)
-            onHideCallbackFunc.invoke(CoerceJavaToLua.coerce(widget),
+            onHideCallbackFunc.invoke(CoerceJavaToLua.coerce(this),
                 CoerceJavaToLua.coerce(GameInstance.getInstance()),
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else

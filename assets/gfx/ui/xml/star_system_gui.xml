@@ -22,13 +22,35 @@
     <TextButton
             id = "empire_management_btn"
             x = "0.0"
-            y = "0.91"
-            width = "0.085"
-            height = "0.09"
+            y = "0.92"
+            width = "0.15"
+            height = "0.08"
             on_click = "empire_management_btn_on_click"
             text = "Empire"
             skin = "uiskin.json">
     </TextButton>
+    <SelectBox
+            id = "game_mode_select_box"
+            x = "0"
+            y = "0.84"
+            width = "0.15"
+            height="0.08"
+            on_click = "game_mode_select_box_on_click"
+            option1 = "ShipMoveMode"
+            option2 = "ShipSpawnMode"
+            option3 = "ShipSelectMode">
+    </SelectBox>
+    <SelectBox
+            id = "faction_selection_box"
+            x = "0"
+            y = "0.76"
+            width = "0.15"
+            height="0.08"
+            on_click = "game_mode_select_box_on_click"
+            option1 = "Faction 1"
+            option2 = "Faction 2"
+            option3 = "Faction 3">
+    </SelectBox>
     <Label
             id = "system_name_label"
             x = "0.38"

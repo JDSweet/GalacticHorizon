@@ -1,6 +1,7 @@
 package org.origin.spacegame.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,7 +18,9 @@ import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.generation.OrbitalZone;
+import org.origin.spacegame.gui.ScriptedGUIScene;
 import org.origin.spacegame.map.hex.Terrain;
+import org.origin.spacegame.screens.StarSystemScreen;
 import org.origin.spacegame.utilities.StringToType;
 
 import java.util.Dictionary;
@@ -48,6 +51,10 @@ public class GameInstance implements Disposable
     private ArrayMap<String, ScriptedShipState> shipAIStates;
     private ArrayMap<String, Terrain> terrains;
 
+    private ArrayMap<String, String> flags;
+    private ArrayMap<String, String> strings;
+    private ObjectFloatMap<String> variables;
+
     public GameInstance()
     {
         state = new GameState();
@@ -62,6 +69,10 @@ public class GameInstance implements Disposable
         this.shipAIScripts = JsePlatform.standardGlobals();
         this.shipAIStates = new ArrayMap<String, ScriptedShipState>();
         this.terrains = new ArrayMap<String, Terrain>();
+
+        this.flags = new ArrayMap<>();
+        this.strings = new ArrayMap<>();
+        this.variables = new ObjectFloatMap<>();
 
         /*String script = "val = 'hello from lua'";
         LuaScriptEngine eng = (LuaScriptEngine) new LuaScriptEngineFactory().getScriptEngine();
@@ -500,4 +511,49 @@ public class GameInstance implements Disposable
         log("GameInstance Debug", "Vector 2 created at " + other.toString());
         return new Vector2(other);
     }
+
+    public void saveVariable(String name, float value)
+    {
+        variables.put(name, value);
+    }
+
+    public void saveFlag(String name)
+    {
+        flags.put(name, name);
+    }
+
+    public float getVariable(String name)
+    {
+        return variables.get(name, 0f);
+    }
+
+    public void setString(String name, String value)
+    {
+        this.strings.put(name, value);
+    }
+
+    public String getString(String name)
+    {
+        if(this.strings.containsKey(name))
+            return strings.get(name);
+        else
+            return "NULL";
+    }
+
+    public boolean hasFlag(String name)
+    {
+        return flags.containsKey(name);
+    }
+
+    public boolean hasString(String name)
+    {
+        return this.strings.containsKey(name);
+    }
+
+    //public ScriptedGUIScene getStarSystemSceneIfOpen()
+    //{
+        //Screen starSystemScreen = game.getScreen();
+        //if(starSystemScreen != null && starSystemScreen instanceof StarSystemScreen)
+            //return starSystemScreen.get
+    //}
 }
