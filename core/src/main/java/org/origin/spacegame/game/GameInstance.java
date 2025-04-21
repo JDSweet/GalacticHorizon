@@ -217,6 +217,7 @@ public class GameInstance implements Disposable
             for(XmlReader.Element child : root.getChildrenByName("ShipAIState"))
             {
                 ScriptedShipState shipAIState = new ScriptedShipState(child, shipAIScripts);
+                Gdx.app.log("[GameInstance.loadShipAIScripts Debug]", "Creating Ship AI State " + shipAIState.getTag());
                 this.shipAIStates.put(shipAIState.getTag(), shipAIState);
                 /*for(ObjectMap.Entry<String, String> attrib : child.getAttributes())
                 {
@@ -448,6 +449,7 @@ public class GameInstance implements Disposable
         this.selectedStarSystem = null;
     }
 
+
     @Override
     public void dispose()
     {
@@ -548,6 +550,11 @@ public class GameInstance implements Disposable
     public boolean hasString(String name)
     {
         return this.strings.containsKey(name);
+    }
+
+    public float dst(Vector2 a, Vector2 b)
+    {
+        return a.dst(b);
     }
 
     //public ScriptedGUIScene getStarSystemSceneIfOpen()

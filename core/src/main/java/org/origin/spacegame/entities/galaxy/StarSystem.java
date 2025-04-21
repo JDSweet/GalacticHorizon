@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
 import org.origin.spacegame.data.StarClass;
 import org.origin.spacegame.entities.fleets.Fleet;
+import org.origin.spacegame.entities.polities.IPolity;
+import org.origin.spacegame.entities.polities.StellarNation;
 import org.origin.spacegame.entities.ships.Ship;
 import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.game.GameInstance;
@@ -171,6 +173,23 @@ public class StarSystem
     public Array<Ship> getShips()
     {
         return this.ships;
+    }
+
+    public Array<Ship> getEnemyShipsFor(int factionID)
+    {
+        IPolity faction = GameInstance.getInstance().getState().getPolity(factionID);
+        Array<Ship> output = new Array<>();
+        Gdx.app.log("[StarSystem.getEnemyShipsFor]", "Ships list is sized at: " + ships.size);
+        for(int i = 0; i < ships.size; i++)
+        {
+            Ship ship = ships.get(i);
+            IPolity shipOwner = ship.getOwner();
+            Gdx.app.log("[StarSystem.getEnemyShipsFor]", "Faction ID: " + ((StellarNation)faction).getID());
+            Gdx.app.log("[StarSystem.getEnemyShipsFor]", "Ship Owner ID: " + ((StellarNation)shipOwner).getID());
+            if(((StellarNation)shipOwner).getID() != ((StellarNation)faction).getID())
+                output.add(ship);
+        }
+        return output;
     }
 
     public void debugID()

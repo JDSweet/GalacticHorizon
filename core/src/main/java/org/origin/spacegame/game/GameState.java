@@ -131,6 +131,7 @@ public class GameState
         this.ships.add(ship);
         polity.addShip(ship);
         system.addShip(ship);
+        ship.setSystemLocation((system));
         Gdx.app.log("GameState.spawnShip() Debug", "Ship spawned at " + pos.toString());
         return ship;
     }

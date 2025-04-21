@@ -72,6 +72,11 @@ public class ShipClass implements Disposable
         this.gfx.dispose();
     }
 
+    public float getCombatRange()
+    {
+        return 10f;
+    }
+
     // This essentially represents whether ships of this ship class are civilian or military.
     // Which can determine how the AI will react to, for example,
     // being fired on by a military vessel.

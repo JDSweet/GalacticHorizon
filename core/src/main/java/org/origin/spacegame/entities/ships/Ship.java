@@ -102,6 +102,7 @@ public class Ship implements Identifiable
         this.isDead = false;
         this.hp = getShipClass().getMaxHP();
         this.stateMachine = new DefaultStateMachine<>(this);
+        this.stateMachine.setInitialState(GameInstance.getInstance().getShipAIState("ship_search_nearest_target_state"));
         //thrust(0.01f);
     }
 
@@ -113,6 +114,9 @@ public class Ship implements Identifiable
     {
         //Tints the ship the proper faction color...
         sprite.setColor(GameInstance.getInstance().getState().getPolity(this.ownerIdx).getColor());
+
+        //Updates the AI
+        updateStateMachine();
 
         // This ensures that the ship is always rotated towards whatever point
         // it is supposed to be facing. If you comment this out, the ships will still
@@ -137,6 +141,11 @@ public class Ship implements Identifiable
             this.velocity.x = thrustAmnt;
         if(facing.x + atLocationDst < position.x)
             this.velocity.x = -thrustAmnt;
+    }
+
+    private void updateStateMachine()
+    {
+        this.stateMachine.update();
     }
 
     // This updates the position of the ship and ensures that
@@ -221,6 +230,11 @@ public class Ship implements Identifiable
         return GameInstance.getInstance().getState().getPolity(ownerIdx);
     }
 
+    public int getOwnerID()
+    {
+        return this.ownerIdx;
+    }
+
     public Vector2 getPosition()
     {
         return position;
@@ -260,5 +274,20 @@ public class Ship implements Identifiable
     public int getID()
     {
         return this.id;
+    }
+
+    public void setSystemLocation(StarSystem system)
+    {
+        this.systemLocation = system;
+    }
+
+    public StarSystem getSystemLocation()
+    {
+        return systemLocation;
+    }
+
+    public DefaultStateMachine<Ship, ScriptedShipState> getStateMachine()
+    {
+        return stateMachine;
     }
 }

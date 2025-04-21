@@ -18,6 +18,7 @@ public class ScriptedShipState extends ScriptedState<Ship>
     public ScriptedShipState(String tag, LuaValue ctxt)
     {
         super(tag, ctxt);
+        this.tag = tag;
         Gdx.app.log("ScriptedShipState", "Ship state " + getTag() + " loaded.");
     }
 

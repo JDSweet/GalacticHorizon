@@ -29,6 +29,8 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
         end
         print('[00_star_system_screen_gameplay_callbacks: Ship Spawning Debug: Player Index] ' .. player_idx)
         local ship = game_state:spawnShip(ship_class, pos, vel, facing, player_idx)
+        --ship:setSystemLocation(game_instance:getSelectedStarSystem())
+        --game_instance:getSelectedStarSystem():addShip(ship)
         --ship:turnTowards(pos)
     elseif(game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_move") then
         local pos = game_instance:vec2()
