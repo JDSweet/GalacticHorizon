@@ -53,6 +53,8 @@ public class Ship implements Identifiable
     //The star system this ship is located in.
     private StarSystem systemLocation;
 
+    private boolean atLocation = false;
+
     // The time between frames. This will eventually be replaced
     // with a different variable that measures the time between
     // game update ticks.
@@ -132,15 +134,33 @@ public class Ship implements Identifiable
     public void thrust(float amnt)
     {
         updateDelta();
+        atLocation = false;
         this.thrustAmnt = amnt;
-        if(facing.y - atLocationDst > position.y)
+
+        if(facing.y /*- atLocationDst*/ > position.y) {
             this.velocity.y = thrustAmnt;
-        if(facing.y + atLocationDst < position.y)
+        }
+        if(facing.y /*+ atLocationDst*/ < position.y) {
             this.velocity.y = -thrustAmnt;
-        if(facing.x - atLocationDst > position.x)
+        }
+        if(facing.x /*- atLocationDst*/ > position.x) {
             this.velocity.x = thrustAmnt;
-        if(facing.x + atLocationDst < position.x)
+        }
+        if(facing.x /*+ atLocationDst*/ < position.x) {
             this.velocity.x = -thrustAmnt;
+        }
+        //atLocation = (facing.y-atLocationDst == position.y) || (facing.y+atLocationDst == position.y) || (facing.x - atLocationDst == position.x) || (facing.x + atLocationDst == position.x);
+    }
+
+    public void stop()
+    {
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+    }
+
+    public boolean isAtLocation()
+    {
+        return atLocation;
     }
 
     private void updateStateMachine()
@@ -152,26 +172,26 @@ public class Ship implements Identifiable
     // the ship is on a trajectory towards whatever point it is facing towards.
     private void updatePos()
     {
-        if(position.dst(facing) > atLocationDst)
+        //if(position.dst(facing) > atLocationDst)
             position.set(position.x + velocity.x, position.y + velocity.y);
-        else
-            position.set(position.x, position.y);
+        //else
+            //position.set(position.x, position.y);
         sprite.setPosition(position.x, position.y);
-        if(facing.y - atLocationDst > position.y)
+        if(facing.y /*- atLocationDst*/ > position.y)
             this.velocity.y = thrustAmnt;
-        if(facing.y + atLocationDst < position.y)
+        if(facing.y /*+ atLocationDst*/ < position.y)
             this.velocity.y = -thrustAmnt;
-        if(facing.x - atLocationDst > position.x)
+        if(facing.x /*- atLocationDst*/ > position.x)
             this.velocity.x = thrustAmnt;
-        if(facing.x + atLocationDst < position.x)
+        if(facing.x /*+ atLocationDst*/ < position.x)
             this.velocity.x = -thrustAmnt;
-//        if(facing.y - atLocationDst > position.y)
+//        if(facing.y /*- atLocationDst*/ > position.y)
 //            this.velocity.y += speed;
-//        if(facing.y + atLocationDst < position.y)
+//        if(facing.y /*+ atLocationDst*/ < position.y)
 //            this.velocity.y -= speed;
-//        if(facing.x - atLocationDst > position.x)
+//        if(facing.x /*- atLocationDst*/ > position.x)
 //            this.velocity.x += speed;
-//        if(facing.x + atLocationDst < position.x)
+//        if(facing.x /*+ atLocationDst*/ < position.x)
 //            this.velocity.x -= speed;
     }
 
@@ -289,5 +309,15 @@ public class Ship implements Identifiable
     public DefaultStateMachine<Ship, ScriptedShipState> getStateMachine()
     {
         return stateMachine;
+    }
+
+    public float dstToShip(Ship other)
+    {
+        return position.dst(other.getPosition());
+    }
+
+    public void setAtLocation(boolean val)
+    {
+        this.atLocation = val;
     }
 }

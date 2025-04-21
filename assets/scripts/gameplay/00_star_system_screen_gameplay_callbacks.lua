@@ -33,21 +33,21 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
         --game_instance:getSelectedStarSystem():addShip(ship)
         --ship:turnTowards(pos)
     elseif(game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_move") then
-        local pos = game_instance:vec2()
-        pos:set(touchPos.x, touchPos.y)
-        local ships = game_instance:getSelectedStarSystem():getShips();
-        local size = -1;
-        if ships ~= nil then
-            size = ships.size;
-        end
-        if size > 0 then
-            for i = 0, size-1 do
-                --print('ID ' .. ships:get(i):toString())
-                local ship = ships:get(i);
-                ship:turnTowards(pos);
-                ship:thrust(0.5); --0.05 --This thrust is applied per update tick. Before the transition to the DateManager/tick-based system, this was per-frame. That's why the original value was a factor of 10 smaller (60 frames/second vs 4-5 updates/second).
-            end
-        end
+        --local pos = game_instance:vec2()
+        --pos:set(touchPos.x, touchPos.y)
+        --local ships = game_instance:getSelectedStarSystem():getShips();
+        --local size = -1;
+        --if ships ~= nil then
+            --size = ships.size;
+        --end
+        --if size > 0 then
+            --for i = 0, size-1 do
+                --local ship = ships:get(i);
+                --ship:turnTowards(pos);
+                --ship:thrust(0.5); --0.05 --This thrust is applied per update tick. Before the transition to the DateManager/tick-based system, this was per-frame. That's why the original value was a factor of 10 smaller (60 frames/second vs 4-5 updates/second).
+            --end
+        --end
+        print("This game mode's code has been moved to the ship's AI scripts.")
     else
         print("[00_star_system_screen_gameplay_callbacks.on_click Debug] Current Game mode isn't implemented.")
     end

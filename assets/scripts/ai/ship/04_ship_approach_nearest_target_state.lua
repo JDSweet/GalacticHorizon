@@ -1,11 +1,33 @@
-function ship_approach_nearest_target_state_on_enter(ship, game_instance, game_state)
-end;
+-- Note: The biggest issue I've experienced so far has been making sure the lua scripts are making the correct API calls.
+-- The script will cause the game to crash randomly if it's making non-existent API calls, so making sure the functions
+-- you call in lua are the same ones defined in Java is important.
 
+at_location_dst = 4
+
+function ship_approach_nearest_target_state_on_enter(ship, game_instance, game_state)
+
+end
+
+--IT WORKS!!! NO BUGS!!! HALLELUJAH!!!
+-- We're just approaching the enemy ship that we selected in the search_nearest_target state. We stop if we've arrived,
+-- Then we transition into the "ship_rotate_and_shoot" state, where we'll just be picking some random point around the enemy ship and thrusting to it.
+-- After weapons are implemented, that state will also cause us to attack the enemy ship we've targeted while we move.
 function ship_approach_nearest_target_state_on_update(ship, game_instance, game_state)
-end;
+    if game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_move" then
+        local pos = game_instance:vec2()
+        pos:set(ship:getTarget():getPosition().x, ship:getTarget():getPosition().y)
+        print('[04_ship_approach_nearest_target_state.on_update] Approaching target ' .. ship:getTarget():getID())
+        ship:turnTowards(pos)
+        ship:thrust(0.5)
+        if ship:dstToShip(ship:getTarget()) < at_location_dst then
+            ship:stop()
+            print('We have arrived!')
+        end
+    end
+end
 
 function ship_approach_nearest_target_state_on_exit(ship, game_instance, game_state)
-end;
+end
 
 function ship_approach_nearest_target_state_on_receive_message(ship, message, game_instance, game_state)
-end;
+end
