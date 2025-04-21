@@ -16,11 +16,12 @@ public class ScriptedTextButton extends ScriptableWidgetContainer
         super(self, ctxt, new TextButton("Default Text", GameInstance.getInstance().getSkin("uiskin.json")), scene);
         TextButton btn_widget = (TextButton) widget;
         LuaValue onClick = this.onClickCallbackFunc;
+        ScriptedTextButton buttonSelf = this;
         btn_widget.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 onClick.invoke(new LuaValue[]{
-                    CoerceJavaToLua.coerce(this),
+                    CoerceJavaToLua.coerce(buttonSelf),
                     CoerceJavaToLua.coerce(GameInstance.getInstance()),
                     CoerceJavaToLua.coerce(GameInstance.getInstance().getState())
                 });
