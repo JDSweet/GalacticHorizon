@@ -158,7 +158,7 @@ public class Ship implements Identifiable
         this.velocity.y = 0;
     }
 
-    public boolean isAtLocation()
+    public boolean isAtDestination()
     {
         return atLocation;
     }
@@ -316,7 +316,7 @@ public class Ship implements Identifiable
         return position.dst(other.getPosition());
     }
 
-    public void setAtLocation(boolean val)
+    public void setAtDestination(boolean val)
     {
         this.atLocation = val;
     }

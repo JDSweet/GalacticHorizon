@@ -16,17 +16,29 @@ function ship_approach_nearest_target_state_on_update(ship, game_instance, game_
     if game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_move" then
         local pos = game_instance:vec2()
         pos:set(ship:getTarget():getPosition().x, ship:getTarget():getPosition().y)
-        print('[04_ship_approach_nearest_target_state.on_update] Approaching target ' .. ship:getTarget():getID())
+        print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] Approaching target ' .. ship:getTarget():getID())
         ship:turnTowards(pos)
         ship:thrust(0.5)
         if ship:dstToShip(ship:getTarget()) < at_location_dst then
             ship:stop()
+            ship:setAtDestination(true)
             print('We have arrived!')
         end
+        -- If the ship has arrived at its destination, we're going to change states,
+        -- and start circling/shooting at the target ship.
+        if ship:isAtDestination() then
+            print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] Ship has arrived at its destination. Preparing for combat!')
+            --ship:getStateMachine():changeState(game_instance:getShipAIState('ship_rotate_and_shoot_nearest_target_state'))
+        end
+    -- If we don't manually stop the ship, it will continue moving towards its destination when we change the game_mode,
+    -- because the logic that stops the ship is contained within that conditional.
+    elseif game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_spawn" then
+        ship:stop()
     end
 end
 
 function ship_approach_nearest_target_state_on_exit(ship, game_instance, game_state)
+    --ship:setAtDestination(false) -- When we leave to another state, we're going to say we're no longer at our destination.
 end
 
 function ship_approach_nearest_target_state_on_receive_message(ship, message, game_instance, game_state)

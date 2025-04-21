@@ -4,12 +4,12 @@ function ship_search_nearest_target_state_on_enter(ship, game_instance, game_sta
 end;
 
 function ship_search_nearest_target_state_on_update(ship, game_instance, game_state)
-    print('[03_ship_search_nearest_target_state.lua.on_update] Updating State')
+    print('[ScriptingDebug: 03_ship_search_nearest_target_state.lua.on_update] Updating State')
     if ship == nil then
-        print('[03_ship_search_nearest_target_state.lua.on_update] ship is a nil value. Update terminating.')
+        print('[ScriptingDebug: 03_ship_search_nearest_target_state.lua.on_update] ship is a nil value. Update terminating.')
         return
     elseif ship:getSystemLocation() == nil then
-        print('[03_ship_search_nearest_target_state.lua.on_update] System Location is a nil value. Update terminating.')
+        print('[ScriptingDebug: 03_ship_search_nearest_target_state.lua.on_update] System Location is a nil value. Update terminating.')
         return
     end
     local enemy_ships = ship:getSystemLocation():getEnemyShipsFor(ship:getOwnerID())
@@ -32,10 +32,10 @@ function ship_search_nearest_target_state_on_update(ship, game_instance, game_st
     end
     if closest_distance <= ship:getShipClass():getCombatRange() and closest_target ~= nil then
         ship:getStateMachine():changeState(game_instance:getShipAIState('ship_rotate_and_shoot_nearest_target_state'))
-        print('[03_ship_search_nearest_target_state.lua.on_update] Changing state to <ship_rotate_and_shoot_nearest_target_state>')
+        print('[ScriptingDebug: 03_ship_search_nearest_target_state.lua.on_update] Changing state to <ship_rotate_and_shoot_nearest_target_state>')
     elseif closest_target ~= nil and closest_distance > ship:getShipClass():getCombatRange() then
         ship:getStateMachine():changeState(game_instance:getShipAIState('ship_approach_nearest_target_state'))
-        print('[03_ship_search_nearest_target_state.lua.on_update] Changing state to <ship_approach_nearest_target_state>')
+        print('[ScriptingDebug: 03_ship_search_nearest_target_state.lua.on_update] Changing state to <ship_approach_nearest_target_state>')
     end
 end;
 
