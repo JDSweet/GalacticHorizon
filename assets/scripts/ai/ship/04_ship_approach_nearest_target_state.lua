@@ -8,7 +8,7 @@ function ship_approach_nearest_target_state_on_enter(ship, game_instance, game_s
 
 end
 
---IT WORKS!!! NO BUGS!!! HALLELUJAH!!!
+-- IT WORKS!!! NO BUGS!!! HALLELUJAH!!!
 -- We're just approaching the enemy ship that we selected in the search_nearest_target state. We stop if we've arrived,
 -- Then we transition into the "ship_rotate_and_shoot" state, where we'll just be picking some random point around the enemy ship and thrusting to it.
 -- After weapons are implemented, that state will also cause us to attack the enemy ship we've targeted while we move.
@@ -22,7 +22,7 @@ function ship_approach_nearest_target_state_on_update(ship, game_instance, game_
         if ship:dstToShip(ship:getTarget()) < at_location_dst then
             ship:stop()
             ship:setAtDestination(true)
-            print('We have arrived!')
+            print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] We have arrived!')
         end
         -- If the ship has arrived at its destination, we're going to change states,
         -- and start circling/shooting at the target ship.
