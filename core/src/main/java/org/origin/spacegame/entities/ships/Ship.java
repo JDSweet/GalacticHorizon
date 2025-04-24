@@ -18,6 +18,9 @@ import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.entities.polities.IPolity;
 import org.origin.spacegame.game.GameInstance;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*
 *
 * How are we going to do combat? I think, for a ship, a state machine is sufficient.
@@ -79,6 +82,8 @@ public class Ship implements Identifiable
 
     private DefaultStateMachine<Ship, ScriptedShipState> stateMachine;
 
+    public Map<String, String> flags = new HashMap<String, String>();
+
     // In degrees. Basically, this lets us account for the fact that some sprites might not
     // be facing the same direction in the actual image file. We can specify the degrees
     // away from the expected orientation that they are facing.
@@ -135,7 +140,7 @@ public class Ship implements Identifiable
     {
         updateDelta();
         atLocation = false;
-        this.thrustAmnt = amnt;
+        this.thrustAmnt = amnt * delta;
 
         if(facing.y /*- atLocationDst*/ > position.y) {
             this.velocity.y = thrustAmnt;
@@ -285,9 +290,50 @@ public class Ship implements Identifiable
         return target;
     }
 
+    public Vector2 getFacing()
+    {
+        return this.facing;
+    }
+
     public void setTarget(Ship target)
     {
         this.target = target;
+    }
+
+    //https://stackoverflow.com/a/50746409
+    public Vector2 getRandomPointAtRadius(float radiusFromShipOrigin)
+    {
+        float r = radiusFromShipOrigin + (float)Math.sqrt(MathUtils.random(0f, 1f));
+        float theta = MathUtils.random(0f, 1f) * 2 * MathUtils.PI;
+
+        float x = position.x + radiusFromShipOrigin * MathUtils.cos(theta);
+        float y = position.y + radiusFromShipOrigin * MathUtils.sin(theta);
+
+        return new Vector2(x, y);
+    }
+
+    public void addFlag(String flag)
+    {
+        this.flags.put(flag, flag);
+    }
+
+    public void setFlag(String flag, String val)
+    {
+        this.flags.put(flag, val);
+    }
+
+    public boolean hasFlag(String flag)
+    {
+        return flags.containsKey(flag);
+    }
+
+    public String getFlag(String flag)
+    {
+        if(hasFlag(flag))
+            return flags.get(flag);
+        else
+            return "NULL";
+
     }
 
     @Override
@@ -314,6 +360,11 @@ public class Ship implements Identifiable
     public float dstToShip(Ship other)
     {
         return position.dst(other.getPosition());
+    }
+
+    public float dstToPoint(Vector2 other)
+    {
+        return position.dst(other);
     }
 
     public void setAtDestination(boolean val)

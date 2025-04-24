@@ -2,7 +2,9 @@
 -- The script will cause the game to crash randomly if it's making non-existent API calls, so making sure the functions
 -- you call in lua are the same ones defined in Java is important.
 
+baseThrustValue = 6
 at_location_dst = 4
+orbit_enemy_dst = at_location_dst
 
 function ship_approach_nearest_target_state_on_enter(ship, game_instance, game_state)
 
@@ -18,7 +20,7 @@ function ship_approach_nearest_target_state_on_update(ship, game_instance, game_
         pos:set(ship:getTarget():getPosition().x, ship:getTarget():getPosition().y)
         print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] Approaching target ' .. ship:getTarget():getID())
         ship:turnTowards(pos)
-        ship:thrust(0.5)
+        ship:thrust(baseThrustValue)
         if ship:dstToShip(ship:getTarget()) < at_location_dst then
             ship:stop()
             ship:setAtDestination(true)
@@ -28,7 +30,7 @@ function ship_approach_nearest_target_state_on_update(ship, game_instance, game_
         -- and start circling/shooting at the target ship.
         if ship:isAtDestination() then
             print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] Ship has arrived at its destination. Preparing for combat!')
-            --ship:getStateMachine():changeState(game_instance:getShipAIState('ship_rotate_and_shoot_nearest_target_state'))
+            ship:getStateMachine():changeState(game_instance:getShipAIState('ship_rotate_and_shoot_nearest_target_state'))
         end
     -- If we don't manually stop the ship, it will continue moving towards its destination when we change the game_mode,
     -- because the logic that stops the ship is contained within that conditional.
