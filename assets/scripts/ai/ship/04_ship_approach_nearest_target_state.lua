@@ -8,7 +8,7 @@
 -- You need to make sure the functions you call in lua are the same ones defined in Java,
 -- and this is tedious, because it involves a lot of cross-checking between code and documentation.
 
-baseThrustValue = 6
+baseThrustValue = 12
 at_location_dst = 4
 orbit_enemy_dst = at_location_dst
 

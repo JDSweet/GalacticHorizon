@@ -5,11 +5,16 @@ function ship_rotate_and_shoot_nearest_target_state_on_enter(ship, game_instance
 end
 
 function ship_rotate_and_shoot_nearest_target_state_on_update(ship, game_instance, game_state)
-    --Pick a random point within the radius of at_location_dst
+    --Flies away from nearest ship until it leaves attack range.
     if game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_move" then
         local target = ship:getTarget()
-        --Pick a random point in the system and start moving towards it.
-        --Once we leave range of the target, start moving towards the target again.
+        local target_position = target:getPosition()
+        print('[ScriptingDebug: 05_ship_rotate_and_shoot_nearest_target_state.on_update]: Ship ' .. ship:getID() .. ' has completed its evasion calculations...')
+        if target ~= nil then
+            ship:turnAway(target_position)
+            ship:thrust(baseThrustValue)
+            print('[ScriptingDebug: 05_ship_rotate_and_shoot_nearest_target_state.on_update]: Ship ' .. ship:getID() .. ' is evading enemy...')
+        end
     end
 end
 

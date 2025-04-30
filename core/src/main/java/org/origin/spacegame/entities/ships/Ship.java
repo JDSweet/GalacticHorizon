@@ -18,8 +18,10 @@ import org.origin.spacegame.entities.galaxy.StarSystem;
 import org.origin.spacegame.entities.polities.IPolity;
 import org.origin.spacegame.game.GameInstance;
 
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 /*
 *
@@ -207,6 +209,11 @@ public class Ship implements Identifiable
         turnTowards(direction.x, direction.y);
     }
 
+    public void turnAway(Vector2 direction)
+    {
+        turnTowards(-direction.x, -direction.y);
+    }
+
     public void turnTowards(float x, float y)
     {
         this.facing.x = x;
@@ -370,5 +377,32 @@ public class Ship implements Identifiable
     public void setAtDestination(boolean val)
     {
         this.atLocation = val;
+    }
+
+
+    protected HashMap<String, Vector2> vectors = new HashMap<>();
+
+    public void saveVector(String name, Vector2 vector)
+    {
+        vectors.put(name, vector);
+    }
+
+    public boolean hasVector(String name, Vector2 vector)
+    {
+        return vectors.containsKey(name);
+    }
+
+    public Vector2 getVector(String name)
+    {
+        Vector2 vector = vectors.get(name);
+        if(vector == null)
+            return new Vector2(0, 0);
+        else
+            return vector;
+    }
+
+    public void deleteVector(String name)
+    {
+        vectors.remove(name);
     }
 }

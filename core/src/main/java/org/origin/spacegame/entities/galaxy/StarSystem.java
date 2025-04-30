@@ -3,6 +3,7 @@ package org.origin.spacegame.entities.galaxy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import org.origin.spacegame.Constants;
@@ -13,6 +14,8 @@ import org.origin.spacegame.entities.polities.StellarNation;
 import org.origin.spacegame.entities.ships.Ship;
 import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.game.GameInstance;
+
+import java.util.Random;
 
 public class StarSystem
 {
@@ -195,5 +198,15 @@ public class StarSystem
     public void debugID()
     {
         Gdx.app.log("DebugID", "ID " + id + " = " + GameInstance.getInstance().getState().getStarSystem(id).id);
+    }
+
+    Random random = new Random();
+    int s = 0;
+    public Vector2 getRandomPoint()
+    {
+        float systemWidth = Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_WIDTH;
+        float systemHeight = Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_HEIGHT;
+        random.setSeed(s++);
+        return new Vector2(random.nextFloat(0, systemWidth), random.nextFloat(0, systemHeight));
     }
 }
