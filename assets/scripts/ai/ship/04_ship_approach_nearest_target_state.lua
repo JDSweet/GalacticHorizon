@@ -1,6 +1,12 @@
--- Note: The biggest issue I've experienced so far has been making sure the lua scripts are making the correct API calls.
--- The script will cause the game to crash randomly if it's making non-existent API calls, so making sure the functions
--- you call in lua are the same ones defined in Java is important.
+-- Note: The biggest issue I've experienced so far has been making sure the lua scripts are making
+-- the correct API calls.
+--
+-- Java -> Lua Intellisense in IntelliJ doesn't work, so all Lua -> Java API calls have to be referenced
+--
+-- If you try to make non-existent API calls in a script, that script will cause the game to crash randomly
+-- and the error logs don't give you much to work with except "your program is trying to call a nil value"
+-- You need to make sure the functions you call in lua are the same ones defined in Java,
+-- and this is tedious, because it involves a lot of cross-checking between code and documentation.
 
 baseThrustValue = 6
 at_location_dst = 4
