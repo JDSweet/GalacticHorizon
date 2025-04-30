@@ -131,8 +131,8 @@ public class Ship implements Identifiable
         // it is supposed to be facing. If you comment this out, the ships will still
         // head towards their destination, but their rotation will not update to reflect
         // the direction they are traveling.
-        if(position.x != facing.x || position.y != facing.y)
-            turnTowards(facing);
+        //if(position.x != facing.x || position.y != facing.y)
+            //turnTowards(facing);
         updatePos();
     }
 
@@ -156,6 +156,10 @@ public class Ship implements Identifiable
         if(facing.x /*+ atLocationDst*/ < position.x) {
             this.velocity.x = -thrustAmnt;
         }
+        if(facing.x == position.x)
+            this.velocity.x = 0;
+        if(facing.y == position.y)
+            this.velocity.y = 0;
         //atLocation = (facing.y-atLocationDst == position.y) || (facing.y+atLocationDst == position.y) || (facing.x - atLocationDst == position.x) || (facing.x + atLocationDst == position.x);
     }
 
@@ -173,6 +177,21 @@ public class Ship implements Identifiable
     private void updateStateMachine()
     {
         this.stateMachine.update();
+    }
+
+    public Vector2 getRandomPointInOrbit(Vector2 target, float radius)
+    {
+        // Given center point (x, y) and radius r
+        Vector2 center = target.cpy();
+
+        // Generate a random angle in radians
+        double theta = Math.random() * 2 * Math.PI;
+
+        // Calculate the x and y coordinates of the random point
+        double x = center.x + radius * Math.cos(theta);
+        double y = center.y + radius * Math.sin(theta);
+
+        return center.set((float)x, (float)y);
     }
 
     // This updates the position of the ship and ensures that
@@ -216,8 +235,9 @@ public class Ship implements Identifiable
 
     public void turnTowards(float x, float y)
     {
-        this.facing.x = x;
-        this.facing.y = y;
+        //this.facing.x = x;
+        //this.facing.y = y;
+        this.facing.set(x, y);
         float deltaX = facing.x - sprite.getX();
         float deltaY = facing.y - sprite.getY();
         float angleRadians = MathUtils.atan2(deltaY, deltaX);
@@ -238,8 +258,6 @@ public class Ship implements Identifiable
         sprite.setOrigin(sprite.getWidth()/2f, sprite.getHeight()/2f);
         sprite.setRotation(angle);
     }
-
-    boolean thrust = true;
 
     public void renderShip(SpriteBatch batch, float delta)
     {

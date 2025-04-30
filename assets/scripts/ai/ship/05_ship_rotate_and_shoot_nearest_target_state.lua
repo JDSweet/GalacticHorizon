@@ -9,12 +9,26 @@ function ship_rotate_and_shoot_nearest_target_state_on_update(ship, game_instanc
     if game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_move" then
         local target = ship:getTarget()
         local target_position = target:getPosition()
-        print('[ScriptingDebug: 05_ship_rotate_and_shoot_nearest_target_state.on_update]: Ship ' .. ship:getID() .. ' has completed its evasion calculations...')
-        if target ~= nil then
-            ship:turnAway(target_position)
-            ship:thrust(baseThrustValue)
-            print('[ScriptingDebug: 05_ship_rotate_and_shoot_nearest_target_state.on_update]: Ship ' .. ship:getID() .. ' is evading enemy...')
+        print('[ScriptingDebug: 05_ship_rotate_and_shoot_nearest_target_state.on_update]: Ship ' .. ship:getID() .. ' is fighting.')
+
+        if ship:getFlag("is_orbiting_target") == "yes" then
+            local combat_dest = ship:getVector("combat_dest")
+            if combat_dest ~= nil then
+                ship:turnTowards(combat_dest)
+                ship:thrust(baseThrustValue)
+
+                local dst_to_target = ship:getPosition():dst(ship:getTarget():getPosition())
+                if dst_to_target > at_location_dst then
+                    ship:getStateMachine():changeState(game_instance:getShipAIState('ship_search_nearest_target_state'))
+                end
+            end
+        else
+            local point = ship:getRandomPointInOrbit(target_position, combat_radius)
+            ship:saveVector("combat_dest", point)
+            ship:setFlag("is_orbiting_target", "yes")
         end
+    else
+        ship:stop()
     end
 end
 

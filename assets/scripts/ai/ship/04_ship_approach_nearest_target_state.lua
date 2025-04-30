@@ -10,7 +10,7 @@
 
 baseThrustValue = 12
 at_location_dst = 4
-orbit_enemy_dst = at_location_dst
+combat_radius = at_location_dst * 5
 
 function ship_approach_nearest_target_state_on_enter(ship, game_instance, game_state)
 
