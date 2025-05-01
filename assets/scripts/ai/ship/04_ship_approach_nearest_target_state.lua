@@ -8,12 +8,8 @@
 -- You need to make sure the functions you call in lua are the same ones defined in Java,
 -- and this is tedious, because it involves a lot of cross-checking between code and documentation.
 
-baseThrustValue = 12
-at_location_dst = 4
-combat_radius = at_location_dst * 5
-
 function ship_approach_nearest_target_state_on_enter(ship, game_instance, game_state)
-
+    print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_enter]' .. ship:getID() .. ' is approaching target ' .. ship:getTarget():getID())
 end
 
 -- IT WORKS!!! NO BUGS!!! HALLELUJAH!!!
@@ -24,14 +20,14 @@ function ship_approach_nearest_target_state_on_update(ship, game_instance, game_
     if game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_move" then
         local pos = game_instance:vec2()
         pos:set(ship:getTarget():getPosition().x, ship:getTarget():getPosition().y)
-        print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] Approaching target ' .. ship:getTarget():getID())
+        --print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] Approaching target ' .. ship:getTarget():getID())
         ship:turnTowards(pos)
         ship:thrust(baseThrustValue)
         if ship:dstToShip(ship:getTarget()) < at_location_dst then
             ship:stop()
             ship:getStateMachine():changeState(game_instance:getShipAIState('ship_rotate_and_shoot_nearest_target_state'))
             --ship:setAtDestination(true)
-            print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] We have arrived!')
+            --print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] We have arrived!')
         end
         -- If the ship has arrived at its destination, we're going to change states,
         -- and start circling/shooting at the target ship.

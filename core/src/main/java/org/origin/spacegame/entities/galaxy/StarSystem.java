@@ -187,8 +187,8 @@ public class StarSystem
         {
             Ship ship = ships.get(i);
             IPolity shipOwner = ship.getOwner();
-            Gdx.app.log("[StarSystem.getEnemyShipsFor]", "Faction ID: " + ((StellarNation)faction).getID());
-            Gdx.app.log("[StarSystem.getEnemyShipsFor]", "Ship Owner ID: " + ((StellarNation)shipOwner).getID());
+            //Gdx.app.log("[StarSystem.getEnemyShipsFor]", "Faction ID: " + ((StellarNation)faction).getID());
+            //Gdx.app.log("[StarSystem.getEnemyShipsFor]", "Ship Owner ID: " + ((StellarNation)shipOwner).getID());
             if(((StellarNation)shipOwner).getID() != ((StellarNation)faction).getID())
                 output.add(ship);
         }
