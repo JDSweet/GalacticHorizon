@@ -18,10 +18,14 @@ function ship_rotate_and_shoot_nearest_target_state_on_update(ship, game_instanc
                 ship:turnTowards(combat_dest)
                 ship:thrust(baseThrustValue)
                 local dst_to_target = ship:getPosition():dst(ship:getTarget():getPosition())
-                if dst_to_target > combat_radius * 0.8 and dst_to_target > at_location_dst then
+                local dst_to_combat_dest = ship:getPosition():dst(combat_dest)
+                if dst_to_combat_dest < dst_to_target and dst_to_target > at_location_dst then
                     --print('[ScriptingDebug: 05_ship_rotate_and_shoot_nearest_target_state.on_update]: Ship ' .. ship:getID() .. ' is preparing to scan for the nearest target.')
                     ship:getStateMachine():changeState(game_instance:getShipAIState('ship_search_nearest_target_state'))
+                    --ship:setFlag("is_orbiting_target", "no")
                 end
+            else
+                --print('this should never be reached.')
             end
         else
             local point = ship:getRandomPointInOrbit(target_position, combat_radius)

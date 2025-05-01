@@ -199,18 +199,26 @@ public class Ship implements Identifiable
     private void updatePos()
     {
         //if(position.dst(facing) > atLocationDst)
-            position.set(position.x + velocity.x, position.y + velocity.y);
+        position.set(position.x + velocity.x, position.y + velocity.y);
         //else
             //position.set(position.x, position.y);
         sprite.setPosition(position.x, position.y);
-        if(facing.y /*- atLocationDst*/ > position.y)
-            this.velocity.y = thrustAmnt;
-        if(facing.y /*+ atLocationDst*/ < position.y)
-            this.velocity.y = -thrustAmnt;
-        if(facing.x /*- atLocationDst*/ > position.x)
-            this.velocity.x = thrustAmnt;
-        if(facing.x /*+ atLocationDst*/ < position.x)
-            this.velocity.x = -thrustAmnt;
+
+        if(facing.epsilonEquals(position)) {
+            this.velocity.set(velocity);
+        }
+        else
+        {
+            if(facing.y /*- atLocationDst*/ > position.y)
+                this.velocity.y = thrustAmnt;
+            else if(facing.y /*+ atLocationDst*/ < position.y)
+                this.velocity.y = -thrustAmnt;
+            if(facing.x /*- atLocationDst*/ > position.x)
+                this.velocity.x = thrustAmnt;
+            else if(facing.x /*+ atLocationDst*/ < position.x)
+                this.velocity.x = -thrustAmnt;
+        }
+
 //        if(facing.y /*- atLocationDst*/ > position.y)
 //            this.velocity.y += speed;
 //        if(facing.y /*+ atLocationDst*/ < position.y)
