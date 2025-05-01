@@ -29,15 +29,17 @@ function ship_approach_nearest_target_state_on_update(ship, game_instance, game_
         ship:thrust(baseThrustValue)
         if ship:dstToShip(ship:getTarget()) < at_location_dst then
             ship:stop()
-            ship:setAtDestination(true)
+            ship:getStateMachine():changeState(game_instance:getShipAIState('ship_rotate_and_shoot_nearest_target_state'))
+            --ship:setAtDestination(true)
             print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] We have arrived!')
         end
         -- If the ship has arrived at its destination, we're going to change states,
         -- and start circling/shooting at the target ship.
-        if ship:isAtDestination() then
-            print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] Ship has arrived at its destination. Preparing for combat!')
-            ship:getStateMachine():changeState(game_instance:getShipAIState('ship_rotate_and_shoot_nearest_target_state'))
-        end
+        --if ship:isAtDestination() then
+            --print('[ScriptingDebug: 04_ship_approach_nearest_target_state.on_update] Ship has arrived at its destination. Preparing for combat!')
+            --ship:setAtDestination(false)
+            --ship:getStateMachine():changeState(game_instance:getShipAIState('ship_rotate_and_shoot_nearest_target_state'))
+        --end
     -- If we don't manually stop the ship, it will continue moving towards its destination when we change the game_mode,
     -- because the logic that stops the ship is contained within that conditional.
     elseif game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_spawn" then

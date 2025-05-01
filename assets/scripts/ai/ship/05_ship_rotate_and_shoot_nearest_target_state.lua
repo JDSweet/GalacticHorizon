@@ -16,9 +16,9 @@ function ship_rotate_and_shoot_nearest_target_state_on_update(ship, game_instanc
             if combat_dest ~= nil then
                 ship:turnTowards(combat_dest)
                 ship:thrust(baseThrustValue)
-
                 local dst_to_target = ship:getPosition():dst(ship:getTarget():getPosition())
                 if dst_to_target > at_location_dst then
+                    print('[ScriptingDebug: 05_ship_rotate_and_shoot_nearest_target_state.on_update]: Ship ' .. ship:getID() .. ' is preparing to scan for the nearest target.')
                     ship:getStateMachine():changeState(game_instance:getShipAIState('ship_search_nearest_target_state'))
                 end
             end

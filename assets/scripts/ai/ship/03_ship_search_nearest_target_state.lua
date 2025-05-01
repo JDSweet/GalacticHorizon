@@ -3,7 +3,7 @@ end
 
 function ship_search_nearest_target_state_on_update(ship, game_instance, game_state)
     if game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_move" then
-        print('[ScriptingDebug: 03_ship_search_nearest_target_state.lua.on_update] Updating State')
+        --print('[ScriptingDebug: 03_ship_search_nearest_target_state.lua.on_update] Updating State')
         if ship == nil then
             print('[ScriptingDebug: 03_ship_search_nearest_target_state.lua.on_update] ship is a nil value. Update terminating.')
             return
@@ -36,6 +36,8 @@ function ship_search_nearest_target_state_on_update(ship, game_instance, game_st
             ship:getStateMachine():changeState(game_instance:getShipAIState('ship_approach_nearest_target_state'))
             print('[ScriptingDebug: 03_ship_search_nearest_target_state.lua.on_update] Changing state to <ship_approach_nearest_target_state>')
         end
+    else
+        ship:stop()
     end
 end
 
