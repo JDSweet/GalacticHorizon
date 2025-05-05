@@ -54,22 +54,22 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
         if(self.hasAttribute("on_create") && ctxt != null)
             this.onCreateCallbackFunc = ctxt.get(self.getAttribute("on_create"));
         else
-            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_click has not been defined.");
+            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_click for " + this.getDebugID() + " has not been defined.");
         if(self.hasAttribute("on_show") && ctxt != null)
             this.onShowCallbackFunc = ctxt.get(self.getAttribute("on_show"));
         else
-            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_show has not been defined.");
+            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_show for " + this.getDebugID() + " has not been defined.");
         if(self.hasAttribute("on_hide") && ctxt != null)
             this.onHideCallbackFunc = ctxt.get(self.getAttribute("on_hide"));
         if(self.hasAttribute("on_click") && ctxt != null)
             this.onClickCallbackFunc = ctxt.get(self.getAttribute("on_click"));
         else
-            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_hide has not been defined.");
+            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_hide for " + this.getDebugID() + " has not been defined.");
 
         if(self.hasAttribute("on_update"))
             this.onUpdateCallbackFunc = ctxt.get(self.getAttribute("on_update"));
         else
-            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_update has not been defined.");
+            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_update for " + this.getDebugID() + " has not been defined.");
 
         if(self.hasAttribute("x"))
             widget.setX(Gdx.graphics.getWidth() * Float.parseFloat(self.getAttribute("x")));

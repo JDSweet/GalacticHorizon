@@ -154,9 +154,9 @@
             <Label
                     id = "ship_ai_state_label"
                     on_create = "ship_ai_state_label_on_create"
-                    on_show = "ship_ai_state_planet_size_label_on_show"
-                    on_update = "ship_ai_state_on_update"
-                    on_hide = "ship_ai_state_planet_size_label_on_hide"
+                    on_show = "ship_ai_state_label_on_show"
+                    on_update = "ship_ai_state_label_on_update"
+                    on_hide = "ship_ai_state_label_on_hide"
                     text = "AI State: X"
                     skin = "uiskin.json">
             </Label>

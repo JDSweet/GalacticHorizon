@@ -216,11 +216,12 @@ function ship_ai_state_label_on_create(self, game_instance, game_state)
 
 end
 
-function ship_ai_state_planet_size_label_on_show(self, game_instance, game_state)
-
+function ship_ai_state_label_on_show(self, game_instance, game_state)
+    print("showing " .. self:getDebugID())
 end
 
 function ship_ai_state_label_on_update(self, game_instance, game_state)
+    print('Updating label')
     local curSystem = game_instance:getSelectedStarSystem()
     if curSystem ~= nil then
         local curShip = curSystem:getSelectedShip()
@@ -235,6 +236,6 @@ function ship_ai_state_label_on_update(self, game_instance, game_state)
     end
 end
 
-function ship_ai_state_planet_size_label_on_hide(self, game_instance, game_state)
+function ship_ai_state_label_on_hide(self, game_instance, game_state)
 
 end
