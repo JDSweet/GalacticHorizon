@@ -220,6 +220,21 @@ function ship_ai_state_planet_size_label_on_show(self, game_instance, game_state
 
 end
 
+function ship_ai_state_label_on_update(self, game_instance, game_state)
+    local curSystem = game_instance:getSelectedStarSystem()
+    if curSystem ~= nil then
+        local curShip = curSystem:getSelectedShip()
+        if curShip ~= nil then
+            local aiStateTag = curShip:getStateMachine():getCurrentState():getTag()
+            local shipPrevAIState = curShip:getFlag("ship_prev_ai_state")
+            if aiStateTag ~= shipPrevAIState then
+                self.widget:setText("AI State: " .. aiStateTag)
+                curShip:setFlag("ship_prev_ai_state", aiStateTag)
+            end
+        end
+    end
+end
+
 function ship_ai_state_planet_size_label_on_hide(self, game_instance, game_state)
 
 end

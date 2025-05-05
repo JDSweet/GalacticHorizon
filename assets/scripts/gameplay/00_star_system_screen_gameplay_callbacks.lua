@@ -51,22 +51,31 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
         --print("This game mode's code has been moved to the ship's AI scripts.")
         local ship = star_system:getClosestShipToPoint(touchPos.x, touchPos.y)
         if ship ~= nil then
-            if ship:getPosition():dst(game_instance:vec2(touchPos.x, touchPos.y)) <= touchDst then
-                if ship:isSelected() then
-                    ship:deselect()
-                    star_system:deselectShip()
-                else
-                    ship:select()
-                    local prevSelectedShip = star_system:getSelectedShip()
-                    if prevSelectedShip ~= nil then
-                        prevSelectedShip:deselect()
-                    end
-                    star_system:selectShip(ship)
-                end
-            end
+            on_ship_clicked(touchPos, ship, star_system, scene, game_instance, game_state)
         end
     else
         print("[00_star_system_screen_gameplay_callbacks.on_click Debug] Current Game mode isn't implemented.")
+    end
+end
+
+function on_ship_clicked(touchPos, ship, star_system, scene, game_instance, game_state)
+    local shipDebugWindow = scene:getWidgetByID("ship_debug_overview_window")
+    shipDebugWindow:getWidget():setVisible(true)
+    local shipAIStateLabel = scene:getWidgetByID("ship_ai_state_label")
+    if ship:getPosition():dst(game_instance:vec2(touchPos.x, touchPos.y)) <= touchDst then
+        if ship:isSelected() then
+            ship:deselect()
+            star_system:deselectShip()
+        else
+            ship:select()
+            local prevSelectedShip = star_system:getSelectedShip()
+            if prevSelectedShip ~= nil then
+                prevSelectedShip:deselect()
+            end
+            star_system:selectShip(ship)
+            --self.widget:setText("AI State: " .. aiStateTag)
+            shipAIStateLabel.widget:setText("AI State: " .. ship:getStateMachine():getCurrentState():getTag())
+        end
     end
 end
 

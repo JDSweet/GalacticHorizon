@@ -69,6 +69,7 @@ public class StarSystemScreen implements Screen, InputProcessor
         InputUtilities.detectCameraMovement(game.getCameraManager());
         //renderGUI(selectedSystem);
 
+        scene.update();
         scene.act();
         game.getCameraManager().update();
         game.getBatch().setProjectionMatrix(game.getCameraManager().getCurrentCamera().combined);
