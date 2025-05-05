@@ -127,4 +127,14 @@ public class ScriptedWindow extends ScriptableWidgetContainer
             children.add(selectBox);
         }
     }
+
+    @Override
+    public void update()
+    {
+        //super.update();
+        for(ScriptableGUIComponent child : children)
+        {
+            child.update();
+        }
+    }
 }

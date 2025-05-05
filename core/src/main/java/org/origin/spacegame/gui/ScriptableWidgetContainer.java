@@ -96,13 +96,17 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
     @Override
     public void show()
     {
-        if(this.onShowCallbackFunc != null)
+        if(this.onShowCallbackFunc != null && !this.onShowCallbackFunc.isnil())
             onShowCallbackFunc.invoke(CoerceJavaToLua.coerce(this),
                 CoerceJavaToLua.coerce(GameInstance.getInstance()),
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         else
             Gdx.app.log(debugTag, "No on_show callback function defined for " + debugTag);
         enable();
+        for(ScriptableGUIComponent child : children)
+        {
+            child.show();
+        }
     }
 
     @Override
@@ -133,6 +137,10 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
         else
             Gdx.app.log(debugTag, "No on_hide callback function defined for " + debugTag);
         disable();
+        for(ScriptableGUIComponent child : children)
+        {
+            child.hide();
+        }
     }
 
     @Override

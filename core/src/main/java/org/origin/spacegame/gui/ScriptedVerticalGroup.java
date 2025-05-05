@@ -112,4 +112,14 @@ public class ScriptedVerticalGroup extends ScriptableWidgetContainer
 
         }
     }
+
+    @Override
+    public void update()
+    {
+        super.update();
+        for(ScriptableGUIComponent child : children)
+        {
+            child.update();
+        }
+    }
 }
