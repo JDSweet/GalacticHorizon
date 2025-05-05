@@ -114,6 +114,10 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
                 CoerceJavaToLua.coerce(GameInstance.getInstance()),
                 CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
         }
+        for(ScriptableGUIComponent child : children)
+        {
+            child.update();
+        }
     }
 
     /**
