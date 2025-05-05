@@ -1,3 +1,4 @@
+touchDst = 2
 
 planet_overview_window_visible = false;
 
@@ -47,7 +48,23 @@ function on_click(touchPos, star_system, scene, game_instance, game_state)
                 --ship:thrust(0.5); --0.05 --This thrust is applied per update tick. Before the transition to the DateManager/tick-based system, this was per-frame. That's why the original value was a factor of 10 smaller (60 frames/second vs 4-5 updates/second).
             --end
         --end
-        print("This game mode's code has been moved to the ship's AI scripts.")
+        --print("This game mode's code has been moved to the ship's AI scripts.")
+        local ship = star_system:getClosestShipToPoint(touchPos.x, touchPos.y)
+        if ship ~= nil then
+            if ship:getPosition():dst(game_instance:vec2(touchPos.x, touchPos.y)) <= touchDst then
+                if ship:isSelected() then
+                    ship:deselect()
+                    star_system:deselectShip()
+                else
+                    ship:select()
+                    local prevSelectedShip = star_system:getSelectedShip()
+                    if prevSelectedShip ~= nil then
+                        prevSelectedShip:deselect()
+                    end
+                    star_system:selectShip(ship)
+                end
+            end
+        end
     else
         print("[00_star_system_screen_gameplay_callbacks.on_click Debug] Current Game mode isn't implemented.")
     end

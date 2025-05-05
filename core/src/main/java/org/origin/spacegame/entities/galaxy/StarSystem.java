@@ -15,6 +15,7 @@ import org.origin.spacegame.entities.ships.Ship;
 import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.game.GameInstance;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class StarSystem
@@ -28,6 +29,8 @@ public class StarSystem
     private Array<Ship> ships;
 
     private Vector2 galacticPosition;
+
+    private Ship selectedShip = null;
 
     /* The screen/system is technically rectangular, for the sake of simplicity and because the camera is
     *       actually a rectangle, so this will hopefully look more natural.
@@ -208,5 +211,56 @@ public class StarSystem
         float systemHeight = Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_HEIGHT;
         random.setSeed(s++);
         return new Vector2(random.nextFloat(0, systemWidth), random.nextFloat(0, systemHeight));
+    }
+
+    public Ship getClosestShipToPoint(Vector2 point)
+    {
+        return getClosestShipToPoint(point.x, point.y);
+    }
+
+    public Ship getClosestShipToPoint(float x, float y)
+    {
+        Vector2 tempPos = new Vector2(x, y);
+        Ship closest = null;
+        float dst = -1f;
+        for(Ship ship : ships)
+        {
+            float dstToShip = ship.getPosition().dst(tempPos);
+            if(closest == null || dst == -1)
+            {
+                closest = ship;
+                dst = dstToShip;
+            }
+            else if(ship.dstToPoint(tempPos) < dst)
+            {
+                closest = ship;
+                dst = dstToShip;
+            }
+            else
+            {
+                continue;
+            }
+        }
+        return closest;
+    }
+
+    public boolean isShipSelected()
+    {
+        return this.selectedShip != null;
+    }
+
+    public void deselectShip()
+    {
+        this.selectedShip = null;
+    }
+
+    public void selectShip(Ship ship)
+    {
+        this.selectedShip = ship;
+    }
+
+    public Ship getSelectedShip()
+    {
+        return selectedShip;
     }
 }

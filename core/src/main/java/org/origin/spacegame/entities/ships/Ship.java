@@ -93,6 +93,8 @@ public class Ship implements Identifiable
     // different ships to have different texture offsets.
     // private static float spriteOffset = 90f;
 
+    private boolean isSelected = false;
+
     public Ship(int id, int ownerIdx, StarSystem systemLocation, Vector2 pos, Vector2 vel, Vector2 facing, ShipClass shipClass)
     {
         this.id = id;
@@ -275,7 +277,8 @@ public class Ship implements Identifiable
 
     public void renderBackgroundCircle(ShapeRenderer renderer)
     {
-        renderer.circle(position.x + sprite.getWidth()/2f, position.y + sprite.getHeight()/2f, sprite.getHeight());
+        if(isSelected())
+            renderer.circle(position.x + sprite.getWidth()/2f, position.y + sprite.getHeight()/2f, sprite.getHeight());
     }
 
     private void updateDelta()
@@ -430,5 +433,20 @@ public class Ship implements Identifiable
     public void deleteVector(String name)
     {
         vectors.remove(name);
+    }
+
+    public void select()
+    {
+        this.isSelected = true;
+    }
+
+    public void deselect()
+    {
+        this.isSelected = false;
+    }
+
+    public boolean isSelected()
+    {
+        return this.isSelected;
     }
 }
