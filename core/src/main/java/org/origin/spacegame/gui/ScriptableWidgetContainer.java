@@ -14,6 +14,7 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
     protected LuaValue onHideCallbackFunc;
     protected LuaValue onCreateCallbackFunc;
     protected LuaValue onClickCallbackFunc;
+    protected LuaValue onUpdateCallbackFunc;
 
     public Actor widget;
 
@@ -65,6 +66,11 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
         else
             Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_hide has not been defined.");
 
+        if(self.hasAttribute("on_update"))
+            this.onUpdateCallbackFunc = ctxt.get(self.getAttribute("on_update"));
+        else
+            Gdx.app.log(debugTag, "Either the Lua context has not been set, or on_update has not been defined.");
+
         if(self.hasAttribute("x"))
             widget.setX(Gdx.graphics.getWidth() * Float.parseFloat(self.getAttribute("x")));
         if(self.hasAttribute("X"))
@@ -97,6 +103,17 @@ public class ScriptableWidgetContainer  implements ScriptableGUIComponent
         else
             Gdx.app.log(debugTag, "No on_show callback function defined for " + debugTag);
         enable();
+    }
+
+    @Override
+    public void update()
+    {
+        if(this.onUpdateCallbackFunc != null)
+        {
+            onUpdateCallbackFunc.invoke(CoerceJavaToLua.coerce(this),
+                CoerceJavaToLua.coerce(GameInstance.getInstance()),
+                CoerceJavaToLua.coerce(GameInstance.getInstance().getState()));
+        }
     }
 
     /**

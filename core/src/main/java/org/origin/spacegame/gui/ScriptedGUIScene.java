@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.XmlReader;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
+import org.mozilla.javascript.Script;
 import org.origin.spacegame.Constants;
 
 public class ScriptedGUIScene  implements ScriptableGUIComponent
@@ -85,6 +86,15 @@ public class ScriptedGUIScene  implements ScriptableGUIComponent
         for(ScriptableGUIComponent child : children)
         {
             child.show();
+        }
+    }
+
+    @Override
+    public void update()
+    {
+        for(ScriptableGUIComponent child : children)
+        {
+            child.update();
         }
     }
 
@@ -184,6 +194,7 @@ public class ScriptedGUIScene  implements ScriptableGUIComponent
 
     public void act()
     {
+        //this.globals.call
         stage.act();
     }
 

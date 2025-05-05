@@ -7,6 +7,7 @@ public interface ScriptableGUIComponent
 {
     public void show();
     public void hide();
+    public void update();
     public void readChild(Element child, ScriptedGUIScene scene, LuaValue callbackCtxt);
     public String getDebugID();
     public void enable();
