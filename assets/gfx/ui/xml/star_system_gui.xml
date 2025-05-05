@@ -63,6 +63,16 @@
             text = "System #X"
             skin = "uiskin.json">
     </Label>
+    <TextButton
+            id = "toggle_ship_debug"
+            x = "0.89"
+            y = "0"
+            width = "0.085"
+            height = "0.085"
+            on_click = "spawn_ship_btn_on_click"
+            text = "Spawn Ship"
+            skin = "uiskin.json">
+    </TextButton>
     <Window
             id = "planet_overview_window"
             x = "0"
@@ -115,6 +125,39 @@
                     on_show = "oz_debug_label_on_show"
                     on_hide = "oz_debug_label_on_hide"
                     text = "Orbital Zone: ANY"
+                    skin = "uiskin.json">
+            </Label>
+        </VerticalGroup>
+    </Window>
+    <Window
+            id = "ship_debug_overview_window"
+            x = "0"
+            y = "0"
+            width = "0.35"
+            height = "0.7"
+            on_create = "ship_debug_overview_window_on_create"
+            on_show = "ship_debug_overview_window_on_show"
+            on_hide = "ship_debug_overview_window_on_hide"
+            title = "Ship #X"
+            skin = "uiskin.json"
+            align = "top-left"
+            visible = "no">
+        <VerticalGroup id = "ship_debug_info_v_group" align = "center-left">
+            <Label
+                    id = "ship_id_label"
+                    on_create = "planet_habitability_label_on_create"
+                    on_show = "ship_id_label_on_show"
+                    on_hide = "ship_id_label_on_hide"
+                    text = "Ship ID: X"
+                    skin = "uiskin.json">
+            </Label>
+            <Label
+                    id = "ship_ai_state_label"
+                    on_create = "ship_ai_state_label_on_create"
+                    on_show = "ship_ai_state_planet_size_label_on_show"
+                    on_update = "ship_ai_state_on_update"
+                    on_hide = "ship_ai_state_planet_size_label_on_hide"
+                    text = "AI State: X"
                     skin = "uiskin.json">
             </Label>
         </VerticalGroup>
