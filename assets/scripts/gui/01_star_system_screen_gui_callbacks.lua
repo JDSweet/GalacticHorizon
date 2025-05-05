@@ -189,3 +189,37 @@ function faction_select_box_on_click(self, game_instance, game_state)
         end
     end
 end
+
+----------------------- Ship Debug --------------------------------
+
+function ship_debug_overview_window_on_create(self, game_instance, game_state)
+
+end
+
+function ship_debug_overview_window_on_show(self, game_instance, game_state)
+
+end
+
+function ship_debug_overview_window_on_hide(self, game_instance, game_state)
+
+end
+
+function ship_id_label_on_show(self, game_instance, game_state)
+    self.widget:setText('Ship ID: ' .. game_instance:getSelectedStarSystem():getSelectedShip():getID());
+end
+
+function ship_id_label_on_hide(self, game_instance, game_state)
+
+end
+
+function ship_ai_state_label_on_create(self, game_instance, game_state)
+
+end
+
+function ship_ai_state_planet_size_label_on_show(self, game_instance, game_state)
+
+end
+
+function ship_ai_state_planet_size_label_on_hide(self, game_instance, game_state)
+
+end
