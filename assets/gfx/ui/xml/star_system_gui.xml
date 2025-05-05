@@ -160,6 +160,12 @@
                     text = "AI State: X"
                     skin = "uiskin.json">
             </Label>
+            <Label
+                    id = "ship_target_id_label"
+                    on_update = "ship_target_id_label_update"
+                    text = "Ship Target ID: X"
+                    skin = "uiskin.json">
+            </Label>
         </VerticalGroup>
     </Window>
 </GUIScreen>
