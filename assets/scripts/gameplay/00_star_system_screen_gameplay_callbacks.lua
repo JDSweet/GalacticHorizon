@@ -61,6 +61,8 @@ end
 function on_ship_clicked(touchPos, ship, star_system, scene, game_instance, game_state)
     local shipDebugWindow = scene:getWidgetByID("ship_debug_overview_window")
     shipDebugWindow:getWidget():setVisible(true)
+    local shipIDLabel = scene:getWidgetByID('ship_id_label')
+    local shipTargetIDLabel = scene:getWidgetByID('ship_target_id_label')
     local shipAIStateLabel = scene:getWidgetByID("ship_ai_state_label")
     if ship:getPosition():dst(game_instance:vec2(touchPos.x, touchPos.y)) <= touchDst then
         if ship:isSelected() then
@@ -73,8 +75,13 @@ function on_ship_clicked(touchPos, ship, star_system, scene, game_instance, game
                 prevSelectedShip:deselect()
             end
             star_system:selectShip(ship)
-            --self.widget:setText("AI State: " .. aiStateTag)
+            shipIDLabel.widget:setText('Ship ID: ' .. ship:getID())
             shipAIStateLabel.widget:setText("AI State: " .. ship:getStateMachine():getCurrentState():getTag())
+            if ship:getTarget() ~= nil then
+                shipTargetIDLabel.widget:setText("Target ID: " .. ship:getTarget():getID())
+            else
+                shipTargetIDLabel.widget:setText("Target ID: NIL")
+            end
         end
     end
 end

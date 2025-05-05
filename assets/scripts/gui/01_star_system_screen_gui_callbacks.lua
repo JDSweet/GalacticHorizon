@@ -205,7 +205,9 @@ function ship_debug_overview_window_on_hide(self, game_instance, game_state)
 end
 
 function ship_id_label_on_show(self, game_instance, game_state)
-    self.widget:setText('Ship ID: ' .. game_instance:getSelectedStarSystem():getSelectedShip():getID());
+    if game_instance:getSelectedStarSystem():getSelectedShip() ~= nil then
+        self.widget:setText('Ship ID: ' .. game_instance:getSelectedStarSystem():getSelectedShip():getID());
+    end
 end
 
 function ship_id_label_on_hide(self, game_instance, game_state)
@@ -217,11 +219,19 @@ function ship_ai_state_label_on_create(self, game_instance, game_state)
 end
 
 function ship_ai_state_label_on_show(self, game_instance, game_state)
-    print("showing " .. self:getDebugID())
+    local curSystem = game_instance:getSelectedStarSystem()
+        if curSystem ~= nil then
+            local curShip = curSystem:getSelectedShip()
+            if curShip ~= nil then
+                local aiStateTag = curShip:getStateMachine():getCurrentState():getTag()
+                self.widget:setText("AI State: " .. aiStateTag)
+                curShip:setFlag("ship_prev_ai_state", aiStateTag)
+            end
+        end
 end
 
 function ship_ai_state_label_on_update(self, game_instance, game_state)
-    print('Updating label')
+    --print('Updating label')
     local curSystem = game_instance:getSelectedStarSystem()
     if curSystem ~= nil then
         local curShip = curSystem:getSelectedShip()
@@ -238,4 +248,17 @@ end
 
 function ship_ai_state_label_on_hide(self, game_instance, game_state)
 
+end
+
+function ship_target_id_label_update(self, game_instance, game_state)
+    --print('Updating label')
+    local curSystem = game_instance:getSelectedStarSystem()
+    if curSystem ~= nil then
+        local curShip = curSystem:getSelectedShip()
+        if curShip ~= nil then
+            if curShip:getTarget() ~= nil then
+                self.widget:setText("Target ID: " .. curShip:getTarget():getID())
+            end
+        end
+    end
 end
