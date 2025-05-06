@@ -14,6 +14,7 @@ import org.origin.spacegame.entities.polities.StellarNation;
 import org.origin.spacegame.entities.ships.Ship;
 import org.origin.spacegame.entities.stellarobj.Planet;
 import org.origin.spacegame.game.GameInstance;
+import org.origin.spacegame.utilities.RandomNumberUtility;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -210,7 +211,7 @@ public class StarSystem
         float systemWidth = Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_WIDTH;
         float systemHeight = Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_HEIGHT;
         random.setSeed(s++);
-        return new Vector2(random.nextFloat(0, systemWidth), random.nextFloat(0, systemHeight));
+        return new Vector2(RandomNumberUtility.nextFloat(0, systemWidth), RandomNumberUtility.nextFloat(0, systemHeight));
     }
 
     public Ship getClosestShipToPoint(Vector2 point)

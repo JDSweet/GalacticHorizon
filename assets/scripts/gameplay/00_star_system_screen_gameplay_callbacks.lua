@@ -4,11 +4,15 @@ planet_overview_window_visible = false;
 
 function on_click(touchPos, star_system, scene, game_instance, game_state)
     local window = scene:getWidgetByID('planet_overview_window'):getWidget()
+    local shipWindow = scene:getWidgetByID('ship_debug_overview_window')
     --local window = window_wrapper.widget;
     if window:isVisible() then
         window:setVisible(false)
         game_instance:deselectPlanet();
         print('[00_star_system_screen_gameplay_callbacks.on_click Debug] Planet un-selected.')
+    end
+    if shipWindow:isVisible() then
+        shipWindow:setVisible(false)
     end
     --spawnShip(String shipClassTag, Vector2 pos, Vector2 vel, Vector2 facing, int polityID)
     if(game_instance:hasString("game_mode") and game_instance:getString("game_mode") == "ship_mode_spawn") then

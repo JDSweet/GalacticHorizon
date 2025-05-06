@@ -1,7 +1,0 @@
-<StarClass tag = "sc_blue_giant"
-             hab_min_radius = "3"
-             hab_max_radius = "6"
-             textureFile = "assets/gfx/stars/blue_star_01.png"
-             star_planet_class = "pc_blue_giant"
-             energy_prod_bonus = "1.2">
-</StarClass>

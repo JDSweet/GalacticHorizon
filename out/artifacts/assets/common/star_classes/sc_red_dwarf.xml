@@ -1,7 +1,0 @@
-<StarClass tag = "sc_red_dwarf"
-             hab_min_radius = "3"
-             hab_max_radius = "6"
-             textureFile = "assets/gfx/stars/red_star_01.png"
-             star_planet_class = "pc_red_dwarf"
-             energy_prod_bonus = "1.2">
-</StarClass>
