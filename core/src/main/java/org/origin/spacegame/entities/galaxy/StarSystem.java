@@ -204,13 +204,13 @@ public class StarSystem
         Gdx.app.log("DebugID", "ID " + id + " = " + GameInstance.getInstance().getState().getStarSystem(id).id);
     }
 
-    Random random = new Random();
+    //Random random = new Random();
     int s = 0;
     public Vector2 getRandomPoint()
     {
         float systemWidth = Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_WIDTH;
         float systemHeight = Constants.StarSystemConstants.STAR_SYSTEM_INTERNAL_HEIGHT;
-        random.setSeed(s++);
+        //random.setSeed(s++);
         return new Vector2(RandomNumberUtility.nextFloat(0, systemWidth), RandomNumberUtility.nextFloat(0, systemHeight));
     }
 
